@@ -30,6 +30,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Executors;
 
 public class ContainerManager {
@@ -207,12 +209,27 @@ public class ContainerManager {
         ArrayList<Shortcut> shortcuts = new ArrayList<>();
         for (Container container : containers) {
             File desktopDir = container.getDesktopDir();
-            ArrayList<File> files = new ArrayList<>();
-            if (desktopDir.exists())
-                files.addAll(Arrays.asList(desktopDir.listFiles()));
-            if (files != null) {
-                for (File file : files) {
-                    if (file.getName().endsWith(".desktop")) shortcuts.add(new Shortcut(container, file));
+            if (!desktopDir.exists()) continue;
+
+            File[] files = desktopDir.listFiles();
+            if (files == null) continue;
+
+            Set<String> desktopNames = new HashSet<>();
+            for (File file : files) {
+                if (file.getName().endsWith(".desktop")) {
+                    desktopNames.add(file.getName().replace(".desktop", ""));
+                }
+            }
+
+            for (File file : files) {
+                String name = file.getName();
+                if (name.endsWith(".desktop")) {
+                    shortcuts.add(new Shortcut(container, file));
+                } else if (name.endsWith(".lnk")) {
+                    String baseName = name.replace(".lnk", "");
+                    if (!desktopNames.contains(baseName)) {
+                        shortcuts.add(new Shortcut(container, file));
+                    }
                 }
             }
         }
