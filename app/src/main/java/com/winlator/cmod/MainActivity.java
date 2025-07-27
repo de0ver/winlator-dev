@@ -266,10 +266,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         List<Fragment> fragments = fragmentManager.getFragments();
         for (Fragment fragment : fragments) {
             if (fragment instanceof ShortcutsFragment && fragment.isVisible()) {
-                finish();
-                return;
+                show(new ShortcutsFragment(), true);
             }
-            if (fragment instanceof ContainersFragment && fragment.isVisible()) {
+            if (fragment instanceof ContainerDetailFragment && fragment.isVisible()) {
                 show(new ContainersFragment(), true);
             }
         }

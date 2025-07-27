@@ -627,7 +627,7 @@ public class ContainerDetailFragment extends Fragment {
                     container.saveData();
                     saveWineRegistryKeys(view);
                     FEXCoreManager.saveFEXCoreSpinners(container, sFEXCoreTSOPreset, sFEXCoreMultiBlock, sFEXCoreX87ReducedPrecision);
-                    AppUtils.showToast(Objects.requireNonNull(getActivity()).getParent(), "Settings saved!");
+                    AppUtils.showToast(getContext(), "Settings saved!");
                     getActivity().onBackPressed();
                 } else {
                     // Create new container with specified properties
@@ -678,7 +678,7 @@ public class ContainerDetailFragment extends Fragment {
                         }
                         preloaderDialog.close();
 
-                        AppUtils.showToast(Objects.requireNonNull(getActivity()).getParent(), "Container created!");
+                        AppUtils.showToast(getContext(), "Container created!");
                         getActivity().onBackPressed();
                     });
                 }
