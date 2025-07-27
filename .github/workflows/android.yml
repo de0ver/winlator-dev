@@ -1,0 +1,44 @@
+name: Android CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: download missing files
+      run: |
+       cd ./app/src/main/assets
+       wget -O proton-9.0-arm64ec.txz https://github.com/TGP-17/wine/releases/download/proton/proton-9.0-arm64ec.txz
+       wget -O proton-9.0-x86_64.txz https://github.com/TGP-17/wine/releases/download/proton/proton-9.0-x86_64.txz
+       wget -O imagefs.txz https://github.com/Pipetto-crypto/winlator/raw/refs/heads/dev/app/src/main/assets/imagefs.txz
+    
+    - name: set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Install dependencies
+      run: |
+       sudo apt-get update
+       sudo apt-get install -y libgl1 libglu1-mesa libc6 lib32z1
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+       name: Winlator APK
+       path: app/build/outputs/apk/debug/app-debug.apk
