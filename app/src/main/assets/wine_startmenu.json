@@ -12,8 +12,20 @@
         {
             "name" : "Wordpad",
             "path" : "C:/windows/system32/write.exe"
+        },
+        {
+            "name" : "DgVoodooCpl",
+            "path" : "C:/windows/syswow64/dgVoodooCpl.exe"
+        },
+        {
+            "name" : "Cnc-draw CFG",
+            "path" : "C:/windows/syswow64/cnc-draw config.exe"
+        },
+        {
+            "name" : "nGlide CFG",
+            "path" : "C:/windows/syswow64/nglide_config.exe"
         }
-        ]
+    ]
     },
     {
         "name" : "System Tools",

@@ -79,6 +79,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ContainerDetailFragment extends Fragment {
 
@@ -626,7 +627,9 @@ public class ContainerDetailFragment extends Fragment {
                     container.saveData();
                     saveWineRegistryKeys(view);
                     FEXCoreManager.saveFEXCoreSpinners(container, sFEXCoreTSOPreset, sFEXCoreMultiBlock, sFEXCoreX87ReducedPrecision);
+                    AppUtils.showToast(Objects.requireNonNull(getActivity()).getParent(), "Settings saved!");
                     getActivity().onBackPressed();
+                    //getActivity().onBackPressed();
                 } else {
                     // Create new container with specified properties
                     JSONObject data = new JSONObject();
@@ -675,7 +678,9 @@ public class ContainerDetailFragment extends Fragment {
                             FEXCoreManager.saveFEXCoreSpinners(container, sFEXCoreTSOPreset, sFEXCoreMultiBlock, sFEXCoreX87ReducedPrecision);
                         }
                         preloaderDialog.close();
+
                         getActivity().onBackPressed();
+                        AppUtils.showToast(Objects.requireNonNull(getActivity()).getParent(), "Container created!");
                     });
                 }
             } catch (JSONException e) {

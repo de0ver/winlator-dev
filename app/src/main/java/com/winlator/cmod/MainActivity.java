@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        show(new ShortcutsFragment(), true);  // Pass `true` to trigger the reverse animation
+        //show(new ShortcutsFragment(), true);  // Pass `true` to trigger the reverse animation
     }
 
     public void setOpenFileCallback(Callback<Uri> openFileCallback) {
