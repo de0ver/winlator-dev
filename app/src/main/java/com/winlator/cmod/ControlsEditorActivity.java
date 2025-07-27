@@ -87,7 +87,7 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
                 panel.setVisibility(View.INVISIBLE);
                 AppUtils.showToast(this, "Hidden for 3 seconds");
                 new android.os.Handler().postDelayed(
-                        () -> panel.setVisibility(View.VISIBLE), 5000);
+                        () -> panel.setVisibility(View.VISIBLE), 3000);
                 break;
         }
     }
