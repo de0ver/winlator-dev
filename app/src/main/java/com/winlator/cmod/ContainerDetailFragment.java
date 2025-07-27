@@ -629,7 +629,6 @@ public class ContainerDetailFragment extends Fragment {
                     FEXCoreManager.saveFEXCoreSpinners(container, sFEXCoreTSOPreset, sFEXCoreMultiBlock, sFEXCoreX87ReducedPrecision);
                     AppUtils.showToast(Objects.requireNonNull(getActivity()).getParent(), "Settings saved!");
                     getActivity().onBackPressed();
-                    //getActivity().onBackPressed();
                 } else {
                     // Create new container with specified properties
                     JSONObject data = new JSONObject();
@@ -679,8 +678,8 @@ public class ContainerDetailFragment extends Fragment {
                         }
                         preloaderDialog.close();
 
-                        getActivity().onBackPressed();
                         AppUtils.showToast(Objects.requireNonNull(getActivity()).getParent(), "Container created!");
+                        getActivity().onBackPressed();
                     });
                 }
             } catch (JSONException e) {

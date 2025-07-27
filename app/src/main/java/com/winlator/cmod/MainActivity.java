@@ -269,6 +269,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
                 return;
             }
+            if (fragment instanceof ContainersFragment && fragment.isVisible()) {
+                show(new ContainersFragment(), true);
+            }
         }
 
         //show(new ShortcutsFragment(), true);  // Pass `true` to trigger the reverse animation
