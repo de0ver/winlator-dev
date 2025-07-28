@@ -14,6 +14,7 @@
         android:id="@+id/IVIcon"
         android:layout_width="26dp"
         android:layout_height="26dp"
+        android:layout_gravity="center"
         android:paddingLeft="4dp" />
 
     <TextView
@@ -23,6 +24,7 @@
         android:layout_weight="1"
         android:maxLines="1"
         android:ellipsize="end"
+        android:layout_gravity="center"
         android:paddingLeft="6dp" />
 
     <View
@@ -34,6 +36,7 @@
         android:id="@+id/TVPID"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:paddingLeft="4dp" />
 
     <View
@@ -45,6 +48,7 @@
         android:id="@+id/TVMemoryUsage"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:paddingLeft="4dp" />
 
     <View

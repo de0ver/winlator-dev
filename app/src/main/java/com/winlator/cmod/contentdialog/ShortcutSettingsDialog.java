@@ -2,7 +2,10 @@ package com.winlator.cmod.contentdialog;
 
 
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Icon;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -102,6 +106,14 @@ public class ShortcutSettingsDialog extends ContentDialog {
 
         final EditText etName = findViewById(R.id.ETName);
         etName.setText(shortcut.name);
+
+        Button selectIcon = findViewById(R.id.SelectIcon);
+        selectIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/png image/gif image/jpeg image/apng");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(getOwnerActivity(), intent, 1069, null);
+        });
 
         final EditText etExecArgs = findViewById(R.id.ETExecArgs);
         etExecArgs.setText(shortcut.getExtra("execArgs"));

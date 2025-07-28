@@ -622,4 +622,7 @@ E.g. <b>META</b> for <i>META key</i>, \n
     <string name="vkbasalt_sharpness_effects">Sharpness Effect</string>
     <string name="vkbasalt_sharpness_level">Sharpness Level</string>
     <string name="vkbasalt_sharpness_denoise">Sharpeness Denoise</string>
+    <string name="launch_container">Launch Container</string>
+    <string name="custom_icon">Custom Icon</string>
+    <string name="select_png_jpg_jpeg_ico">Select PNG/JPG/JPEG/ICO</string>
 </resources>
