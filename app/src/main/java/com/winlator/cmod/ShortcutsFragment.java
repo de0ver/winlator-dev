@@ -42,6 +42,7 @@ import com.winlator.cmod.container.ContainerManager;
 import com.winlator.cmod.container.Shortcut;
 import com.winlator.cmod.contentdialog.ContentDialog;
 import com.winlator.cmod.contentdialog.ShortcutSettingsDialog;
+import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.FileUtils;
 
 import java.io.BufferedReader;
@@ -76,9 +77,6 @@ public class ShortcutsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
-
         FrameLayout frameLayout = (FrameLayout)inflater.inflate(R.layout.shortcuts_fragment, container, false);
         recyclerView = frameLayout.findViewById(R.id.RecyclerView);
         emptyTextView = frameLayout.findViewById(R.id.TVEmptyText);
@@ -89,12 +87,7 @@ public class ShortcutsFragment extends Fragment {
 
     public void loadShortcutsList() {
         ArrayList<Shortcut> shortcuts = manager.loadShortcuts();
-        shortcuts.sort(new Comparator<Shortcut>() {
-            @Override
-            public int compare(Shortcut shortcut, Shortcut t1) {
-                return shortcut.name.compareTo(t1.name);
-            }
-        });
+        shortcuts.sort(Comparator.comparing(shortcut -> shortcut.name));
         // Validate and remove corrupted shortcuts
         shortcuts.removeIf(shortcut -> shortcut == null || shortcut.file == null || shortcut.file.getName().isEmpty());
 
@@ -102,7 +95,6 @@ public class ShortcutsFragment extends Fragment {
         if (shortcuts.isEmpty()) emptyTextView.setVisibility(View.VISIBLE);
         else emptyTextView.setVisibility(View.GONE); // Ensure the empty text view is hidden if there are shortcuts
     }
-
 
     private class ShortcutsAdapter extends RecyclerView.Adapter<ShortcutsAdapter.ViewHolder> {
         private final List<Shortcut> data;
@@ -169,6 +161,15 @@ public class ShortcutsFragment extends Fragment {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.shortcut_settings) {
                     (new ShortcutSettingsDialog(ShortcutsFragment.this, shortcut)).show();
+                }
+                else if (itemId == R.id.shortcut_launch_container) {
+                    Activity activity = getActivity();
+                    if (!XrActivity.isEnabled(getContext())) {
+                        Intent intent = new Intent(activity, XServerDisplayActivity.class);
+                        intent.putExtra("container_id", shortcut.container.id);
+                        requireActivity().startActivity(intent);
+                    }
+                    else XrActivity.openIntent(getActivity(), shortcut.container.id, null);
                 }
                 else if (itemId == R.id.shortcut_remove) {
                     ContentDialog.confirm(context, R.string.do_you_want_to_remove_this_shortcut, () -> {
@@ -246,14 +247,9 @@ public class ShortcutsFragment extends Fragment {
             builder.show();
         }
 
-
-
-
-
-
         private void runFromShortcut(Shortcut shortcut) {
             Activity activity = getActivity();
-
+            AppUtils.showToast(getContext(), "Starting: " + shortcut.name);
             if (!XrActivity.isEnabled(getContext())) {
                 Intent intent = new Intent(activity, XServerDisplayActivity.class);
                 intent.putExtra("container_id", shortcut.container.id);
@@ -294,7 +290,6 @@ public class ShortcutsFragment extends Fragment {
                     return;
                 }
             }
-
 
             // Check for FRONTEND_INSTRUCTIONS.txt
             File instructionsFile = new File(frontendDir, "FRONTEND_INSTRUCTIONS.txt");

@@ -161,7 +161,6 @@ public class ContainerManager {
         return null;
     }
 
-
     private void duplicateContainer(Container srcContainer) {
         int id = maxContainerId + 1;
 
@@ -200,7 +199,6 @@ public class ContainerManager {
         containers.add(dstContainer);
     }
 
-
     private void removeContainer(Container container) {
         if (FileUtils.delete(container.getRootDir())) containers.remove(container);
     }
@@ -210,30 +208,13 @@ public class ContainerManager {
         for (Container container : containers) {
             File desktopDir = container.getDesktopDir();
             if (!desktopDir.exists()) continue;
-
             File[] files = desktopDir.listFiles();
             if (files == null) continue;
-
-            Set<String> desktopNames = new HashSet<>();
             for (File file : files) {
-                if (file.getName().endsWith(".desktop")) {
-                    desktopNames.add(file.getName().replace(".desktop", ""));
-                }
-            }
-
-            for (File file : files) {
-                String name = file.getName();
-                if (name.endsWith(".desktop")) {
+                if (file.getName().endsWith(".desktop"))
                     shortcuts.add(new Shortcut(container, file));
-                } else if (name.endsWith(".lnk")) {
-                    String baseName = name.replace(".lnk", "");
-                    if (!desktopNames.contains(baseName)) {
-                        shortcuts.add(new Shortcut(container, file));
-                    }
-                }
             }
         }
-
         shortcuts.sort(Comparator.comparing(a -> a.name));
         return shortcuts;
     }
@@ -249,8 +230,7 @@ public class ContainerManager {
 
     private void extractCommonDlls(WineInfo wineInfo, String srcName, String dstName, File containerDir, OnExtractFileListener onExtractFileListener) throws JSONException {
         File srcDir = new File(wineInfo.path + "/lib/wine/" + srcName);
-
-        File[] srcfiles = srcDir.listFiles(file -> file.isFile());
+        File[] srcfiles = srcDir.listFiles(File::isFile);
 
         for (File file : srcfiles) {
             String dllName = file.getName();
@@ -352,8 +332,6 @@ public class ContainerManager {
         });
     }
 
-
-
     public void exportContainer(Container container, Runnable callback) {
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
@@ -399,7 +377,4 @@ public class ContainerManager {
     private void runOnUiThread(Runnable action) {
         new Handler(Looper.getMainLooper()).post(action);
     }
-
-
-
 }

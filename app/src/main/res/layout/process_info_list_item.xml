@@ -5,11 +5,25 @@
     android:layout_height="38dp"
     android:gravity="center_vertical">
 
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="#CCCCCC" />
+
     <ImageView
         android:id="@+id/IVIcon"
         android:layout_width="26dp"
         android:layout_height="26dp"
         android:paddingLeft="4dp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="#CCCCCC" />
 
     <TextView
         android:id="@+id/TVName"
@@ -20,17 +34,38 @@
         android:ellipsize="end"
         android:paddingLeft="6dp" />
 
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="#CCCCCC" />
+
     <TextView
         android:id="@+id/TVPID"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:paddingLeft="4dp" />
 
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="#CCCCCC" />
+
     <TextView
         android:id="@+id/TVMemoryUsage"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:paddingLeft="4dp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="#CCCCCC" />
 
     <RelativeLayout
         android:layout_width="40dp"

@@ -25,7 +25,7 @@ public class LogView extends View {
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final ArrayList<String> lines = new ArrayList<>();
     private final float rowHeight = UnitUtils.dpToPx(30);
-    private final float defaultTextSize = UnitUtils.dpToPx(16);
+    private final float defaultTextSize = UnitUtils.dpToPx(12);
     private final float minScrollThumbSize = UnitUtils.dpToPx(6);
     private final PointF lastPoint = new PointF();
     private final PointF scrollPosition = new PointF();
@@ -83,7 +83,7 @@ public class LogView extends View {
             float textHeight = paint.getFontSpacing();
 
             float rowY = -scrollPosition.y;
-            
+
             
             for (int i = 0, count = lines.size(); i < count; i++) {
                 if ((rowY + rowHeight) < 0 || rowY >= height) {
@@ -91,7 +91,11 @@ public class LogView extends View {
                     continue;
                 }
 
-                paint.setColor((i % 2) != 0 ? 0xffe1f5fe : 0xffffffff);
+                if (lines.get(i).contains(":err:"))
+                    paint.setColor(0xfff7a59c);
+                else
+                    paint.setColor((i % 2) != 0 ? 0xffe1f5fe : 0xffffffff);
+
                 canvas.drawRect(-scrollPosition.x, rowY, width, rowY + rowHeight, paint);
 
                 paint.setColor(0xff212121);
