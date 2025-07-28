@@ -2,8 +2,6 @@ package com.winlator.cmod.contentdialog;
 
 
 
-import static androidx.core.app.ActivityCompat.startActivityForResult;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -110,9 +108,9 @@ public class ShortcutSettingsDialog extends ContentDialog {
         Button selectIcon = findViewById(R.id.SelectIcon);
         selectIcon.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/png image/gif image/jpeg image/apng");
+            intent.setType("image/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(getOwnerActivity(), intent, 1069, null);
+            fragment.startActivityForResult(intent, 1337);
         });
 
         final EditText etExecArgs = findViewById(R.id.ETExecArgs);
