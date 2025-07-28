@@ -8,8 +8,6 @@
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
         android:background="#CCCCCC" />
 
     <ImageView
@@ -17,13 +15,6 @@
         android:layout_width="26dp"
         android:layout_height="26dp"
         android:paddingLeft="4dp" />
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="#CCCCCC" />
 
     <TextView
         android:id="@+id/TVName"
@@ -37,8 +28,6 @@
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
         android:background="#CCCCCC" />
 
     <TextView
@@ -50,8 +39,6 @@
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
         android:background="#CCCCCC" />
 
     <TextView
@@ -63,15 +50,13 @@
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
         android:background="#CCCCCC" />
 
     <RelativeLayout
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:gravity="center">
-
+        
         <ImageButton
             style="@style/ListMenuButton"
             android:id="@+id/BTMenu"

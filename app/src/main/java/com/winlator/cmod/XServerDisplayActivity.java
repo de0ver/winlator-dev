@@ -462,6 +462,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 shortcut = new Shortcut(container, new File(shortcutPath));
             }
 
+            AppUtils.showToast(this, "Starting: { Container: " + container.getName() + ";" + shortcutName != null ? " Shortcut: " + shortcutName : "}");
+
             // Initialize Win32AppWorkarounds
             win32AppWorkarounds = new Win32AppWorkarounds(this);
 
@@ -575,8 +577,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             if (dxwrapper.equals("dxvk") || dxwrapper.equals("vkd3d")) {
                 this.dxwrapperConfig = DXVKConfigDialog.parseConfig(dxwrapperConfig);
             }
-
-
 
             if (!wineInfo.isWin64()) {
                 onExtractFileListener = (file, size) -> {
