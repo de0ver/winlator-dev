@@ -19,7 +19,9 @@
         <EditText
             style="@style/EditText"
             android:id="@+id/ETName"
-            android:inputType="textCapSentences" />
+            android:inputType="textCapSentences"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,13 +36,15 @@
             <ImageView
                 android:id="@+id/CustomIcon"
                 android:layout_width="48dp"
-                android:layout_height="48dp" />
+                android:layout_height="48dp"
+                android:src="@drawable/cover_art_placeholder"/>
 
             <Button
                 android:id="@+id/SelectIcon"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
                 android:text="@string/select_png_jpg_jpeg_ico" />
         </LinearLayout>
 

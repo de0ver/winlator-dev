@@ -22,7 +22,7 @@ import java.nio.file.Files;
         public final Container container;
         public final String name;
         public final String path;
-        public final Bitmap icon;
+        public Bitmap icon;
         public final File file;
         public final File iconFile;
         public final String wmClass;

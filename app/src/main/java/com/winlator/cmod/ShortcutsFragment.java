@@ -59,6 +59,7 @@ public class ShortcutsFragment extends Fragment {
     private RecyclerView recyclerView;
     private TextView emptyTextView;
     private ContainerManager manager;
+    private ShortcutSettingsDialog currentDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +73,19 @@ public class ShortcutsFragment extends Fragment {
         manager = new ContainerManager(getContext());
         loadShortcutsList();
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.shortcuts);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1337 && resultCode == Activity.RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+
+            if (currentDialog != null) {
+                currentDialog.onIconSelected(selectedImageUri);
+            }
+        }
     }
 
     @Nullable
@@ -160,7 +174,8 @@ public class ShortcutsFragment extends Fragment {
             listItemMenu.setOnMenuItemClickListener((menuItem) -> {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.shortcut_settings) {
-                    (new ShortcutSettingsDialog(ShortcutsFragment.this, shortcut)).show();
+                    currentDialog = new ShortcutSettingsDialog(ShortcutsFragment.this, shortcut);
+                    currentDialog.show();
                 }
                 else if (itemId == R.id.shortcut_launch_container) {
                     Activity activity = getActivity();
@@ -225,6 +240,7 @@ public class ShortcutsFragment extends Fragment {
         public interface OnContainerSelectedListener {
             void onContainerSelected(Container container);
         }
+
 
         private void showContainerSelectionDialog(ArrayList<Container> containers, OnContainerSelectedListener listener) {
             // Create an AlertDialog to show the list of containers

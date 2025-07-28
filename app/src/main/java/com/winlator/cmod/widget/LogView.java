@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.winlator.cmod.R;
 import com.winlator.cmod.contentdialog.DebugDialog;
+import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.UnitUtils;
 import com.winlator.cmod.math.Mathf;
 
@@ -26,7 +27,7 @@ public class LogView extends View {
     private final ArrayList<String> lines = new ArrayList<>();
     private final float rowHeight = UnitUtils.dpToPx(30);
     private final float defaultTextSize = UnitUtils.dpToPx(12);
-    private final float minScrollThumbSize = UnitUtils.dpToPx(6);
+    private final float minScrollThumbSize = UnitUtils.dpToPx(12);
     private final PointF lastPoint = new PointF();
     private final PointF scrollPosition = new PointF();
     private final PointF scrollSize = new PointF();
@@ -84,7 +85,6 @@ public class LogView extends View {
 
             float rowY = -scrollPosition.y;
 
-            
             for (int i = 0, count = lines.size(); i < count; i++) {
                 if ((rowY + rowHeight) < 0 || rowY >= height) {
                     rowY += rowHeight;
@@ -93,7 +93,10 @@ public class LogView extends View {
 
                 if (lines.get(i).contains(":err:"))
                     paint.setColor(0xfff7a59c);
-                else
+                else if (lines.get(i).contains("winedbg") || lines.get(i).contains(":msvcrt:")) {
+                    paint.setColor(0xffff0000);
+                    AppUtils.showToast(getContext(),"App crashed!");
+                } else
                     paint.setColor((i % 2) != 0 ? 0xffe1f5fe : 0xffffffff);
 
                 canvas.drawRect(-scrollPosition.x, rowY, width, rowY + rowHeight, paint);

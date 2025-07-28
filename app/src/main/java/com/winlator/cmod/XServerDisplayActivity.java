@@ -147,6 +147,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -440,7 +441,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 Log.d("XServerDisplayActivity", "No shortcut path provided, skipping shortcut parsing.");
             }
 
-
             // Increment play count at the start of a session
             incrementPlayCount();
 
@@ -462,7 +462,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 shortcut = new Shortcut(container, new File(shortcutPath));
             }
 
-            AppUtils.showToast(this, "Starting: { Container: " + container.getName() + ";" + shortcutName != null ? " Shortcut: " + shortcutName : "}");
+            if (Objects.equals(shortcutName, null))
+                AppUtils.showToast(this, "Starting: " + container.getName());
+            else
+                AppUtils.showToast(this, "Starting: " + shortcutName);
 
             // Initialize Win32AppWorkarounds
             win32AppWorkarounds = new Win32AppWorkarounds(this);

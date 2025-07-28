@@ -5,8 +5,11 @@ package com.winlator.cmod.contentdialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
@@ -48,6 +52,10 @@ import com.winlator.cmod.widget.EnvVarsView;
 import com.winlator.cmod.winhandler.WinHandler;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +65,7 @@ import kotlin.random.Random;
 
 public class ShortcutSettingsDialog extends ContentDialog {
     private final ShortcutsFragment fragment;
-    private final Shortcut shortcut;
+    public final Shortcut shortcut;
     private InputControlsManager inputControlsManager;
     private TextView tvGraphicsDriverVersion;
     private String box64Version;
@@ -82,6 +90,39 @@ public class ShortcutSettingsDialog extends ContentDialog {
 //        }
 
         createContentView();
+    }
+
+    public void onIconSelected(Uri iconUri) {
+        try {
+            Context context = fragment.getContext();
+
+            InputStream inputStream = context.getContentResolver().openInputStream(iconUri);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            inputStream.close();
+
+            if (bitmap == null) {
+                AppUtils.showToast(getContext(),"Can't load image");
+                return;
+            }
+
+            File iconFile = shortcut.iconFile;
+            FileOutputStream out = new FileOutputStream(iconFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+
+            shortcut.icon = bitmap;
+
+            ImageView iconPreview = findViewById(R.id.CustomIcon);
+            if (iconPreview != null) {
+                iconPreview.setImageBitmap(bitmap);
+            }
+
+            AppUtils.showToast(getContext(), "Icon updated!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void createContentView() {
