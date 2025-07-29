@@ -2210,7 +2210,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             }
         }
 
-        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+        /*if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
             // Release pointer capture when Volume Down key is pressed
             if (touchpadView != null && pointerCaptureRequested) {
                 touchpadView.releasePointerCapture();
@@ -2240,7 +2240,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
                 return true; // Indicate that the event was handled
             }
-        }
+        }*/
 
         // **NEW: Check if the floating view is visible and forward the key event to it**
         if (winetricksFloatingView != null && winetricksFloatingView.getVisibility() == View.VISIBLE) {

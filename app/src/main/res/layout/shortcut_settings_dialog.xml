@@ -20,8 +20,8 @@
             style="@style/EditText"
             android:id="@+id/ETName"
             android:inputType="textCapSentences"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"/>
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
