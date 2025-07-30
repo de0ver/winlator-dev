@@ -25,9 +25,9 @@ import java.util.Date;
 public class LogView extends View {
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final ArrayList<String> lines = new ArrayList<>();
-    private final float rowHeight = UnitUtils.dpToPx(30);
-    private final float defaultTextSize = UnitUtils.dpToPx(12);
-    private final float minScrollThumbSize = UnitUtils.dpToPx(12);
+    private final float rowHeight = UnitUtils.dpToPx(16);
+    private final float defaultTextSize = UnitUtils.dpToPx(8);
+    private final float minScrollThumbSize = UnitUtils.dpToPx(8);
     private final PointF lastPoint = new PointF();
     private final PointF scrollPosition = new PointF();
     private final PointF scrollSize = new PointF();
@@ -95,7 +95,6 @@ public class LogView extends View {
                     paint.setColor(0xfff7a59c);
                 else if (lines.get(i).contains("winedbg") || lines.get(i).contains(":msvcrt:")) {
                     paint.setColor(0xffff0000);
-                    AppUtils.showToast(getContext(),"App crashed!");
                 } else
                     paint.setColor((i % 2) != 0 ? 0xffe1f5fe : 0xffffffff);
 

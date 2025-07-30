@@ -55,6 +55,8 @@ public class DebugDialog extends ContentDialog implements Callback<String> {
     public void call(final String line) {
         if (!getPaused()) logView.append(line+"\n");
         try {
+            if (line.contains(":winedbg:") || line.contains("msvcrt") || line.contains("illegal"))
+                AppUtils.showToast(getContext(), "Application crashed!");
             writer.write(line + "\n");
             writer.flush();
         }

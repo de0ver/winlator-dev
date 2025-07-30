@@ -74,7 +74,7 @@ import java.nio.file.Files;
                         try {
                             extraData.put(key, value);
                         }
-                        catch (JSONException e) {}
+                        catch (JSONException ignored) {}
                     }
                 }
             }
@@ -150,24 +150,24 @@ import java.nio.file.Files;
                 }
                 else extraData.remove(name);
             }
-            catch (JSONException e) {}
+            catch (JSONException ignored) {}
         }
 
         public void saveData() {
-            String content = "[Desktop Entry]\n";
+            StringBuilder content = new StringBuilder("[Desktop Entry]\n");
             for (String line : FileUtils.readLines(file)) {
                 if (line.contains("[Extra Data]")) break;
-                if (!line.contains("[Desktop Entry]") && !line.isEmpty()) content += line + "\n";
+                if (!line.contains("[Desktop Entry]") && !line.isEmpty()) content.append(line).append("\n");
             }
 
             if (extraData.length() > 0) {
-                content += "\n[Extra Data]\n";
+                content.append("\n[Extra Data]\n");
                 Iterator<String> keys = extraData.keys();
                 while (keys.hasNext()) {
                     String key = keys.next();
                     try {
-                        content += key + "=" + extraData.getString(key) + "\n";
-                    } catch (JSONException e) {}
+                        content.append(key).append("=").append(extraData.getString(key)).append("\n");
+                    } catch (JSONException ignored) {}
                 }
             }
 
@@ -177,12 +177,12 @@ import java.nio.file.Files;
                 return; // Prevent saving to an incorrect file
             }
 
-            FileUtils.writeString(file, content);
+            FileUtils.writeString(file, content.toString());
         }
 
 
         public void genUUID() {
-            if (getExtra("uuid").equals("")) {
+            if (getExtra("uuid").isEmpty()) {
                 putExtra("uuid", UUID.randomUUID().toString());
                 saveData();
             }
@@ -296,7 +296,7 @@ import java.nio.file.Files;
                 List<String> lines = Files.readAllLines(file.toPath());
                 for (String line : lines) {
                     if (line.startsWith("Exec")) {
-                        exe = line.substring(line.lastIndexOf("\\") + 1, line.length()).replaceAll("\\s+$", "");
+                        exe = line.substring(line.lastIndexOf("\\") + 1).replaceAll("\\s+$", "");
                         break;
                     }
                 }

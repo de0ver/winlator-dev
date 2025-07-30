@@ -463,9 +463,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             }
 
             if (Objects.equals(shortcutName, null))
-                AppUtils.showToast(this, "Starting: " + container.getName());
+                AppUtils.showToast(this, "Launching - " + container.getName());
             else
-                AppUtils.showToast(this, "Starting: " + shortcutName);
+                AppUtils.showToast(this, "Launching - " + shortcutName);
 
             // Initialize Win32AppWorkarounds
             win32AppWorkarounds = new Win32AppWorkarounds(this);
@@ -562,7 +562,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 String inputType = shortcut.getExtra("inputType");
                 if (!inputType.isEmpty()) winHandler.setInputType(Byte.parseByte(inputType));
                 String xinputDisabledString = shortcut.getExtra("disableXinput", "false");
-                isRelativeMouseMovement = shortcut.getExtra("relativeMouseMovement", container.isRelativeMouseMovement() ? "1" : "0").equals("1") ? true : false;
+                isRelativeMouseMovement = shortcut.getExtra("relativeMouseMovement", container.isRelativeMouseMovement() ? "1" : "0").equals("1");
                 xinputDisabledFromShortcut = parseBoolean(xinputDisabledString);
                 // Pass the value to WinHandler
                 winHandler.setXInputDisabled(xinputDisabledFromShortcut);
@@ -640,7 +640,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             }
         });
 
-        if (!midiSoundFont.equals("")) {
+        if (!midiSoundFont.isEmpty()) {
             InputStream in = null;
             InputStream finalIn = in;
             MidiManager.OnMidiLoadedCallback callback = new MidiManager.OnMidiLoadedCallback() {
@@ -664,7 +664,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                     MidiManager.load(in, callback);
                 } else
                     MidiManager.load(new File(MidiManager.getSoundFontDir(this), midiSoundFont), callback);
-            } catch (Exception e) {}
+            } catch (Exception ignored) {}
         }
 
         // Check if a profile is defined by the shortcut
@@ -1525,19 +1525,15 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                     ProcessBuilder processBuilder = new ProcessBuilder(command);
                     processBuilder.directory(new File(imageFs.home_path));
                     Map<String, String> environmentVars = processBuilder.environment();
-                    for (Map.Entry<String, String> entry : envVars.entrySet()) {
-                        environmentVars.put(entry.getKey(), entry.getValue());
-                    }
+                    environmentVars.putAll(envVars);
                     processBuilder.redirectErrorStream(true);
                     process[0] = processBuilder.start();
                     runOnUiThread(() -> outputView.setText(""));
                     BufferedReader reader = new BufferedReader(new InputStreamReader(process[0].getInputStream()));
                     String outputLine = null;
                     while (((outputLine = reader.readLine()) != null)) {
-                        if (outputLine != null) {
-                            String finalOutputLine = outputLine;
-                            runOnUiThread(() -> outputView.append(finalOutputLine + "\n"));
-                        }
+                        String finalOutputLine = outputLine;
+                        runOnUiThread(() -> outputView.append(finalOutputLine + "\n"));
                     }
                     int exitCode = process[0].waitFor();
                     runOnUiThread(() -> outputView.append("Winetricks exited with code " + exitCode + "\n"));
@@ -1594,9 +1590,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 processBuilder.directory(new File(imageFs.home_path));
 
                 Map<String, String> environmentVars = processBuilder.environment();
-                for (Map.Entry<String, String> entry : envVars.entrySet()) {
-                    environmentVars.put(entry.getKey(), entry.getValue());
-                }
+                environmentVars.putAll(envVars);
 
                 process = processBuilder.start();
                 process.getOutputStream().close();
@@ -1607,8 +1601,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 appendBufferedLog(reader, outputView, false);
                 appendBufferedLog(errorReader, outputView, true);
 
-                int exitCode = process.waitFor();
-                final int finalExitCode = exitCode;
+                final int finalExitCode = process.waitFor();
                 runOnUiThread(() -> outputView.append("Winetricks Latest exited with code " + finalExitCode + "\n"));
 
             } catch (Exception e) {
@@ -1749,8 +1742,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         dynamicEnvExports.append("exec \"")
                 .append(box64Path).append("\" \"")
                 .append(wineBinPath).append("/wine\" ")
-                .append("explorer.exe /desktop=shell wfm ")
-                .append("\"" + imageFs.getRootDir().getPath() +  "/home/xuser/.cache/winetricks\"")
+                .append("explorer.exe /desktop=shell wfm ").append("\"").append(imageFs.getRootDir().getPath()).append("/home/xuser/.cache/winetricks\"")
                 .append("\n");
 
         // 4. Write the script to disk
@@ -1842,7 +1834,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
 
 
-    private ActivityResultLauncher<Intent> controlsEitorActivityResultLauncher = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> controlsEitorActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (editInputControlsCallback != null) {
@@ -1968,7 +1960,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             updateProfile.run();
         });
 
-        dialog.setOnCancelCallback(updateProfile::run);
+        dialog.setOnCancelCallback(updateProfile);
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
@@ -2012,42 +2004,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     }
 
     private void startTouchscreenTimeout() {
-        boolean isTimeoutEnabled = preferences.getBoolean("touchscreen_timeout_enabled", false);
-
-        if (isTimeoutEnabled) {
-            // Show controls initially and set up touch event listeners
-            inputControlsView.setVisibility(View.VISIBLE);
-            Log.d("XServerDisplayActivity", "Timeout is enabled, setting up timeout logic.");
-
-            // Attach the OnTouchListener to reset the timeout on touch events
-            touchpadView.setOnTouchListener((v, event) -> {
-                int action = event.getAction();
-                if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
-                    // Reset the timeout on any touch event
-                    //Log.d("XServerDisplayActivity", "Touch detected, resetting timeout.");
-
-                    // Keep the controls visible
-                    inputControlsView.setVisibility(View.VISIBLE);
-
-                    // Remove any pending hide callbacks and reset the timeout
-                    timeoutHandler.removeCallbacks(hideControlsRunnable);
-                    timeoutHandler.postDelayed(hideControlsRunnable, 5000); // Reset timeout
-                }
-
-                return false; // Allow the touch event to propagate
-            });
-
-            // Reset the timeout when the controls are initially displayed
-            timeoutHandler.removeCallbacks(hideControlsRunnable);
-            timeoutHandler.postDelayed(hideControlsRunnable, 5000); // Hide after 5 seconds of inactivity
-        } else {
-            // If timeout is disabled, keep the controls always visible
-            Log.d("XServerDisplayActivity", "Timeout is disabled, controls will stay visible.");
-
-            inputControlsView.setVisibility(View.VISIBLE); // Ensure controls are visible
-            timeoutHandler.removeCallbacks(hideControlsRunnable); // Remove any existing hide callbacks
-            touchpadView.setOnTouchListener(null); // Remove the touch listener
-        }
+        return;
     }
 
     private void showInputControls(ControlsProfile profile) {
@@ -2116,7 +2073,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "graphics_driver/extra_libs" + ".tzst", rootDir);
         }
 
-        if (adrenoToolsDriverId != "System") {
+        if (!adrenoToolsDriverId.equals("System")) {
             AdrenotoolsManager adrenotoolsManager = new AdrenotoolsManager(this);
             adrenotoolsManager.setDriverById(envVars, imageFs, adrenoToolsDriverId);
         }
@@ -2173,24 +2130,18 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         // Let winHandler process the event if available
         if (winHandler != null) {
             handledByWinHandler = winHandler.onGenericMotionEvent(event);
-            if (handledByWinHandler) {
-                //Log.d("XServerDisplayActivity", "Event handled by winHandler");
-            }
+            //Log.d("XServerDisplayActivity", "Event handled by winHandler");
         }
 
         // Let touchpadView process the event if available
         if (touchpadView != null) {
             handledByTouchpadView = touchpadView.onExternalMouseEvent(event);
-            if (handledByTouchpadView) {
-                //Log.d("XServerDisplayActivity", "Event handled by touchpadView");
-            }
+            //Log.d("XServerDisplayActivity", "Event handled by touchpadView");
         }
 
         // Pass the event to the super method to ensure system-level handling
         boolean handledBySuper = super.dispatchGenericMotionEvent(event);
-        if (!handledBySuper) {
-            //Log.d("XServerDisplayActivity", "Event not handled by super");
-        }
+        //Log.d("XServerDisplayActivity", "Event not handled by super");
 
         // Combine the results: any handler consuming the event indicates it was handled
         return handledByWinHandler || handledByTouchpadView || handledBySuper;
@@ -2448,7 +2399,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
             if (!dlls.isEmpty()) restoreOriginalDllFiles(dlls.toArray(new String[0]));
         }
-        catch (JSONException e) {}
+        catch (JSONException ignored) {}
     }
 
     private void restoreOriginalDllFiles(final String... dlls) {

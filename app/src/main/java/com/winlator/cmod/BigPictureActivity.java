@@ -1564,21 +1564,21 @@ public class BigPictureActivity extends AppCompatActivity {
     }
 
     private void playDefaultMp3FromAssets() {
-        if (mediaPlayer != null) {
+        /*if (mediaPlayer != null) {
             mediaPlayer.release();  // Release any existing player
         }
 
         mediaPlayer = new MediaPlayer();
         try {
-            AssetFileDescriptor afd = getAssets().openFd("default_music.mp3"); // Ensure the MP3 file is named "default_music.mp3" in assets
+            *//*AssetFileDescriptor afd = getAssets().openFd("default_music.mp3"); // Ensure the MP3 file is named "default_music.mp3" in assets
             mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             mediaPlayer.setLooping(true); // Loop the music
             mediaPlayer.prepare();
             mediaPlayer.start();
-            afd.close();
+            afd.close();*//*
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 

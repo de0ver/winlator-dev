@@ -137,7 +137,7 @@ public class Box86_64EditPresetDialog extends ContentDialog {
                 parent.addView(child);
             }
         }
-        catch (JSONException e) {}
+        catch (JSONException ignored) {}
     }
 
     private static void applyFieldSetLabelStyle(TextView textView, boolean isDarkMode) {

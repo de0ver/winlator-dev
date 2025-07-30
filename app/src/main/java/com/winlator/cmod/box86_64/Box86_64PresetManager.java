@@ -192,15 +192,16 @@ public abstract class Box86_64PresetManager {
         String key = prefix+"_custom_presets";
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String oldCustomPresetsStr = preferences.getString(key, "");
-        String newCustomPresetsStr = "";
+        StringBuilder newCustomPresetsStr = new StringBuilder();
 
         String[] customPresets = oldCustomPresetsStr.split(",");
-        for (int i = 0; i < customPresets.length; i++) {
-            String[] preset = customPresets[i].split("\\|");
-            if (!preset[0].equals(id)) newCustomPresetsStr += (!newCustomPresetsStr.isEmpty() ? "," : "")+customPresets[i];
+        for (String customPreset : customPresets) {
+            String[] preset = customPreset.split("\\|");
+            if (!preset[0].equals(id))
+                newCustomPresetsStr.append((newCustomPresetsStr.length() > 0) ? "," : "").append(customPreset);
         }
 
-        preferences.edit().putString(key, newCustomPresetsStr).apply();
+        preferences.edit().putString(key, newCustomPresetsStr.toString()).apply();
     }
 
     public static void loadSpinner(String prefix, Spinner spinner, String selectedId) {
