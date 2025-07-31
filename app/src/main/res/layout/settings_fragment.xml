@@ -374,14 +374,24 @@
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white">
 
                         <LinearLayout
                             android:id="@+id/LLWineDebugChannels"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:padding="4dp" />
+                            android:padding="4dp"
+                            android:background="@android:color/white">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Channel 1"
+                                android:textColor="@android:color/white" />
+
+                        </LinearLayout>
                     </HorizontalScrollView>
 
                     <View style="@style/FieldSeparator" />
@@ -569,7 +579,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
-        android:tint="#ffffff"
+        android:tint="#444444"
         android:src="@drawable/icon_confirm"
         android:layout_margin="16dp" />
 </FrameLayout>

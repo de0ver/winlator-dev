@@ -350,6 +350,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             @Override
             public void run() {
                 savePlaytimeData();
+                saveLastPlayDate();
                 handler.postDelayed(this, SAVE_INTERVAL_MS);
             }
         };
@@ -728,11 +729,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
     private boolean parseBoolean(String value) {
         // Return true for "true", "1", "yes" (case-insensitive)
-        if ("true".equalsIgnoreCase(value) || "1".equals(value) || "yes".equalsIgnoreCase(value)) {
-            return true;
-        }
+        return "true".equalsIgnoreCase(value) || "1".equals(value) || "yes".equalsIgnoreCase(value);
         // Return false for any other value, including "false", "0", "no"
-        return false;
     }
 
 
@@ -873,6 +871,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         }
 
         savePlaytimeData();
+        saveLastPlayDate();
         handler.removeCallbacks(savePlaytimeRunnable);
         ProcessHelper.pauseAllWineProcesses();
     }
@@ -882,7 +881,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         long endTime = System.currentTimeMillis();
         long playtime = endTime - startTime;
 
-        // Ensure that playtime is not negative
         if (playtime < 0) {
             playtime = 0;
         }
@@ -890,21 +888,26 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         SharedPreferences.Editor editor = playtimePrefs.edit();
         String playtimeKey = shortcutName + "_playtime";
 
-        // Accumulate the playtime into totalPlaytime
         long totalPlaytime = playtimePrefs.getLong(playtimeKey, 0) + playtime;
         editor.putLong(playtimeKey, totalPlaytime);
         editor.apply();
 
-        // Reset startTime to the current time for the next interval
         startTime = System.currentTimeMillis();
     }
-
 
     private void incrementPlayCount() {
         SharedPreferences.Editor editor = playtimePrefs.edit();
         String playCountKey = shortcutName + "_play_count";
         int playCount = playtimePrefs.getInt(playCountKey, 0) + 1;
         editor.putInt(playCountKey, playCount);
+        editor.apply();
+    }
+
+    private void saveLastPlayDate() {
+        SharedPreferences.Editor editor = playtimePrefs.edit();
+        String playDateKey = shortcutName + "_play_date";
+        long currentTimeMillis = System.currentTimeMillis();
+        editor.putLong(playDateKey, currentTimeMillis);
         editor.apply();
     }
 
@@ -932,6 +935,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     @Override
     protected void onDestroy() {
         savePlaytimeData(); // Save on destroy
+        saveLastPlayDate();
         handler.removeCallbacks(savePlaytimeRunnable);
         if (restartTriggerObserver != null) restartTriggerObserver.stopWatching();
         super.onDestroy();
@@ -941,6 +945,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     protected void onStop() {
         super.onStop();
         savePlaytimeData();
+        saveLastPlayDate();
         handler.removeCallbacks(savePlaytimeRunnable);
     }
 

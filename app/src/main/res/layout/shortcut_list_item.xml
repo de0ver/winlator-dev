@@ -1,66 +1,75 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:gravity="center_vertical">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/LLInnerArea"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_marginRight="12dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ImageView"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp" />
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:gravity="center_vertical">
 
         <LinearLayout
+            android:id="@+id/LLInnerArea"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginRight="12dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/TVTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                android:ellipsize="end"
-                android:maxLines="1" />
+            <ImageView
+                android:id="@+id/ImageView"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
 
-            <TextView
-                android:id="@+id/TVPath"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="italic"
-                android:ellipsize="end"
-                android:maxLines="1" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/TVSubtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1" />
+                <TextView
+                    android:id="@+id/TVTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#DDDDDD"
+                    android:textStyle="bold"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+
+                <TextView
+                    android:id="@+id/TVPath"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#458CA3"
+                    android:textStyle="italic"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+
+                <TextView
+                    android:id="@+id/TVSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#9A2F2F"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-    <ImageButton
-        style="@style/ListMenuButton"
-        android:id="@+id/BTMenu"
-        android:src="@drawable/icon_list_item_menu" />
+        <ImageButton
+            style="@style/ListMenuButton"
+            android:id="@+id/BTMenu"
+            android:src="@drawable/icon_list_item_menu"
+            android:backgroundTint="@android:color/black"
+            app:tint="@android:color/white" />
+    </LinearLayout>
 </LinearLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sort_shortcuts"
+        android:title="Sortby ASC"
+        android:icon="@drawable/icon_sort"
+        app:showAsAction="always|withText" />
+    <item
+        android:id="@+id/add_shortcuts"
+        android:title="Add Shortcuts"
+        android:icon="@drawable/icon_add"
+        android:color="#FFFFFF"
+        app:showAsAction="ifRoom" />
+</menu>

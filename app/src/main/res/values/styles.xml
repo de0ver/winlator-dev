@@ -32,7 +32,8 @@
         <item name="popupWindowStyle">@style/PopupWindow.Dark</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Dark</item>
         <item name="popupMenuStyle">@style/PopupMenu.Dark</item>
-    </style>
+    
+        <item name="android:textColor">#ffffff</item></style>
 
     <!-- Light Theme Fullscreen -->
     <style name="AppThemeFullscreen" parent="@style/AppTheme">
@@ -218,19 +219,20 @@
     </style>
 
     <style name="ToolButton.Dark" parent="BaseImageButton">
-        <item name="android:tint">@color/colorPrimaryDarkMode</item>
+        <item name="android:tint">#ffffff</item>
     </style>
 
     <style name="ListMenuButton" parent="BaseImageButton">
         <item name="android:layout_width">34dp</item>
         <item name="android:layout_height">34dp</item>
-        <item name="android:tint">@color/colorPrimaryDark</item>
+        <item name="android:tint">@color/white</item>
         <item name="android:layout_marginLeft">2dp</item>
         <item name="android:layout_marginRight">2dp</item>
     </style>
 
     <style name="ListMenuButton.Dark" parent="ListMenuButton">
-        <item name="android:tint">@color/colorPrimaryDarkModeDark</item>
+        <item name="android:tint">#ffffff</item>
+        <item name="android:backgroundTint">#000000</item>
     </style>
 
     <!-- Line Styles -->
@@ -263,13 +265,13 @@
     <style name="FieldSeparator">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">#eeeeee</item>
+        <item name="android:background">#FFFFFF</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginBottom">8dp</item>
     </style>
 
     <style name="FieldSeparator.Dark" parent="FieldSeparator">
-        <item name="android:background">#444444</item>
+        <item name="android:background">#FFFFFF</item>
     </style>
 
     <style name="FieldSet">
@@ -657,7 +659,7 @@
         <item name="android:padding">6.0dip</item>
         <item name="android:layout_width">40.0dip</item>
         <item name="android:layout_height">36.0dip</item>
-        <item name="tint">@color/colorPrimary</item>
+        <item name="tint">#FFFFFF</item>
     </style>
 
     <style name="RightSideButton">
@@ -665,7 +667,7 @@
         <item name="android:padding">6.0dip</item>
         <item name="android:layout_width">40.0dip</item>
         <item name="android:layout_height">36.0dip</item>
-        <item name="tint">@color/colorPrimary</item>
+        <item name="tint">#FFFFFF</item>
     </style>
 
 

@@ -966,7 +966,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
-        android:tint="#ffffff"
+        android:tint="#444444"
         android:src="@drawable/icon_confirm"
         android:layout_margin="16dp" />
 </FrameLayout>

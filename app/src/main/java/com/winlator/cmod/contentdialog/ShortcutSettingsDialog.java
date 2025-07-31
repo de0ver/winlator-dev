@@ -710,7 +710,7 @@ public class ShortcutSettingsDialog extends ContentDialog {
             if (!newLinkFile.isFile()) linkFile.renameTo(newLinkFile);
         }
 
-        fragment.loadShortcutsList();
+        fragment.loadShortcutsList(fragment.curSortType);
         fragment.updateShortcutOnScreen(newName, newName, shortcut.container.id, newDesktopFile.getAbsolutePath(),
                 Icon.createWithBitmap(shortcut.icon), shortcut.getExtra("uuid"));
     }

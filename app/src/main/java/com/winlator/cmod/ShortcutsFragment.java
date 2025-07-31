@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +19,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,8 +35,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.math.MathUtils;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +52,7 @@ import com.winlator.cmod.contentdialog.ContentDialog;
 import com.winlator.cmod.contentdialog.ShortcutSettingsDialog;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.FileUtils;
+import com.winlator.cmod.xenvironment.ImageFs;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -60,19 +69,32 @@ public class ShortcutsFragment extends Fragment {
     private TextView emptyTextView;
     private ContainerManager manager;
     private ShortcutSettingsDialog currentDialog;
+    public int curSortType = 0;
+    private final String[] sortTypeText = {"Name", "Container Id", "Path", "Playtime", "Play Count", "Last Play Date"};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         manager = new ContainerManager(getContext());
-        loadShortcutsList();
+        loadShortcutsList(curSortType);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.shortcuts);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        FrameLayout frameLayout = (FrameLayout)inflater.inflate(R.layout.shortcuts_fragment, container, false);
+        recyclerView = frameLayout.findViewById(R.id.RecyclerView);
+        emptyTextView = frameLayout.findViewById(R.id.TVEmptyText);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        return frameLayout;
     }
 
     @Override
@@ -88,23 +110,76 @@ public class ShortcutsFragment extends Fragment {
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FrameLayout frameLayout = (FrameLayout)inflater.inflate(R.layout.shortcuts_fragment, container, false);
-        recyclerView = frameLayout.findViewById(R.id.RecyclerView);
-        emptyTextView = frameLayout.findViewById(R.id.TVEmptyText);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-        return frameLayout;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        // Clear any existing menu items to prevent duplication
+        menu.clear();
+        menuInflater.inflate(R.menu.shortcuts_menu, menu);
+        MenuItem sortItem = menu.findItem(R.id.sort_shortcuts);
+        sortItem.setTitle(sortTypeText[curSortType]);
     }
 
-    public void loadShortcutsList() {
-        ArrayList<Shortcut> shortcuts = manager.loadShortcuts();
-        shortcuts.sort(Comparator.comparing(shortcut -> shortcut.name));
-        // Validate and remove corrupted shortcuts
-        shortcuts.removeIf(shortcut -> shortcut == null || shortcut.file == null || shortcut.file.getName().isEmpty());
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.add_shortcuts:
+                AppUtils.showToast(getContext(), "W.I.P.");
+                /*if (!ImageFs.find(getContext()).isValid()) return false;
+                FragmentManager fragmentManager = getParentFragmentManager();
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down, R.anim.slide_in_down, R.anim.slide_out_up)
+                        .addToBackStack(null)
+                        .replace(R.id.FLFragmentContainer, new ContainerDetailFragment())
+                        .commit();*/
+                return true;
 
+            case R.id.sort_shortcuts:
+                curSortType = (curSortType + 1) % sortTypeText.length;
+                loadShortcutsList(curSortType);
+                AppUtils.showToast(getContext(), "Sort by: " + sortTypeText[curSortType]);
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
+
+    public void loadShortcutsList(int typeSort) {
+        ArrayList<Shortcut> shortcuts = manager.loadShortcuts();
+        SharedPreferences prefs = getContext().getSharedPreferences("playtime_stats", Context.MODE_PRIVATE);
+
+        switch (typeSort) {
+            case 0:
+                shortcuts.sort(Comparator.comparing(s -> s.name));
+                break;
+            case 1:
+                shortcuts.sort(Comparator.comparing(s -> s.container.id));
+                break;
+            case 2:
+                shortcuts.sort(Comparator.comparing(s -> s.path));
+                break;
+            case 3:
+                shortcuts.sort((s1, s2) -> Long.compare(
+                        prefs.getLong(s2.name + "_playtime", 0),
+                        prefs.getLong(s1.name + "_playtime", 0)
+                ));
+                break;
+            case 4:
+                shortcuts.sort((s1, s2) -> Integer.compare(
+                        prefs.getInt(s2.name + "_play_count", 0),
+                        prefs.getInt(s1.name + "_play_count", 0)
+                ));
+                break;
+            case 5:
+                shortcuts.sort((s1, s2) -> Long.compare(
+                        prefs.getLong(s2.name + "_play_date", 0),
+                        prefs.getLong(s1.name + "_play_date", 0)
+                ));
+                break;
+        }
+
+        shortcuts.removeIf(shortcut -> shortcut == null || shortcut.file.getName().isEmpty());
+        //AppUtils.showToast(getContext(), "Sort by: " + sortTypeText[typeSort]);
         recyclerView.setAdapter(new ShortcutsAdapter(shortcuts));
         if (shortcuts.isEmpty()) emptyTextView.setVisibility(View.VISIBLE);
         else emptyTextView.setVisibility(View.GONE); // Ensure the empty text view is hidden if there are shortcuts
@@ -193,7 +268,7 @@ public class ShortcutsFragment extends Fragment {
 
                         if (fileDeleted) {
                             disableShortcutOnScreen(requireContext(), shortcut);
-                            loadShortcutsList();
+                            loadShortcutsList(curSortType);
                             Toast.makeText(context, "Shortcut removed successfully.", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(context, "Failed to remove the shortcut. Please try again.", Toast.LENGTH_SHORT).show();
@@ -212,7 +287,7 @@ public class ShortcutsFragment extends Fragment {
                             // Use the selected container to clone the shortcut
                             if (shortcut.cloneToContainer(selectedContainer)) {
                                 Toast.makeText(context, "Shortcut cloned successfully.", Toast.LENGTH_SHORT).show();
-                                loadShortcutsList(); // Reload the shortcuts to show the cloned one
+                                loadShortcutsList(curSortType); // Reload the shortcuts to show the cloned one
                             } else {
                                 Toast.makeText(context, "Failed to clone shortcut.", Toast.LENGTH_SHORT).show();
                             }
