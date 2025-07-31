@@ -2,6 +2,10 @@
     <group android:checkableBehavior="none">
         <!-- Existing menu items -->
         <item
+            android:icon="@drawable/icon_screen_effect"
+            android:id="@+id/main_menu_screen_effects"
+            android:title="@string/screen_effect" />
+        <item
             android:icon="@drawable/icon_pause"
             android:id="@+id/main_menu_pause"
             android:title="Pause/Resume" />
@@ -34,11 +38,6 @@
             android:id="@+id/main_menu_gamepad_configurator"
             android:title="Gamepad Configurator"
             android:icon="@drawable/icon_gamepad" /> -->
-
-        <item
-            android:icon="@drawable/icon_screen_effect"
-            android:id="@+id/main_menu_screen_effects"
-            android:title="@string/screen_effect" />
         <!--
         <item
             android:icon="@drawable/icon_reset"
@@ -67,7 +66,5 @@
             android:id="@+id/main_menu_terminal"
             android:title="Debug Terminal"
             android:icon="@drawable/icon_env_var" />
-
-
     </group>
 </menu>

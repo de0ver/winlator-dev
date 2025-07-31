@@ -42,7 +42,7 @@ public abstract class TarCompressorUtils {
             }
             tar.closeArchiveEntry();
         }
-        catch (Exception e) {}
+        catch (Exception ignored) {}
     }
 
     private static void addLinkFile(ArchiveOutputStream tar, File file, String entryName) {
@@ -52,7 +52,7 @@ public abstract class TarCompressorUtils {
             tar.putArchiveEntry(entry);
             tar.closeArchiveEntry();
         }
-        catch (Exception e) {}
+        catch (Exception ignored) {}
     }
 
     private static void addDirectory(ArchiveOutputStream tar, File folder, String basePath, ExclusionFilter filter) throws IOException {

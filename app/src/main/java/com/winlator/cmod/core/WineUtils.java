@@ -92,7 +92,7 @@ public abstract class WineUtils {
                 else registryEditor.removeValue(dllOverridesKey, dlname);
             }
         }
-        catch (JSONException e) {}
+        catch (JSONException ignored) {}
     }
 
     public static void setWinComponentRegistryKeys(File systemRegFile, String identifier, boolean useNative, Context context) {

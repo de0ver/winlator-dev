@@ -91,18 +91,19 @@ public class LogView extends View {
                     continue;
                 }
 
-                if (lines.get(i).contains(":err:"))
+                String cur_line = lines.get(i).toLowerCase();
+                if (cur_line.contains(":err:"))
                     paint.setColor(0xfff7a59c);
-                else if (lines.get(i).contains("winedbg") || lines.get(i).contains(":msvcrt:")) {
+                else if (cur_line.contains("winedbg") || cur_line.contains(":msvcrt:") || cur_line.contains("illegal"))
                     paint.setColor(0xffff0000);
-                } else
+                else
                     paint.setColor((i % 2) != 0 ? 0xffe1f5fe : 0xffffffff);
 
                 canvas.drawRect(-scrollPosition.x, rowY, width, rowY + rowHeight, paint);
 
                 paint.setColor(0xff212121);
                 float centerY = (rowY - paint.ascent()) + (rowHeight - textHeight) * 0.5f;
-                canvas.drawText(lines.get(i), -scrollPosition.x, centerY, paint);
+                canvas.drawText(cur_line, -scrollPosition.x, centerY, paint);
                 rowY += rowHeight;
             }
              

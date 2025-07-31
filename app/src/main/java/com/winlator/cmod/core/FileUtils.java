@@ -113,7 +113,7 @@ public abstract class FileUtils {
             (new File(linkFile)).delete();
             Os.symlink(linkTarget, linkFile);
         }
-        catch (ErrnoException e) {}
+        catch (ErrnoException ignored) {}
     }
 
     public static boolean isSymlink(File file) {
@@ -266,7 +266,7 @@ public abstract class FileUtils {
                     else copy(context, relativePath, dstFile);
                 }
             }
-            catch (IOException e) {}
+            catch (IOException ignored) {}
         }
         else {
             if (dstFile.isDirectory()) dstFile = new File(dstFile, FileUtils.getName(assetFile));
@@ -276,7 +276,7 @@ public abstract class FileUtils {
                  BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(dstFile), StreamUtils.BUFFER_SIZE)) {
                 StreamUtils.copy(inStream, outStream);
             }
-            catch (IOException e) {}
+            catch (IOException ignored) {}
         }
     }
 
@@ -330,7 +330,7 @@ public abstract class FileUtils {
         try {
             Os.chmod(file.getAbsolutePath(), mode);
         }
-        catch (ErrnoException e) {}
+        catch (ErrnoException ignored) {}
     }
 
     public static File createTempFile(File parent, String prefix) {
@@ -467,7 +467,7 @@ public abstract class FileUtils {
                 result = !line.isEmpty() ? Integer.parseInt(line) : 0;
             }
         }
-        catch (Exception e) {}
+        catch (Exception ignored) {}
         return result;
     }
 

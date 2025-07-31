@@ -2280,7 +2280,25 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         File rootDir = imageFs.getRootDir();
         File windowsDir = new File(rootDir, ImageFs.WINEPREFIX + "/drive_c/windows");
 
-        if (dxwrapper.contains("vkd3d")) {
+        if (dxwrapper.contains("dxvk") || dxwrapper.contains("vkd3d"))
+        {
+            ContentProfile profile = contentsManager.getProfileByEntryName(dxwrapper);
+            if (profile != null)
+                contentsManager.applyContent(profile);
+            else
+                TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "dxwrapper/" + dxwrapper + ".tzst", windowsDir, onExtractFileListener);
+
+            if (dxwrapper.contains("dxvk") && compareVersion(StringUtils.parseNumber(dxwrapper), "2.4") < 0)
+                TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "dxwrapper/d8vk-" + DefaultVersion.D8VK + ".tzst", windowsDir, onExtractFileListener);
+            else
+                TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "dxwrapper/dxvk-2.4.1" + ".tzst", windowsDir, onExtractFileListener);
+        }
+
+        if (dxwrapper.contains("wined3d")) {
+            restoreOriginalDllFiles(dlls);
+        }
+
+        /*if (dxwrapper.contains("vkd3d")) {
             ContentProfile profile = contentsManager.getProfileByEntryName(dxwrapper);
             Log.d(TAG, "Extracting DXVK 2.4.1");
             TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "dxwrapper/dxvk-2.4.1" + ".tzst", windowsDir, onExtractFileListener);
@@ -2311,7 +2329,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         } else if (dxwrapper.contains("wined3d")) {
             Log.d(TAG, "Restoring original DLL files for wined3d.");
             restoreOriginalDllFiles(dlls);
-        }
+        }*/
     }
 
     private void extractDDrawrapperFiles(String ddrawrapper) {
@@ -2321,24 +2339,26 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         File rootDir = imageFs.getRootDir();
         File windowsDir = new File(rootDir, ImageFs.WINEPREFIX + "/drive_c/windows");
 
-        Log.d("XServerDisplayActivity", "Deleting glide dlls before extraction");
+        //SLog.d("XServerDisplayActivity", "Deleting glide dlls before extraction");
         for (String glideDLL : glideDlls) {
             FileUtils.delete(new File(windowsDir + "/syswow64/" + glideDLL));
         }
 
-        if (ddrawrapper.equals("wined3d")) {
-            Log.d("XserverDisplayActivity", "Restoring original dlls for WineD3D");
+        if (ddrawrapper.equals("wined3d")) { // <- wined3d dlls
+            //Log.d("XserverDisplayActivity", "Restoring original dlls for WineD3D");
             restoreOriginalDllFiles(dlls);
         }
         else {
-            Log.d("XServerDisplayActivity", "Extracting ddrawrapper " + ddrawrapper);
+            //Log.d("XServerDisplayActivity", "Extracting ddrawrapper " + ddrawrapper); //d7tod9 dlls
             TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "ddrawrapper/" + ddrawrapper + ".tzst", windowsDir, onExtractFileListener);
         }
 
-        if (!ddrawrapper.contains("dgvoodoo"))  {
-            Log.d("XServerDisplayActivity", "Extracting nglide wrapper");
+        if (!ddrawrapper.contains("dgvoodoo"))  { //glide dlls
+            //Log.d("XServerDisplayActivity", "Extracting nglide wrapper");
             TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "ddrawrapper/nglide.tzst", windowsDir, onExtractFileListener);
         }
+
+        //dgvoodoo ddraw dlls
     }
 
 

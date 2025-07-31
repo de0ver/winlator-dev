@@ -564,7 +564,7 @@ public class Container {
             }
 
             if (data.has("graphicsDriver")) {
-                String graphicsDriver = data.getString("graphicsDriver");
+                String graphicsDriver = data.getString("graphicsDriver").toLowerCase();
                 if (graphicsDriver.equals("turnip-zink") || graphicsDriver.equals("turnip")) {
                     data.put("graphicsDriver", "wrapper");
                 }
@@ -603,7 +603,7 @@ public class Container {
 
             data.put("wincomponents", result);
         }
-        catch (JSONException e) {}
+        catch (JSONException ignored) {}
     }
 
     public static String getFallbackCPUList() {
