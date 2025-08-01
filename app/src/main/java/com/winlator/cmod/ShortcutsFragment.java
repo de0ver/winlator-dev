@@ -41,6 +41,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,6 +53,7 @@ import com.winlator.cmod.contentdialog.ContentDialog;
 import com.winlator.cmod.contentdialog.ShortcutSettingsDialog;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.FileUtils;
+import com.winlator.cmod.saves.CustomFilePickerActivity;
 import com.winlator.cmod.xenvironment.ImageFs;
 
 import java.io.BufferedReader;
@@ -69,8 +71,11 @@ public class ShortcutsFragment extends Fragment {
     private TextView emptyTextView;
     private ContainerManager manager;
     private ShortcutSettingsDialog currentDialog;
+    //private final Activity activity;
     public int curSortType = 0;
     private final String[] sortTypeText = {"Name", "Container Id", "Path", "Playtime", "Play Count", "Last Play Date"};
+    private boolean isGrid = false;
+    private SharedPreferences prefs;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,7 +87,10 @@ public class ShortcutsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         manager = new ContainerManager(getContext());
+        prefs = requireContext().getSharedPreferences("ShortcutsPref", Context.MODE_PRIVATE);
+        curSortType = prefs.getInt("cur_sort_type", 0);
         loadShortcutsList(curSortType);
+
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.shortcuts);
     }
 
@@ -92,7 +100,8 @@ public class ShortcutsFragment extends Fragment {
         FrameLayout frameLayout = (FrameLayout)inflater.inflate(R.layout.shortcuts_fragment, container, false);
         recyclerView = frameLayout.findViewById(R.id.RecyclerView);
         emptyTextView = frameLayout.findViewById(R.id.TVEmptyText);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        setRecyclerLayoutManager();
+        //recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         return frameLayout;
     }
@@ -124,6 +133,20 @@ public class ShortcutsFragment extends Fragment {
         switch (menuItem.getItemId()) {
             case R.id.add_shortcuts:
                 AppUtils.showToast(getContext(), "W.I.P.");
+                /*if (selectedContainer == null || selectedContainer.getRootDir() == null) {
+                    AppUtils.showToast(getContext(), R.string.invalid_container);
+                    return;
+                }
+
+                File rootDir = selectedContainer.getRootDir();
+                String dynamicPath = new File(rootDir, ".wine/drive_c/").getAbsolutePath();
+
+                Intent intent = new Intent(activity, CustomFilePickerActivity.class);
+                intent.putExtra("initialDirectory", dynamicPath);
+                intent.putExtra("isEditing", saveToEdit != null); // Pass if we are in edit mode
+                intent.putExtra("editingPath", saveToEdit != null ? saveToEdit.path : dynamicPath); // Pass the current path if editing
+
+                activity.startActivityForResult(intent, REQUEST_CODE_CUSTOM_FILE_PICKER);*/
                 /*if (!ImageFs.find(getContext()).isValid()) return false;
                 FragmentManager fragmentManager = getParentFragmentManager();
                 fragmentManager.beginTransaction()
@@ -135,8 +158,16 @@ public class ShortcutsFragment extends Fragment {
 
             case R.id.sort_shortcuts:
                 curSortType = (curSortType + 1) % sortTypeText.length;
+                SharedPreferences.Editor prefEditor = prefs.edit();
+                prefEditor.putInt("cur_sort_type", curSortType);
+                prefEditor.apply();
                 loadShortcutsList(curSortType);
                 AppUtils.showToast(getContext(), "Sort by: " + sortTypeText[curSortType]);
+                menuItem.setTitle(sortTypeText[curSortType]);
+                return true;
+            case R.id.change_layout:
+                    isGrid = !isGrid;
+                    setRecyclerLayoutManager();
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
@@ -160,20 +191,26 @@ public class ShortcutsFragment extends Fragment {
                 break;
             case 3:
                 shortcuts.sort((s1, s2) -> Long.compare(
-                        prefs.getLong(s2.name + "_playtime", 0),
-                        prefs.getLong(s1.name + "_playtime", 0)
+                        prefs.getLong(s2.path + "_playtime", 0),
+                        //prefs.getLong(s2.name + "_playtime", 0),
+                        prefs.getLong(s1.path + "_playtime", 0)
+                        //prefs.getLong(s1.name + "_playtime", 0)
                 ));
                 break;
             case 4:
                 shortcuts.sort((s1, s2) -> Integer.compare(
-                        prefs.getInt(s2.name + "_play_count", 0),
-                        prefs.getInt(s1.name + "_play_count", 0)
+                        prefs.getInt(s2.path + "_play_count", 0),
+                        //prefs.getInt(s2.name + "_play_count", 0),
+                        prefs.getInt(s1.path + "_play_count", 0)
+                        //prefs.getInt(s1.name + "_play_count", 0)
                 ));
                 break;
             case 5:
                 shortcuts.sort((s1, s2) -> Long.compare(
-                        prefs.getLong(s2.name + "_play_date", 0),
-                        prefs.getLong(s1.name + "_play_date", 0)
+                        prefs.getLong(s2.path + "_play_date", 0),
+                        //prefs.getLong(s2.name + "_play_date", 0),
+                        prefs.getLong(s1.path + "_play_date", 0)
+                        //prefs.getLong(s1.name + "_play_date", 0)
                 ));
                 break;
         }
@@ -183,6 +220,14 @@ public class ShortcutsFragment extends Fragment {
         recyclerView.setAdapter(new ShortcutsAdapter(shortcuts));
         if (shortcuts.isEmpty()) emptyTextView.setVisibility(View.VISIBLE);
         else emptyTextView.setVisibility(View.GONE); // Ensure the empty text view is hidden if there are shortcuts
+    }
+
+    private void setRecyclerLayoutManager() {
+        if (isGrid) {
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        } else {
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
     }
 
     private class ShortcutsAdapter extends RecyclerView.Adapter<ShortcutsAdapter.ViewHolder> {
@@ -214,7 +259,12 @@ public class ShortcutsFragment extends Fragment {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.shortcut_list_item, parent, false));
+            /*int layoutId = (isGrid)
+                    ? R.layout.shortcut_grid_item
+                    : R.layout.shortcut_list_item;*/
+
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shortcut_list_item, parent, false);
+            return new ViewHolder(view);
         }
 
         @Override
@@ -493,8 +543,10 @@ public class ShortcutsFragment extends Fragment {
         private void showShortcutProperties(Shortcut shortcut) {
             SharedPreferences playtimePrefs = getContext().getSharedPreferences("playtime_stats", Context.MODE_PRIVATE);
 
-            String playtimeKey = shortcut.name + "_playtime";
-            String playCountKey = shortcut.name + "_play_count";
+            String playtimeKey = shortcut.path + "_playtime";
+            //String playtimeKey = shortcut.name + "_playtime";
+            String playCountKey = shortcut.path + "_play_count";
+            //String playCountKey = shortcut.name + "_play_count";
 
             long totalPlaytime = playtimePrefs.getLong(playtimeKey, 0);
             int playCount = playtimePrefs.getInt(playCountKey, 0);

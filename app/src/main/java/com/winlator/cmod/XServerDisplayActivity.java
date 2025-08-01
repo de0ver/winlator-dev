@@ -210,6 +210,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private long startTime;
     private SharedPreferences playtimePrefs;
     private String shortcutName;
+    private String shortcutPath;
+    private String shortcutPathForStat;
     private Handler handler;
     private Runnable savePlaytimeRunnable;
     private static final long SAVE_INTERVAL_MS = 1000;
@@ -407,7 +409,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 //            containerManager.activateContainer(container);
 
             // Log shortcut_path
-            String shortcutPath = getIntent().getStringExtra("shortcut_path");
+            shortcutPath = getIntent().getStringExtra("shortcut_path");
+            //String shortcutPath = getIntent().getStringExtra("shortcut_path");
             Log.d("XServerDisplayActivity", "Shortcut Path: " + shortcutPath);
 
 
@@ -461,6 +464,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
             if (shortcutPath != null && !shortcutPath.isEmpty()) {
                 shortcut = new Shortcut(container, new File(shortcutPath));
+                shortcutPathForStat = shortcut.path;
             }
 
             if (Objects.equals(shortcutName, null))
@@ -886,7 +890,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         }
 
         SharedPreferences.Editor editor = playtimePrefs.edit();
-        String playtimeKey = shortcutName + "_playtime";
+        String playtimeKey = shortcutPathForStat + "_playtime";
+        //String playtimeKey = shortcutName + "_playtime";
 
         long totalPlaytime = playtimePrefs.getLong(playtimeKey, 0) + playtime;
         editor.putLong(playtimeKey, totalPlaytime);
@@ -897,7 +902,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
     private void incrementPlayCount() {
         SharedPreferences.Editor editor = playtimePrefs.edit();
-        String playCountKey = shortcutName + "_play_count";
+        String playCountKey = shortcutPathForStat + "_play_count";
+        //String playCountKey = shortcutName + "_play_count";
         int playCount = playtimePrefs.getInt(playCountKey, 0) + 1;
         editor.putInt(playCountKey, playCount);
         editor.apply();
@@ -905,7 +911,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
     private void saveLastPlayDate() {
         SharedPreferences.Editor editor = playtimePrefs.edit();
-        String playDateKey = shortcutName + "_play_date";
+        String playDateKey;
+        //if (shortcutPathForStat.isEmpty())
+        playDateKey = shortcutPathForStat + "_play_date";
+        //String playDateKey = shortcutName + "_play_date";
         long currentTimeMillis = System.currentTimeMillis();
         editor.putLong(playDateKey, currentTimeMillis);
         editor.apply();

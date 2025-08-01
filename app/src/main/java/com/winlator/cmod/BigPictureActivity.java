@@ -962,8 +962,10 @@ public class BigPictureActivity extends AppCompatActivity {
 
         // Set play count and playtime (unchanged)
         SharedPreferences playtimePrefs = getSharedPreferences("playtime_stats", Context.MODE_PRIVATE);
-        long totalPlaytime = playtimePrefs.getLong(shortcut.name + "_playtime", 0);
-        int playCount = playtimePrefs.getInt(shortcut.name + "_play_count", 0);
+        long totalPlaytime = playtimePrefs.getLong(shortcut.path + "_playtime", 0);
+        //long totalPlaytime = playtimePrefs.getLong(shortcut.name + "_playtime", 0);
+        int playCount = playtimePrefs.getInt(shortcut.path + "_play_count", 0);
+        //int playCount = playtimePrefs.getInt(shortcut.name + "_play_count", 0);
         playCountView.setText("Times Played: " + playCount);
         playtimeView.setText("Playtime: " + formatPlaytime(totalPlaytime));
 
