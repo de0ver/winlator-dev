@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -241,9 +243,16 @@ public class InputControlsFragment extends Fragment {
             loadProfileSpinner(sProfile);
             updateLayout.run();
         };
+
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
+
+        Uri initialUri = Uri.parse(
+                "content://com.android.externalstorage.documents/document/primary:Download/Winlator/profiles"
+        );
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, initialUri);
+
         getActivity().startActivityFromFragment(this, intent, MainActivity.OPEN_FILE_REQUEST_CODE);
     }
 

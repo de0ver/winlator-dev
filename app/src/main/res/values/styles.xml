@@ -215,7 +215,7 @@
     <style name="ToolButton" parent="BaseImageButton">
         <item name="android:layout_marginLeft">2dp</item>
         <item name="android:layout_marginRight">2dp</item>
-        <item name="android:tint">@color/colorPrimary</item>
+        <item name="android:tint">@color/white</item>
     </style>
 
     <style name="ToolButton.Dark" parent="BaseImageButton">
@@ -349,7 +349,7 @@
 
     <style name="Base.Widget.AppCompat.SeekBar" parent="@android:style/Widget.Material.SeekBar" />
     <style name="Base.Widget.AppCompat.SeekBar.Discrete" parent="@style/Base.Widget.AppCompat.SeekBar">
-        <item name="tickMark">@drawable/abc_seekbar_tick_mark_material</item>
+        <item name="tickMark">@color/black</item>
     </style>
 
     <style name="Preference.SeekBarPreference" parent="@style/Preference">

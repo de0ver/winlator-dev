@@ -286,10 +286,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 //            Log.e("XServerDisplayActivity", "Failed to create test file: " + e.getMessage());
 //        }
 
-
         final PreloaderDialog preloaderDialog = new PreloaderDialog(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
 
         // Check for Dark Mode
         isDarkMode = preferences.getBoolean("dark_mode", false);
