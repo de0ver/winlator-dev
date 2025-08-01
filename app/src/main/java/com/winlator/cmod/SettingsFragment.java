@@ -19,7 +19,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -40,37 +39,26 @@ import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.navigation.NavigationView;
-import com.winlator.cmod.R;
 import com.winlator.cmod.box86_64.Box86_64EditPresetDialog;
 import com.winlator.cmod.box86_64.Box86_64Preset;
 import com.winlator.cmod.box86_64.Box86_64PresetManager;
-import com.winlator.cmod.container.Container;
-import com.winlator.cmod.container.ContainerManager;
 import com.winlator.cmod.contentdialog.ContentDialog;
-import com.winlator.cmod.contents.ContentProfile;
-import com.winlator.cmod.contents.ContentsManager;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.ArrayUtils;
 import com.winlator.cmod.core.Callback;
-import com.winlator.cmod.core.DefaultVersion;
 import com.winlator.cmod.core.FileUtils;
 import com.winlator.cmod.core.PreloaderDialog;
-import com.winlator.cmod.core.StringUtils;
 import com.winlator.cmod.core.TarCompressorUtils;
-import com.winlator.cmod.core.WineInfo;
-import com.winlator.cmod.core.WineUtils;
 import com.winlator.cmod.inputcontrols.ControlElement;
 import com.winlator.cmod.inputcontrols.ExternalController;
 import com.winlator.cmod.inputcontrols.PreferenceKeys;
 import com.winlator.cmod.midi.MidiManager;
 import com.winlator.cmod.restore.RestoreActivity;
 import com.winlator.cmod.widget.InputControlsView;
-import com.winlator.cmod.xenvironment.ImageFs;
 import com.winlator.cmod.xenvironment.ImageFsInstaller;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.tukaani.xz.check.Check;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,8 +75,8 @@ public class SettingsFragment extends Fragment {
     public static final String DEFAULT_EXPORT_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/Winlator/Frontend";
     private SharedPreferences preferences;
 
-	// Disable or enable True Mouse Control
-	private CheckBox cbCursorLock;
+    // Disable or enable True Mouse Control
+    private CheckBox cbCursorLock;
     // Disable or enable Xinput Processing
     private CheckBox cbXinputToggle;
 
@@ -131,9 +119,8 @@ public class SettingsFragment extends Fragment {
         Button btnConfigureGyro = view.findViewById(R.id.BTConfigureGyro);
         btnConfigureGyro.setOnClickListener(v -> showGyroConfigDialog());
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.settings);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.settings);
     }
-
 
 
     @Nullable
@@ -349,16 +336,18 @@ public class SettingsFragment extends Fragment {
         sbCursorSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                tvCursorSpeed.setText(progress+"%");
+                tvCursorSpeed.setText(progress + "%");
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
-        sbCursorSpeed.setProgress((int)(preferences.getFloat("cursor_speed", 1.0f) * 100));
+        sbCursorSpeed.setProgress((int) (preferences.getFloat("cursor_speed", 1.0f) * 100));
 
         final RadioGroup rgTriggerType = view.findViewById(R.id.RGTriggerType);
         final View btHelpTriggerMode = view.findViewById(R.id.BTHelpTriggerMode);
@@ -431,13 +420,12 @@ public class SettingsFragment extends Fragment {
             editor.putInt("gyro_mode", rgGyroMode.getCheckedRadioButtonId() == R.id.RBHoldMode ? 0 : 1);
 
 
-
             if (!wineDebugChannels.isEmpty()) {
                 editor.putString("wine_debug_channels", String.join(",", wineDebugChannels));
             } else if (preferences.contains("wine_debug_channels")) {
                 editor.remove("wine_debug_channels");
-            }
-            else if (preferences.contains("wine_debug_channels")) editor.remove("wine_debug_channels");
+            } else if (preferences.contains("wine_debug_channels"))
+                editor.remove("wine_debug_channels");
 
             editor.putBoolean("legacy_mode_enabled", enableLegacyInputMode); // Save the 7.1.2 legacy mode state
 
@@ -454,7 +442,6 @@ public class SettingsFragment extends Fragment {
                         .commit();
             }
         });
-
 
 
         return view;
@@ -583,7 +570,7 @@ public class SettingsFragment extends Fragment {
         final Context context = getContext();
 
         Callback<String> updateSpinner = (prefix) -> {
-            Box86_64PresetManager.loadSpinner(prefix, spinners.get(prefix), preferences.getString(prefix+"_preset", Box86_64Preset.COMPATIBILITY));
+            Box86_64PresetManager.loadSpinner(prefix, spinners.get(prefix), preferences.getString(prefix + "_preset", Box86_64Preset.COMPATIBILITY));
         };
 
         Callback<String> onAddPreset = (prefix) -> {
@@ -602,7 +589,7 @@ public class SettingsFragment extends Fragment {
             Spinner spinner = spinners.get(prefix);
             Box86_64PresetManager.duplicatePreset(prefix, context, Box86_64PresetManager.getSpinnerSelectedId(spinner));
             updateSpinner.call(prefix);
-            spinner.setSelection(spinner.getCount()-1);
+            spinner.setSelection(spinner.getCount() - 1);
         });
 
         Callback<String> onRemovePreset = (prefix) -> {
@@ -652,12 +639,14 @@ public class SettingsFragment extends Fragment {
             JSONArray jsonArray = null;
             try {
                 jsonArray = new JSONArray(FileUtils.readString(context, "wine_debug_channels.json"));
+            } catch (JSONException e) {
             }
-            catch (JSONException e) {}
 
             final String[] items = ArrayUtils.toStringArray(jsonArray);
             ContentDialog.showMultipleChoiceList(context, R.string.wine_debug_channel, items, (selectedPositions) -> {
-                for (int selectedPosition : selectedPositions) if (!debugChannels.contains(items[selectedPosition])) debugChannels.add(items[selectedPosition]);
+                for (int selectedPosition : selectedPositions)
+                    if (!debugChannels.contains(items[selectedPosition]))
+                        debugChannels.add(items[selectedPosition]);
                 loadWineDebugChannels(view, debugChannels);
             });
         });
@@ -759,10 +748,12 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         sbGyroYSensitivity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -772,10 +763,12 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         sbGyroSmoothing.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -785,10 +778,12 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         sbGyroDeadzone.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -798,10 +793,12 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         // SensorManager to handle gyroscope input and affect only the thumbstick position within a fixed radius
@@ -869,7 +866,8 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            }
         };
 
         sensorManager.registerListener(gyroListener, gyroscopeSensor, SensorManager.SENSOR_DELAY_GAME);
@@ -891,7 +889,6 @@ public class SettingsFragment extends Fragment {
         // Show the dialog
         builder.create().show();
     }
-
 
 
     private void showBackupConfirmationDialog() {
@@ -931,7 +928,6 @@ public class SettingsFragment extends Fragment {
             }
         });
     }
-
 
 
     private void selectBackupFileForRestore() {
@@ -1005,10 +1001,6 @@ public class SettingsFragment extends Fragment {
             }
         }
     }
-
-
-
-
 
 
     private void restoreAppData(Uri backupUri) {
@@ -1129,10 +1121,12 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         sbLeftSensitivity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -1142,10 +1136,12 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         sbRightDeadzone.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -1155,10 +1151,12 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         sbRightSensitivity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -1168,10 +1166,12 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         // Set up the dialog buttons
@@ -1214,7 +1214,6 @@ public class SettingsFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
 
 
 }

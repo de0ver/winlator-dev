@@ -125,8 +125,8 @@ public class ContainerDetailFragment extends Fragment {
 
         try {
             gpuCards = new JSONArray(FileUtils.readString(getContext(), "gpu_cards.json"));
+        } catch (JSONException e) {
         }
-        catch (JSONException e) {}
     }
 
     private static void applyFieldSetLabelStyle(TextView textView, boolean isDarkMode) {
@@ -219,13 +219,13 @@ public class ContainerDetailFragment extends Fragment {
 
         Spinner sFEXCoreTSOPreset = view.findViewById(R.id.SFEXCoreTSOPreset);
         sFEXCoreTSOPreset.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
-        
+
         Spinner sFEXCoreMultiBlock = view.findViewById(R.id.SFEXCoreMultiblock);
         sFEXCoreMultiBlock.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
-        
+
         Spinner sFEXCoreX87ReducedPrecision = view.findViewById(R.id.SFEXCoreX87ReducedPrecision);
         sFEXCoreX87ReducedPrecision.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
-        
+
 
         Spinner sStartupSelection = view.findViewById(R.id.SStartupSelection);
         sStartupSelection.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
@@ -273,7 +273,7 @@ public class ContainerDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(isEditMode() ? R.string.edit_container : R.string.new_container);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(isEditMode() ? R.string.edit_container : R.string.new_container);
 
         // Find TextViews by ID and apply dynamic styles
         TextView desktopLabel = view.findViewById(R.id.TVDesktop);
@@ -292,7 +292,7 @@ public class ContainerDetailFragment extends Fragment {
         // Advanced Tab TextViews
         TextView box86box64Label = view.findViewById(R.id.TVBox86Box64);
         applyFieldSetLabelStyle(box86box64Label, isDarkMode);  // Apply the dark or light mode styles
-        
+
         TextView fexCoreLabel = view.findViewById(R.id.TVFEXCore);
         applyFieldSetLabelStyle(fexCoreLabel, isDarkMode);
 
@@ -331,14 +331,12 @@ public class ContainerDetailFragment extends Fragment {
         contentsManager.syncContents();
 
 
-
         boolean isLegacyModeEnabled = preferences.getBoolean("legacy_mode_enabled", false);
 
 
         final EditText etName = view.findViewById(R.id.ETName);
 
         final Spinner sWineVersion = view.findViewById(R.id.SWineVersion);
-
 
 
         // Ensure the Wine version layout is visible
@@ -359,7 +357,7 @@ public class ContainerDetailFragment extends Fragment {
         loadScreenSizeSpinner(view, isEditMode() ? container.getScreenSize() : Container.DEFAULT_SCREEN_SIZE);
 
         final Spinner sGraphicsDriver = view.findViewById(R.id.SGraphicsDriver);
-        
+
         final Spinner sDXWrapper = view.findViewById(R.id.SDXWrapper);
         final Spinner sDDrawrapper = view.findViewById(R.id.SDDrawrapper);
 
@@ -489,7 +487,7 @@ public class ContainerDetailFragment extends Fragment {
         final Spinner sFEXCoreTSOPreset = view.findViewById(R.id.SFEXCoreTSOPreset);
         final Spinner sFEXCoreMultiBlock = view.findViewById(R.id.SFEXCoreMultiblock);
         final Spinner sFEXCoreX87ReducedPrecision = view.findViewById(R.id.SFEXCoreX87ReducedPrecision);
-        
+
         FEXCoreManager.loadFEXCoreSettings(context, container, sFEXCoreTSOPreset, sFEXCoreMultiBlock, sFEXCoreX87ReducedPrecision);
 
         String selectedDriver = sGraphicsDriver.getSelectedItem().toString();
@@ -590,7 +588,6 @@ public class ContainerDetailFragment extends Fragment {
                         envVars = envVars.replace(envVar, "").replaceAll("\\s{2,}", " ").trim();
                     }
                 }
-
 
 
                 if (isEditMode()) {
@@ -700,8 +697,8 @@ public class ContainerDetailFragment extends Fragment {
                 JSONObject gpuName = gpuCards.getJSONObject(sGPUName.getSelectedItemPosition());
                 registryEditor.setDwordValue("Software\\Wine\\Direct3D", "VideoPciDeviceID", gpuName.getInt("deviceID"));
                 registryEditor.setDwordValue("Software\\Wine\\Direct3D", "VideoPciVendorID", gpuName.getInt("vendorID"));
+            } catch (JSONException e) {
             }
-            catch (JSONException e) {}
 
             Spinner sOffscreenRenderingMode = view.findViewById(R.id.SOffscreenRenderingMode);
             registryEditor.setStringValue("Software\\Wine\\Direct3D", "OffScreenRenderingMode", sOffscreenRenderingMode.getSelectedItem().toString().toLowerCase(Locale.ENGLISH));
@@ -741,14 +738,14 @@ public class ContainerDetailFragment extends Fragment {
 
                 if (type == WineThemeManager.BackgroundType.IMAGE) {
                     ipvDesktopBackgroundImage.setVisibility(View.VISIBLE);
-                }
-                else if (type == WineThemeManager.BackgroundType.COLOR) {
+                } else if (type == WineThemeManager.BackgroundType.COLOR) {
                     cpvDesktopBackgroundColor.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
         sDesktopBackgroundType.setSelection(desktopTheme.backgroundType.ordinal());
 
@@ -794,8 +791,8 @@ public class ContainerDetailFragment extends Fragment {
                 if (item.getInt("deviceID") == selectedDeviceID) selectedPosition = i;
                 values.add(item.getString("name"));
             }
+        } catch (JSONException e) {
         }
-        catch (JSONException e) {}
 
         spinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, values));
         spinner.setSelection(selectedPosition);
@@ -806,12 +803,12 @@ public class ContainerDetailFragment extends Fragment {
         String value = sScreenSize.getSelectedItem().toString();
         if (value.equalsIgnoreCase("custom")) {
             value = Container.DEFAULT_SCREEN_SIZE;
-            String strWidth = ((EditText)view.findViewById(R.id.ETScreenWidth)).getText().toString().trim();
-            String strHeight = ((EditText)view.findViewById(R.id.ETScreenHeight)).getText().toString().trim();
+            String strWidth = ((EditText) view.findViewById(R.id.ETScreenWidth)).getText().toString().trim();
+            String strHeight = ((EditText) view.findViewById(R.id.ETScreenHeight)).getText().toString().trim();
             if (strWidth.matches("[0-9]+") && strHeight.matches("[0-9]+")) {
                 int width = Integer.parseInt(strWidth);
                 int height = Integer.parseInt(strHeight);
-                if ((width % 2) == 0 && (height % 2) == 0) return width+"x"+height;
+                if ((width % 2) == 0 && (height % 2) == 0) return width + "x" + height;
             }
         }
         return StringUtils.parseIdentifier(value);
@@ -824,10 +821,10 @@ public class ContainerDetailFragment extends Fragment {
         ColorPickerView cpvDesktopBackground = view.findViewById(R.id.CPVDesktopBackgroundColor);
         WineThemeManager.Theme theme = WineThemeManager.Theme.values()[sDesktopTheme.getSelectedItemPosition()];
 
-        String desktopTheme = theme+","+type+","+cpvDesktopBackground.getColorAsString();
+        String desktopTheme = theme + "," + type + "," + cpvDesktopBackground.getColorAsString();
         if (type == WineThemeManager.BackgroundType.IMAGE) {
             File userWallpaperFile = WineThemeManager.getUserWallpaperFile(getContext());
-            desktopTheme += ","+(userWallpaperFile.isFile() ? userWallpaperFile.lastModified() : "0");
+            desktopTheme += "," + (userWallpaperFile.isFile() ? userWallpaperFile.lastModified() : "0");
         }
         return desktopTheme;
     }
@@ -888,7 +885,8 @@ public class ContainerDetailFragment extends Fragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         // Set the spinner's initial selection
@@ -904,15 +902,15 @@ public class ContainerDetailFragment extends Fragment {
                 if (dxwrapper.equals("dxvk")) {
                     vDXWrapperConfig.setOnClickListener((v) -> (new DXVKConfigDialog(vDXWrapperConfig)).show());
                     vDXWrapperConfig.setVisibility(View.VISIBLE);
-                }
-                else if (dxwrapper.equals("vkd3d")) {
+                } else if (dxwrapper.equals("vkd3d")) {
                     vDXWrapperConfig.setOnClickListener((v) -> (new VKD3DConfigDialog(vDXWrapperConfig)).show());
                     vDXWrapperConfig.setVisibility(View.VISIBLE);
                 } else vDXWrapperConfig.setVisibility(View.GONE);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 
@@ -934,8 +932,8 @@ public class ContainerDetailFragment extends Fragment {
         String[] wincomponents = new String[views.size()];
 
         for (int i = 0; i < views.size(); i++) {
-            Spinner spinner = (Spinner)views.get(i);
-            wincomponents[i] = spinner.getTag()+"="+spinner.getSelectedItemPosition();
+            Spinner spinner = (Spinner) views.get(i);
+            wincomponents[i] = spinner.getTag() + "=" + spinner.getSelectedItemPosition();
         }
         return String.join(",", wincomponents);
     }
@@ -950,13 +948,13 @@ public class ContainerDetailFragment extends Fragment {
         for (String[] wincomponent : new KeyValueSet(wincomponents)) {
             ViewGroup parent = wincomponent[0].startsWith("direct") ? directxSectionView : generalSectionView;
             View itemView = inflater.inflate(R.layout.wincomponent_list_item, parent, false);
-            ((TextView)itemView.findViewById(R.id.TextView)).setText(StringUtils.getString(context, wincomponent[0]));
+            ((TextView) itemView.findViewById(R.id.TextView)).setText(StringUtils.getString(context, wincomponent[0]));
             Spinner spinner = itemView.findViewById(R.id.Spinner);
             spinner.setSelection(Integer.parseInt(wincomponent[1]), false);
             spinner.setTag(wincomponent[0]);
 
             // Set the background color of the spinners dynamically based on the current theme
-            spinner.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark: R.drawable.content_dialog_background);
+            spinner.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
 
             parent.addView(itemView);
 
@@ -1009,7 +1007,7 @@ public class ContainerDetailFragment extends Fragment {
             Spinner spinner = child.findViewById(R.id.Spinner);
             EditText editText = child.findViewById(R.id.EditText);
             String path = editText.getText().toString().trim();
-            if (!path.isEmpty()) drives += spinner.getSelectedItem()+path;
+            if (!path.isEmpty()) drives += spinner.getSelectedItem() + path;
         }
         return drives;
     }
@@ -1022,13 +1020,13 @@ public class ContainerDetailFragment extends Fragment {
         LayoutInflater inflater = LayoutInflater.from(context);
         final String drives = isEditMode() ? container.getDrives() : Container.DEFAULT_DRIVES;
         final String[] driveLetters = new String[Container.MAX_DRIVE_LETTERS];
-        for (int i = 0; i < driveLetters.length; i++) driveLetters[i] = ((char)(i + 68))+":";
+        for (int i = 0; i < driveLetters.length; i++) driveLetters[i] = ((char) (i + 68)) + ":";
 
         Callback<String[]> addItem = (drive) -> {
             final View itemView = inflater.inflate(R.layout.drive_list_item, parent, false);
             Spinner spinner = itemView.findViewById(R.id.Spinner);
             spinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, driveLetters));
-            AppUtils.setSpinnerSelectionFromValue(spinner, drive[0]+":");
+            AppUtils.setSpinnerSelectionFromValue(spinner, drive[0] + ":");
 
             // Apply dark theme to the spinner popup background
             spinner.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
@@ -1110,8 +1108,7 @@ public class ContainerDetailFragment extends Fragment {
                     sEmulator.setEnabled(true);
                     sEmulator64.setSelection(0);
                     if (!isEditMode()) sEmulator.setSelection(0);
-                }
-                else {
+                } else {
                     fexcoreFL.setVisibility(View.GONE);
                     sEmulator.setEnabled(false);
                     sEmulator.setSelection(1);
@@ -1120,6 +1117,7 @@ public class ContainerDetailFragment extends Fragment {
                 loadBox64VersionSpinner(context, container, contentsManager, sBox64Version, wineInfo.isArm64EC());
                 cbWoW64Mode.setEnabled(true); // Always allow user to toggle WoW64 mode
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 FrameLayout fexcoreFL = view.findViewById(R.id.fexcoreFrame);
@@ -1132,8 +1130,7 @@ public class ContainerDetailFragment extends Fragment {
                     fexcoreFL.setVisibility(View.VISIBLE);
                     sEmulator.setEnabled(true);
                     sEmulator64.setSelection(0);
-                }
-                else {
+                } else {
                     fexcoreFL.setVisibility(View.GONE);
                     sEmulator.setEnabled(false);
                     sEmulator.setSelection(1);
@@ -1151,7 +1148,8 @@ public class ContainerDetailFragment extends Fragment {
         for (ContentProfile profile : contentsManager.getProfiles(ContentProfile.ContentType.CONTENT_TYPE_WINE))
             wineVersions.add(ContentsManager.getEntryName(profile));
         sWineVersion.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, wineVersions));
-        if (isEditMode()) AppUtils.setSpinnerSelectionFromValue(sWineVersion, container.getWineVersion());
+        if (isEditMode())
+            AppUtils.setSpinnerSelectionFromValue(sWineVersion, container.getWineVersion());
     }
 
     public String getControllerMapping(View view) {
@@ -1162,7 +1160,7 @@ public class ContainerDetailFragment extends Fragment {
         };
         byte[] controllerMapping = new byte[ids.length];
         for (int i = 0; i < ids.length; i++) {
-            int index =  ((Spinner)view.findViewById(ids[i])).getSelectedItemPosition();
+            int index = ((Spinner) view.findViewById(ids[i])).getSelectedItemPosition();
             byte value = XKeycode.values()[index].id;
             controllerMapping[i] = value;
         }
@@ -1193,7 +1191,7 @@ public class ContainerDetailFragment extends Fragment {
     public static void updateGraphicsDriverSpinner(Context context, Spinner spinner) {
         String[] originalItems = context.getResources().getStringArray(R.array.graphics_driver_entries);
         List<String> itemList = new ArrayList<>(Arrays.asList(originalItems));
-        
+
         // Set the adapter with the combined list
         spinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, itemList));
     }
@@ -1203,8 +1201,7 @@ public class ContainerDetailFragment extends Fragment {
         if (isArm64EC) {
             String[] originalItems = context.getResources().getStringArray(R.array.wowbox64_version_entries);
             itemList = new ArrayList<>(Arrays.asList(originalItems));
-        }
-        else {
+        } else {
             String[] originalItems = context.getResources().getStringArray(R.array.box64_version_entries);
             itemList = new ArrayList<>(Arrays.asList(originalItems));
         }

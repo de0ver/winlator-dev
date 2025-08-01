@@ -14,12 +14,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,12 +32,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.winlator.cmod.R;
+import com.winlator.cmod.container.Container;
+import com.winlator.cmod.container.ContainerManager;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.Callback;
 import com.winlator.cmod.core.FileUtils;
-import com.winlator.cmod.container.Container;
-import com.winlator.cmod.container.ContainerManager;
 import com.winlator.cmod.core.PreloaderDialog;
 import com.winlator.cmod.core.TarCompressorUtils;
 import com.winlator.cmod.saves.Save;
@@ -128,7 +127,6 @@ public class SavesFragment extends Fragment {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, REQUEST_CODE_IMPORT_ARCHIVE);
     }
-
 
 
     @Override
@@ -281,8 +279,6 @@ public class SavesFragment extends Fragment {
             }
         }).start();
     }
-
-
 
 
     public void refreshSavesList() {
@@ -441,7 +437,6 @@ public class SavesFragment extends Fragment {
         }
 
 
-
         private void makeFileVisible(File file) {
             // Force a media scan so the file becomes visible to other apps
             MediaScannerConnection.scanFile(getContext(),
@@ -501,41 +496,39 @@ public class SavesFragment extends Fragment {
     }
 
 
+    private void showTransferDialog(Save save) {
+        // Create a simple dialog with a Spinner for selecting a container
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.container_selection_dialog, null);
+        Spinner spinner = dialogView.findViewById(R.id.spinner_container_selection);
 
+        List<Container> containers = containerManager.getContainers();
+        ArrayAdapter<Container> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, containers);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
-        private void showTransferDialog(Save save) {
-            // Create a simple dialog with a Spinner for selecting a container
-            View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.container_selection_dialog, null);
-            Spinner spinner = dialogView.findViewById(R.id.spinner_container_selection);
+        new androidx.appcompat.app.AlertDialog.Builder(getContext())
+                .setTitle(R.string.select_container)
+                .setView(dialogView)
+                .setPositiveButton(R.string.transfer, (dialog, which) -> {
+                    Container selectedContainer = (Container) spinner.getSelectedItem();
+                    transferSaveFiles(save, selectedContainer);
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
 
-            List<Container> containers = containerManager.getContainers();
-            ArrayAdapter<Container> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, containers);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
+    private void transferSaveFiles(Save save, Container container) {
+        // Clone the save directory to the container's directory
+        File sourceDir = new File(save.path);
+        File targetDir = new File(container.getRootDir(), "xuser-" + container.id);
 
-            new androidx.appcompat.app.AlertDialog.Builder(getContext())
-                    .setTitle(R.string.select_container)
-                    .setView(dialogView)
-                    .setPositiveButton(R.string.transfer, (dialog, which) -> {
-                        Container selectedContainer = (Container) spinner.getSelectedItem();
-                        transferSaveFiles(save, selectedContainer);
-                    })
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show();
-        }
-
-        private void transferSaveFiles(Save save, Container container) {
-            // Clone the save directory to the container's directory
-            File sourceDir = new File(save.path);
-            File targetDir = new File(container.getRootDir(), "xuser-" + container.id);
-
-            boolean success = FileUtils.copy(sourceDir, targetDir);
-            if (success) {
-                // Optionally, notify the user of the successful transfer
-                AppUtils.showToast(getContext(), R.string.transfer_complete);
-            } else {
-                AppUtils.showToast(getContext(), R.string.transfer_failed);
-            }
+        boolean success = FileUtils.copy(sourceDir, targetDir);
+        if (success) {
+            // Optionally, notify the user of the successful transfer
+            AppUtils.showToast(getContext(), R.string.transfer_complete);
+        } else {
+            AppUtils.showToast(getContext(), R.string.transfer_failed);
         }
     }
+}
 

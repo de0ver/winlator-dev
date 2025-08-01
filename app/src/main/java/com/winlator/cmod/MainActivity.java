@@ -35,13 +35,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.navigation.NavigationView;
-import com.winlator.cmod.R;
+import com.winlator.cmod.container.ContainerManager;
 import com.winlator.cmod.contentdialog.ContentDialog;
 import com.winlator.cmod.contentdialog.SaveEditDialog;
 import com.winlator.cmod.contentdialog.SaveSettingsDialog;
 import com.winlator.cmod.core.Callback;
 import com.winlator.cmod.core.PreloaderDialog;
-import com.winlator.cmod.container.ContainerManager;
 import com.winlator.cmod.saves.Save;
 import com.winlator.cmod.saves.SaveManager;
 import com.winlator.cmod.xenvironment.ImageFsInstaller;
@@ -112,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //    }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Determine text color based on dark mode
         int textColor = isDarkMode ? Color.WHITE : Color.BLACK;
         setNavigationViewItemTextColor(navigationView, textColor);
-        
+
 
         // Initialize SaveManager and ContainerManager
         saveManager = new SaveManager(this);
@@ -210,8 +208,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (requestCode == PERMISSION_WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 ImageFsInstaller.installIfNeeded(this);
-            }
-            else finish();
+            } else finish();
         }
     }
 

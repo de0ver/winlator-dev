@@ -29,7 +29,7 @@ import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
-import com.winlator.cmod.R;
+import com.winlator.cmod.contentdialog.ContentDialog;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.Callback;
 import com.winlator.cmod.core.FileUtils;
@@ -38,7 +38,6 @@ import com.winlator.cmod.inputcontrols.ControlsProfile;
 import com.winlator.cmod.inputcontrols.ExternalController;
 import com.winlator.cmod.inputcontrols.InputControlsManager;
 import com.winlator.cmod.math.Mathf;
-import com.winlator.cmod.contentdialog.ContentDialog;
 import com.winlator.cmod.widget.InputControlsView;
 
 import org.json.JSONException;
@@ -75,7 +74,7 @@ public class InputControlsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.input_controls);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.input_controls);
     }
 
     @Override
@@ -84,8 +83,7 @@ public class InputControlsFragment extends Fragment {
             try {
                 ControlsProfile importedProfile = manager.importProfile(new JSONObject(FileUtils.readString(getContext(), data.getData())));
                 if (importProfileCallback != null) importProfileCallback.call(importedProfile);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 AppUtils.showToast(getContext(), R.string.unable_to_import_profile);
             }
             importProfileCallback = null;
@@ -112,7 +110,7 @@ public class InputControlsFragment extends Fragment {
         sbCursorSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                tvCursorSpeed.setText(progress+"%");
+                tvCursorSpeed.setText(progress + "%");
                 if (currentProfile != null) {
                     currentProfile.setCursorSpeed(progress / 100.0f);
                     currentProfile.save();
@@ -120,17 +118,18 @@ public class InputControlsFragment extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         updateLayout = () -> {
             if (currentProfile != null) {
-                sbCursorSpeed.setProgress((int)(currentProfile.getCursorSpeed() * 100));
-            }
-            else sbCursorSpeed.setProgress(100);
+                sbCursorSpeed.setProgress((int) (currentProfile.getCursorSpeed() * 100));
+            } else sbCursorSpeed.setProgress(100);
             loadExternalControllers(view);
         };
 
@@ -141,21 +140,23 @@ public class InputControlsFragment extends Fragment {
         sbUiOpacity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                tvUiOpacity.setText(progress+"%");
+                tvUiOpacity.setText(progress + "%");
                 if (fromUser) {
-                    progress = (int)Mathf.roundTo(progress, 5);
+                    progress = (int) Mathf.roundTo(progress, 5);
                     seekBar.setProgress(progress);
                     preferences.edit().putFloat("overlay_opacity", progress / 100.0f).apply();
                 }
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
-        sbUiOpacity.setProgress((int)(preferences.getFloat("overlay_opacity", InputControlsView.DEFAULT_OVERLAY_OPACITY) * 100));
+        sbUiOpacity.setProgress((int) (preferences.getFloat("overlay_opacity", InputControlsView.DEFAULT_OVERLAY_OPACITY) * 100));
 
         view.findViewById(R.id.BTAddProfile).setOnClickListener((v) -> ContentDialog.prompt(context, R.string.profile_name, null, (name) -> {
             currentProfile = manager.createProfile(name);
@@ -170,8 +171,7 @@ public class InputControlsFragment extends Fragment {
                     currentProfile.save();
                     loadProfileSpinner(sProfile);
                 });
-            }
-            else AppUtils.showToast(context, R.string.no_profile_selected);
+            } else AppUtils.showToast(context, R.string.no_profile_selected);
         });
 
         view.findViewById(R.id.BTDuplicateProfile).setOnClickListener((v) -> {
@@ -181,8 +181,7 @@ public class InputControlsFragment extends Fragment {
                     loadProfileSpinner(sProfile);
                     updateLayout.run();
                 });
-            }
-            else AppUtils.showToast(context, R.string.no_profile_selected);
+            } else AppUtils.showToast(context, R.string.no_profile_selected);
         });
 
         view.findViewById(R.id.BTRemoveProfile).setOnClickListener((v) -> {
@@ -193,8 +192,7 @@ public class InputControlsFragment extends Fragment {
                     loadProfileSpinner(sProfile);
                     updateLayout.run();
                 });
-            }
-            else AppUtils.showToast(context, R.string.no_profile_selected);
+            } else AppUtils.showToast(context, R.string.no_profile_selected);
         });
 
         view.findViewById(R.id.BTImportProfile).setOnClickListener((v) -> {
@@ -205,8 +203,7 @@ public class InputControlsFragment extends Fragment {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.open_file) {
                     openProfileFile(sProfile);
-                }
-                else if (itemId == R.id.download_file) {
+                } else if (itemId == R.id.download_file) {
                     downloadProfileList(sProfile);
                 }
                 return true;
@@ -219,10 +216,9 @@ public class InputControlsFragment extends Fragment {
                 File exportedFile = manager.exportProfile(currentProfile);
                 if (exportedFile != null) {
                     String path = exportedFile.getPath().substring(exportedFile.getPath().indexOf(Environment.DIRECTORY_DOWNLOADS));
-                    AppUtils.showToast(context, context.getString(R.string.profile_exported_to)+" "+path);
+                    AppUtils.showToast(context, context.getString(R.string.profile_exported_to) + " " + path);
                 }
-            }
-            else AppUtils.showToast(context, R.string.no_profile_selected);
+            } else AppUtils.showToast(context, R.string.no_profile_selected);
         });
 
         view.findViewById(R.id.BTControlsEditor).setOnClickListener((v) -> {
@@ -252,7 +248,7 @@ public class InputControlsFragment extends Fragment {
     }
 
     private void downloadSelectedProfiles(final Spinner sProfile, String[] items, final ArrayList<Integer> positions) {
-        final MainActivity activity = (MainActivity)getActivity();
+        final MainActivity activity = (MainActivity) getActivity();
         activity.preloaderDialog.show(R.string.downloading_file);
         currentProfile = null;
         final AtomicInteger processedItemCount = new AtomicInteger();
@@ -261,8 +257,8 @@ public class InputControlsFragment extends Fragment {
             HttpUtils.download(String.format(INPUT_CONTROLS_URL, items[position]), (content) -> {
                 try {
                     if (content != null) manager.importProfile(new JSONObject(content));
+                } catch (JSONException e) {
                 }
-                catch (JSONException e) {}
                 if (processedItemCount.incrementAndGet() == positions.size()) {
                     activity.runOnUiThread(() -> {
                         activity.preloaderDialog.close();
@@ -275,7 +271,7 @@ public class InputControlsFragment extends Fragment {
     }
 
     private void downloadProfileList(final Spinner sProfile) {
-        final MainActivity activity = (MainActivity)getActivity();
+        final MainActivity activity = (MainActivity) getActivity();
         activity.preloaderDialog.show(R.string.loading);
         HttpUtils.download(String.format(INPUT_CONTROLS_URL, "index.txt"), (content) -> activity.runOnUiThread(() -> {
             activity.preloaderDialog.close();
@@ -286,8 +282,7 @@ public class InputControlsFragment extends Fragment {
                         ContentDialog.confirm(activity, R.string.do_you_want_to_download_the_selected_profiles, () -> downloadSelectedProfiles(sProfile, items, positions));
                     }
                 });
-            }
-            else AppUtils.showToast(activity, R.string.unable_to_load_profile_list);
+            } else AppUtils.showToast(activity, R.string.unable_to_load_profile_list);
         }));
     }
 
@@ -300,7 +295,7 @@ public class InputControlsFragment extends Fragment {
     private void loadProfileSpinner(Spinner spinner) {
         final ArrayList<ControlsProfile> profiles = manager.getProfiles();
         ArrayList<String> values = new ArrayList<>();
-        values.add("-- "+getString(R.string.select_profile)+" --");
+        values.add("-- " + getString(R.string.select_profile) + " --");
 
         int selectedPosition = 0;
         for (int i = 0; i < profiles.size(); i++) {
@@ -319,7 +314,8 @@ public class InputControlsFragment extends Fragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 
@@ -340,10 +336,10 @@ public class InputControlsFragment extends Fragment {
             String bindingsText = context.getString(R.string.bindings);
             for (final ExternalController controller : controllers) {
                 View itemView = inflater.inflate(R.layout.external_controller_list_item, container, false);
-                ((TextView)itemView.findViewById(R.id.TVTitle)).setText(controller.getName());
+                ((TextView) itemView.findViewById(R.id.TVTitle)).setText(controller.getName());
 
                 int controllerBindingCount = controller.getControllerBindingCount();
-                ((TextView)itemView.findViewById(R.id.TVSubtitle)).setText(controllerBindingCount+" "+bindingsText);
+                ((TextView) itemView.findViewById(R.id.TVSubtitle)).setText(controllerBindingCount + " " + bindingsText);
 
                 ImageView imageView = itemView.findViewById(R.id.ImageView);
                 int tintColor = controller.isConnected() ? ContextCompat.getColor(context, R.color.colorAccent) : 0xffe57373;
@@ -366,13 +362,11 @@ public class InputControlsFragment extends Fragment {
                         intent.putExtra("controller_id", controller.getId());
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);  // Custom slide animations
-                    }
-                    else AppUtils.showToast(getContext(), R.string.no_profile_selected);
+                    } else AppUtils.showToast(getContext(), R.string.no_profile_selected);
                 });
 
                 container.addView(itemView);
             }
-        }
-        else view.findViewById(R.id.TVEmptyText).setVisibility(View.VISIBLE);
+        } else view.findViewById(R.id.TVEmptyText).setVisibility(View.VISIBLE);
     }
 }

@@ -132,7 +132,6 @@ public class BigPictureActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,7 +146,6 @@ public class BigPictureActivity extends AppCompatActivity {
 //        animatedBackground = (AnimationDrawable) parallaxBackgroundView.getBackground();
 //        animatedBackground.setOneShot(false); // Loop the animation
 //        parallaxBackgroundView.post(() -> animatedBackground.start());
-
 
 
         TiledBackgroundView backgroundView = findViewById(R.id.parallaxBackgroundView);
@@ -204,9 +202,12 @@ public class BigPictureActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
 
@@ -360,7 +361,6 @@ public class BigPictureActivity extends AppCompatActivity {
         });
 
 
-
         // Find the YouTube URL input and Load Video button
         EditText youtubeUrlInput = findViewById(R.id.youtubeUrlInput);
         Button loadVideoButton = findViewById(R.id.loadVideoButton);
@@ -417,7 +417,6 @@ public class BigPictureActivity extends AppCompatActivity {
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             startActivityForResult(intent, REQUEST_CODE_SELECT_MP3);
         });
-
 
 
         RadioGroup musicSourceGroup = findViewById(R.id.musicSourceGroup);
@@ -508,8 +507,6 @@ public class BigPictureActivity extends AppCompatActivity {
                 }
             }
         }
-
-
 
 
         // Set the listener for the "Load Video" button
@@ -870,7 +867,6 @@ public class BigPictureActivity extends AppCompatActivity {
     }
 
 
-
     // Prompt user to select a custom cover art image from gallery
     private void promptForCustomCoverArtUpload() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -950,7 +946,6 @@ public class BigPictureActivity extends AppCompatActivity {
         }
     }
 
-
     public void loadShortcutData(Shortcut shortcut) {
         currentShortcut = shortcut;
 
@@ -972,7 +967,7 @@ public class BigPictureActivity extends AppCompatActivity {
         // Get the associated container for this shortcut (unchanged)
         Container container = manager.getContainerForShortcut(shortcut);
         String graphicsDriver = shortcut.getExtra("graphicsDriver");
-        
+
         setTextOrPlaceholder(graphicsDriverView, graphicsDriver, container.getGraphicsDriver());
         setTextOrPlaceholder(graphicsDriverVersionView, shortcut.getExtra("graphicsDroverConfig"), container.getGraphicsDriverConfig());
         setTextOrPlaceholder(dxWrapperView, shortcut.getExtra("dxwrapper"), container.getDXWrapper());
@@ -1110,8 +1105,6 @@ public class BigPictureActivity extends AppCompatActivity {
             parent.addView(uploadText);
         });
     }
-
-
 
 
     private void fetchGridsForGame(int gameId, Shortcut shortcut) {
@@ -1366,8 +1359,6 @@ public class BigPictureActivity extends AppCompatActivity {
     }
 
 
-
-
     private void playMp3(File mp3File) {
         if (mediaPlayer != null) {
             mediaPlayer.release();  // Release any existing player
@@ -1385,7 +1376,6 @@ public class BigPictureActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
 
 //    private String saveCustomCoverArt(Bitmap coverArt, String shortcutName) {
@@ -1584,9 +1574,6 @@ public class BigPictureActivity extends AppCompatActivity {
     }
 
 
-
-
-
     private void stopBackgroundMusic() {
         // Stop YouTube WebView
         if (webView != null) {
@@ -1680,7 +1667,6 @@ public class BigPictureActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
 
 }

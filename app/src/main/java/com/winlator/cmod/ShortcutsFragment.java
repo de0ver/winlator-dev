@@ -9,9 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
@@ -35,17 +32,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.math.MathUtils;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.winlator.cmod.R;
 import com.winlator.cmod.container.Container;
 import com.winlator.cmod.container.ContainerManager;
 import com.winlator.cmod.container.Shortcut;
@@ -53,8 +47,6 @@ import com.winlator.cmod.contentdialog.ContentDialog;
 import com.winlator.cmod.contentdialog.ShortcutSettingsDialog;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.FileUtils;
-import com.winlator.cmod.saves.CustomFilePickerActivity;
-import com.winlator.cmod.xenvironment.ImageFs;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -91,13 +83,13 @@ public class ShortcutsFragment extends Fragment {
         curSortType = prefs.getInt("cur_sort_type", 0);
         loadShortcutsList(curSortType);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.shortcuts);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.shortcuts);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FrameLayout frameLayout = (FrameLayout)inflater.inflate(R.layout.shortcuts_fragment, container, false);
+        FrameLayout frameLayout = (FrameLayout) inflater.inflate(R.layout.shortcuts_fragment, container, false);
         recyclerView = frameLayout.findViewById(R.id.RecyclerView);
         emptyTextView = frameLayout.findViewById(R.id.TVEmptyText);
         setRecyclerLayoutManager();
@@ -166,8 +158,8 @@ public class ShortcutsFragment extends Fragment {
                 menuItem.setTitle(sortTypeText[curSortType]);
                 return true;
             case R.id.change_layout:
-                    isGrid = !isGrid;
-                    setRecyclerLayoutManager();
+                isGrid = !isGrid;
+                setRecyclerLayoutManager();
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
@@ -219,7 +211,8 @@ public class ShortcutsFragment extends Fragment {
         //AppUtils.showToast(getContext(), "Sort by: " + sortTypeText[typeSort]);
         recyclerView.setAdapter(new ShortcutsAdapter(shortcuts));
         if (shortcuts.isEmpty()) emptyTextView.setVisibility(View.VISIBLE);
-        else emptyTextView.setVisibility(View.GONE); // Ensure the empty text view is hidden if there are shortcuts
+        else
+            emptyTextView.setVisibility(View.GONE); // Ensure the empty text view is hidden if there are shortcuts
     }
 
     private void setRecyclerLayoutManager() {
@@ -301,17 +294,14 @@ public class ShortcutsFragment extends Fragment {
                 if (itemId == R.id.shortcut_settings) {
                     currentDialog = new ShortcutSettingsDialog(ShortcutsFragment.this, shortcut);
                     currentDialog.show();
-                }
-                else if (itemId == R.id.shortcut_launch_container) {
+                } else if (itemId == R.id.shortcut_launch_container) {
                     Activity activity = getActivity();
                     if (!XrActivity.isEnabled(getContext())) {
                         Intent intent = new Intent(activity, XServerDisplayActivity.class);
                         intent.putExtra("container_id", shortcut.container.id);
                         requireActivity().startActivity(intent);
-                    }
-                    else XrActivity.openIntent(getActivity(), shortcut.container.id, null);
-                }
-                else if (itemId == R.id.shortcut_remove) {
+                    } else XrActivity.openIntent(getActivity(), shortcut.container.id, null);
+                } else if (itemId == R.id.shortcut_remove) {
                     ContentDialog.confirm(context, R.string.do_you_want_to_remove_this_shortcut, () -> {
                         boolean fileDeleted = shortcut.file.delete();
                         boolean iconFileDeleted = shortcut.iconFile != null && shortcut.iconFile.delete();
@@ -324,8 +314,7 @@ public class ShortcutsFragment extends Fragment {
                             Toast.makeText(context, "Failed to remove the shortcut. Please try again.", Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
-                else if (itemId == R.id.shortcut_clone_to_container) {
+                } else if (itemId == R.id.shortcut_clone_to_container) {
                     // Use the ContainerManager to get the list of containers
                     ContainerManager containerManager = new ContainerManager(context);
                     ArrayList<Container> containers = containerManager.getContainers();
@@ -343,16 +332,13 @@ public class ShortcutsFragment extends Fragment {
                             }
                         }
                     });
-                }
-                else if (itemId == R.id.shortcut_add_to_home_screen) {
+                } else if (itemId == R.id.shortcut_add_to_home_screen) {
                     if (shortcut.getExtra("uuid").equals(""))
                         shortcut.genUUID();
                     addShortcutToScreen(shortcut);
-                }
-                else if (itemId == R.id.shortcut_export_to_frontend) {
+                } else if (itemId == R.id.shortcut_export_to_frontend) {
                     exportShortcutToFrontend(shortcut);
-                }
-                else if (itemId == R.id.shortcut_properties) {
+                } else if (itemId == R.id.shortcut_properties) {
                     showShortcutProperties(shortcut);
                 }
                 return true;
@@ -399,8 +385,7 @@ public class ShortcutsFragment extends Fragment {
                 String disableXinputValue = shortcut.getExtra("disableXinput", "0"); // Get value from shortcut or use "0" (false) by default
                 intent.putExtra("disableXinput", disableXinputValue); // Use the actual value from the shortcut
                 activity.startActivity(intent);
-            }
-            else XrActivity.openIntent(activity, shortcut.container.id, shortcut.file.getPath());
+            } else XrActivity.openIntent(activity, shortcut.container.id, shortcut.file.getPath());
         }
 
         private void exportShortcutToFrontend(Shortcut shortcut) {
@@ -581,8 +566,6 @@ public class ShortcutsFragment extends Fragment {
         }
 
 
-
-
     }
 
     private ShortcutInfo buildScreenShortCut(String shortLabel, String longLabel, int containerId, String shortcutPath, Icon icon, String uuid) {
@@ -611,7 +594,8 @@ public class ShortcutsFragment extends Fragment {
         try {
             shortcutManager.disableShortcuts(Collections.singletonList(shortcut.getExtra("uuid")),
                     context.getString(R.string.shortcut_not_available));
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     public void updateShortcutOnScreen(String shortLabel, String longLabel, int containerId, String shortcutPath, Icon icon, String uuid) {
@@ -624,6 +608,7 @@ public class ShortcutsFragment extends Fragment {
                     break;
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 }

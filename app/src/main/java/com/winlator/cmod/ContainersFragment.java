@@ -1,7 +1,5 @@
 package com.winlator.cmod;
 
-import static com.winlator.cmod.core.AppUtils.showToast;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -35,7 +33,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.winlator.cmod.R;
 import com.winlator.cmod.container.Container;
 import com.winlator.cmod.container.ContainerManager;
 import com.winlator.cmod.container.Shortcut;
@@ -256,7 +253,6 @@ public class ContainersFragment extends Fragment {
     }
 
 
-
     private void toggleBigPictureMode() {
         // Start BigPictureActivity without passing shortcut data explicitly
         Intent intent = new Intent(getContext(), BigPictureActivity.class);
@@ -399,7 +395,6 @@ public class ContainersFragment extends Fragment {
             }
         }
     }
-
 
 
 }

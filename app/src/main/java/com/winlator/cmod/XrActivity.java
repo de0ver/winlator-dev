@@ -15,7 +15,6 @@ import android.widget.EditText;
 
 import androidx.preference.PreferenceManager;
 
-import com.winlator.cmod.R;
 import com.winlator.cmod.container.Container;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.xserver.Keyboard;
@@ -38,7 +37,7 @@ public class XrActivity extends XServerDisplayActivity implements TextWatcher {
 
     // Order of the enum has to be the as in xr/main.cpp
     public enum ControllerButton {
-        L_GRIP,  L_MENU, L_THUMBSTICK_PRESS, L_THUMBSTICK_LEFT, L_THUMBSTICK_RIGHT, L_THUMBSTICK_UP, L_THUMBSTICK_DOWN, L_TRIGGER, L_X, L_Y,
+        L_GRIP, L_MENU, L_THUMBSTICK_PRESS, L_THUMBSTICK_LEFT, L_THUMBSTICK_RIGHT, L_THUMBSTICK_UP, L_THUMBSTICK_DOWN, L_TRIGGER, L_X, L_Y,
         R_A, R_B, R_GRIP, R_THUMBSTICK_PRESS, R_THUMBSTICK_LEFT, R_THUMBSTICK_RIGHT, R_THUMBSTICK_UP, R_THUMBSTICK_DOWN, R_TRIGGER,
     }
 
@@ -81,10 +80,12 @@ public class XrActivity extends XServerDisplayActivity implements TextWatcher {
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
 
     @Override
     public synchronized void afterTextChanged(Editable e) {
@@ -249,8 +250,7 @@ public class XrActivity extends XServerDisplayActivity implements TextWatcher {
             if (getButtonClicked(buttons, secondaryPress)) {
                 if (buttons[primaryGrip.ordinal()]) {
                     isSBS = !isSBS;
-                }
-                else {
+                } else {
                     isImmersive = !isImmersive;
                 }
             }
@@ -319,13 +319,19 @@ public class XrActivity extends XServerDisplayActivity implements TextWatcher {
 
     // Rendering
     public native void init();
+
     public native void bindFramebuffer();
+
     public native int getWidth();
+
     public native int getHeight();
+
     public native boolean beginFrame(boolean immersive, boolean sbs);
+
     public native void endFrame();
 
     // Input
     public native float[] getAxes();
+
     public native boolean[] getButtons();
 }

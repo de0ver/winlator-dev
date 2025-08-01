@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.winlator.cmod.R;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.inputcontrols.Binding;
 import com.winlator.cmod.inputcontrols.ControlsProfile;
@@ -170,8 +169,10 @@ public class ExternalControllerBindingsActivity extends AppCompatActivity {
     @Override
     public boolean dispatchGenericMotionEvent(MotionEvent event) {
         if (event.getDeviceId() == controller.getDeviceId() && controller.updateStateFromMotionEvent(event)) {
-            if (controller.state.isPressed(ExternalController.IDX_BUTTON_L2)) updateControllerBinding(KeyEvent.KEYCODE_BUTTON_L2, Binding.NONE);
-            if (controller.state.isPressed(ExternalController.IDX_BUTTON_R2)) updateControllerBinding(KeyEvent.KEYCODE_BUTTON_R2, Binding.NONE);
+            if (controller.state.isPressed(ExternalController.IDX_BUTTON_L2))
+                updateControllerBinding(KeyEvent.KEYCODE_BUTTON_L2, Binding.NONE);
+            if (controller.state.isPressed(ExternalController.IDX_BUTTON_R2))
+                updateControllerBinding(KeyEvent.KEYCODE_BUTTON_R2, Binding.NONE);
             processJoystickInput();
             return true;
         }
@@ -181,10 +182,10 @@ public class ExternalControllerBindingsActivity extends AppCompatActivity {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getDeviceId() == controller.getDeviceId() && event.getRepeatCount() == 0) {
-            if (event.getAction() == KeyEvent.ACTION_DOWN) updateControllerBinding(event.getKeyCode(), Binding.NONE);
+            if (event.getAction() == KeyEvent.ACTION_DOWN)
+                updateControllerBinding(event.getKeyCode(), Binding.NONE);
             return true;
-        }
-        else return super.dispatchKeyEvent(event);
+        } else return super.dispatchKeyEvent(event);
     }
 
     @Override
@@ -260,17 +261,16 @@ public class ExternalControllerBindingsActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
             });
 
             Binding selectedBinding = item.getBinding();
             if (selectedBinding.isKeyboard()) {
                 holder.bindingType.setSelection(0, false);
-            }
-            else if (selectedBinding.isMouse()) {
+            } else if (selectedBinding.isMouse()) {
                 holder.bindingType.setSelection(1, false);
-            }
-            else if (selectedBinding.isGamepad()) {
+            } else if (selectedBinding.isGamepad()) {
                 holder.bindingType.setSelection(2, false);
             }
 
@@ -297,7 +297,8 @@ public class ExternalControllerBindingsActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
             });
 
             update.run();
@@ -309,15 +310,15 @@ public class ExternalControllerBindingsActivity extends AppCompatActivity {
     }
 
     private void animateItemView(int position) {
-        final ControllerBindingsAdapter.ViewHolder holder = (ControllerBindingsAdapter.ViewHolder)recyclerView.findViewHolderForAdapterPosition(position);
+        final ControllerBindingsAdapter.ViewHolder holder = (ControllerBindingsAdapter.ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
             final int color = ContextCompat.getColor(this, R.color.colorAccent);
             final ValueAnimator animator = ValueAnimator.ofFloat(0.4f, 0.0f);
             animator.setDuration(200);
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
             animator.addUpdateListener((animation) -> {
-                float alpha = (float)animation.getAnimatedValue();
-                holder.itemView.setBackgroundColor(Color.argb((int)(alpha * 255), Color.red(color), Color.green(color), Color.blue(color)));
+                float alpha = (float) animation.getAnimatedValue();
+                holder.itemView.setBackgroundColor(Color.argb((int) (alpha * 255), Color.red(color), Color.green(color), Color.blue(color)));
             });
             animator.start();
         }
