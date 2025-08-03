@@ -207,8 +207,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private Handler timeoutHandler = new Handler(Looper.getMainLooper());
     private Runnable hideControlsRunnable;
 
-    private boolean isDarkMode;
-
     private String screenEffectProfile;
 
     private GlibcProgramLauncherComponent glibcLauncher; // Reference to GlibcProgramLauncherComponent
@@ -289,9 +287,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         final PreloaderDialog preloaderDialog = new PreloaderDialog(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Check for Dark Mode
-        isDarkMode = preferences.getBoolean("dark_mode", false);
-
         boolean isOpenWithAndroidBrowser = preferences.getBoolean("open_with_android_browser", false);
         boolean isShareAndroidClipboard = preferences.getBoolean("share_android_clipboard", false);
 
@@ -359,10 +354,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         NavigationView navigationView = findViewById(R.id.NavigationView);
 
-        if (isDarkMode) {
+        //if (isDarkMode) {
             navigationView.setItemTextColor(ContextCompat.getColorStateList(this, R.color.white));
             navigationView.setBackgroundResource(R.color.content_dialog_background_dark);
-        }
+        //}
 
         boolean enableLogs = preferences.getBoolean("enable_wine_debug", false) || preferences.getBoolean("enable_box86_64_logs", false);
         Menu menu = navigationView.getMenu();
@@ -408,7 +403,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 Log.d("XServerDisplayActivity", "Parsed Container ID from .desktop file: " + containerId);
             }
 
-
             // Initialize playtime tracking
             playtimePrefs = getSharedPreferences("playtime_stats", MODE_PRIVATE);
             shortcutName = getIntent().getStringExtra("shortcut_name");
@@ -445,9 +439,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             incrementPlayCount();
 
             if (Objects.equals(shortcutName, null))
-                AppUtils.showToast(this, "Launching < " + container.getName() + " >");
+                AppUtils.showToast(this, "Launching " + '"' + container.getName() + '"');
             else
-                AppUtils.showToast(this, "Launching < " + shortcutName + " >");
+                AppUtils.showToast(this, "Launching " + '"' + shortcutName + '"');
 
             // Initialize Win32AppWorkarounds
             win32AppWorkarounds = new Win32AppWorkarounds(this);
@@ -572,7 +566,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             }
         }
 
-        preloaderDialog.show(R.string.starting_up);
+        if (shortcut == null)
+            preloaderDialog.show(R.string.starting_up);
+        else
+            preloaderDialog.show(shortcut.name, shortcut.icon);
 
 
         inputControlsManager = new InputControlsManager(this);
@@ -809,7 +806,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             }
         }
     }
-
 
     @Override
     public void onResume() {
@@ -1868,11 +1864,11 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         final Spinner sProfile = dialog.findViewById(R.id.SProfile);
 
-        dialog.getWindow().setBackgroundDrawableResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
-        sProfile.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background_dark);
+        sProfile.setPopupBackgroundResource(R.drawable.content_dialog_background_dark);
 
         // Set text color for all TextViews in the dialog to white or black based on dark mode
-        int textColor = ContextCompat.getColor(this, isDarkMode ? R.color.white : R.color.black);
+        int textColor = ContextCompat.getColor(this, R.color.white);
         ViewGroup dialogViewGroup = (ViewGroup) dialog.getWindow().getDecorView().findViewById(android.R.id.content);
         setTextColorForDialog(dialogViewGroup, textColor);
 

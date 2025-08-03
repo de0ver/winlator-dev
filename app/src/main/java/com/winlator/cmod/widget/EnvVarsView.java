@@ -42,7 +42,6 @@ public class EnvVarsView extends FrameLayout {
     private final LinearLayout container;
     private final TextView emptyTextView;
     private final LayoutInflater inflater;
-    private boolean isDarkMode; // Field to track dark mode state
 
     // Interface for callback to get value from dynamically created views
     private interface GetValueCallback {
@@ -97,7 +96,6 @@ public class EnvVarsView extends FrameLayout {
 
     public EnvVarsView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes, boolean isDarkMode) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        this.isDarkMode = isDarkMode;
         inflater = LayoutInflater.from(context);
         container = new LinearLayout(context);
         container.setOrientation(LinearLayout.VERTICAL);
@@ -127,7 +125,6 @@ public class EnvVarsView extends FrameLayout {
 
     // Method to apply dark theme styles
     private void applyDarkTheme(View view) {
-        if (isDarkMode) {
             if (view instanceof TextView) {
                 ((TextView) view).setTextColor(Color.WHITE);
             } else if (view instanceof EditText) {
@@ -140,9 +137,6 @@ public class EnvVarsView extends FrameLayout {
                 // Apply custom styles if needed for ToggleButton
                 // For example, you could change the background or text colors
             }
-        } else {
-            // Apply light theme if needed
-        }
     }
 
     // Method to get environment variables as a string
@@ -209,7 +203,7 @@ public class EnvVarsView extends FrameLayout {
                 editText.setVisibility(VISIBLE);
                 editText.setText(value);
                 // Apply specific styling for "TEXT" fields
-                editText.setBackgroundResource(isDarkMode ? R.drawable.edit_text_dark : R.drawable.edit_text); // Apply dark background resource for "TEXT"
+                editText.setBackgroundResource(R.drawable.edit_text_dark); // Apply dark background resource for "TEXT"
                 getValueCallback = () -> editText.getText().toString();
                 break;
             case "NUMBER":
@@ -239,7 +233,6 @@ public class EnvVarsView extends FrameLayout {
     }
 
     public void setDarkMode(boolean isDarkMode) {
-        this.isDarkMode = isDarkMode;
         applyDarkTheme(emptyTextView); // Apply dark theme to the current instance
         for (int i = 0; i < container.getChildCount(); i++) {
             applyDarkTheme(container.getChildAt(i));

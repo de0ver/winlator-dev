@@ -208,7 +208,6 @@ public class ShortcutsFragment extends Fragment {
         }
 
         shortcuts.removeIf(shortcut -> shortcut == null || shortcut.file.getName().isEmpty());
-        //AppUtils.showToast(getContext(), "Sort by: " + sortTypeText[typeSort]);
         recyclerView.setAdapter(new ShortcutsAdapter(shortcuts));
         if (shortcuts.isEmpty()) emptyTextView.setVisibility(View.VISIBLE);
         else
@@ -291,55 +290,56 @@ public class ShortcutsFragment extends Fragment {
             listItemMenu.inflate(R.menu.shortcut_popup_menu);
             listItemMenu.setOnMenuItemClickListener((menuItem) -> {
                 int itemId = menuItem.getItemId();
-                if (itemId == R.id.shortcut_settings) {
-                    currentDialog = new ShortcutSettingsDialog(ShortcutsFragment.this, shortcut);
-                    currentDialog.show();
-                } else if (itemId == R.id.shortcut_launch_container) {
-                    Activity activity = getActivity();
-                    if (!XrActivity.isEnabled(getContext())) {
-                        Intent intent = new Intent(activity, XServerDisplayActivity.class);
-                        intent.putExtra("container_id", shortcut.container.id);
-                        requireActivity().startActivity(intent);
-                    } else XrActivity.openIntent(getActivity(), shortcut.container.id, null);
-                } else if (itemId == R.id.shortcut_remove) {
-                    ContentDialog.confirm(context, R.string.do_you_want_to_remove_this_shortcut, () -> {
-                        boolean fileDeleted = shortcut.file.delete();
-                        boolean iconFileDeleted = shortcut.iconFile != null && shortcut.iconFile.delete();
+                switch (itemId) {
+                    case R.id.shortcut_settings -> {
+                        currentDialog = new ShortcutSettingsDialog(ShortcutsFragment.this, shortcut);
+                        currentDialog.show();
 
-                        if (fileDeleted) {
-                            disableShortcutOnScreen(requireContext(), shortcut);
-                            loadShortcutsList(curSortType);
-                            Toast.makeText(context, "Shortcut removed successfully.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "Failed to remove the shortcut. Please try again.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else if (itemId == R.id.shortcut_clone_to_container) {
-                    // Use the ContainerManager to get the list of containers
-                    ContainerManager containerManager = new ContainerManager(context);
-                    ArrayList<Container> containers = containerManager.getContainers();
+                    }
+                    case R.id.shortcut_launch_container -> {
+                        Activity activity = getActivity();
+                        if (!XrActivity.isEnabled(getContext())) {
+                            Intent intent = new Intent(activity, XServerDisplayActivity.class);
+                            intent.putExtra("container_id", shortcut.container.id);
+                            requireActivity().startActivity(intent);
+                        } else XrActivity.openIntent(getActivity(), shortcut.container.id, null);
+                    }
+                    case R.id.shortcut_remove ->
+                            ContentDialog.confirm(context, R.string.do_you_want_to_remove_this_shortcut, () -> {
+                                if (shortcut.file.delete()) {
+                                    disableShortcutOnScreen(requireContext(), shortcut);
+                                    loadShortcutsList(curSortType);
+                                    AppUtils.showToast(context, "Shortcut removed successfully.");
+                                } else {
+                                    AppUtils.showToast(context, "Failed to remove the shortcut. Please try again.");
+                                }
+                            });
+                    case R.id.shortcut_clone_to_container -> {
+                        // Use the ContainerManager to get the list of containers
+                        ContainerManager containerManager = new ContainerManager(context);
+                        ArrayList<Container> containers = containerManager.getContainers();
 
-                    // Show a container selection dialog
-                    showContainerSelectionDialog(containers, new OnContainerSelectedListener() {
-                        @Override
-                        public void onContainerSelected(Container selectedContainer) {
-                            // Use the selected container to clone the shortcut
-                            if (shortcut.cloneToContainer(selectedContainer)) {
-                                Toast.makeText(context, "Shortcut cloned successfully.", Toast.LENGTH_SHORT).show();
-                                loadShortcutsList(curSortType); // Reload the shortcuts to show the cloned one
-                            } else {
-                                Toast.makeText(context, "Failed to clone shortcut.", Toast.LENGTH_SHORT).show();
+                        // Show a container selection dialog
+                        showContainerSelectionDialog(containers, new OnContainerSelectedListener() {
+                            @Override
+                            public void onContainerSelected(Container selectedContainer) {
+                                // Use the selected container to clone the shortcut
+                                if (shortcut.cloneToContainer(selectedContainer)) {
+                                    AppUtils.showToast(context, "Shortcut cloned successfully.");
+                                    loadShortcutsList(curSortType); // Reload the shortcuts to show the cloned one
+                                } else {
+                                    AppUtils.showToast(context, "Failed to clone shortcut.");
+                                }
                             }
-                        }
-                    });
-                } else if (itemId == R.id.shortcut_add_to_home_screen) {
-                    if (shortcut.getExtra("uuid").equals(""))
-                        shortcut.genUUID();
-                    addShortcutToScreen(shortcut);
-                } else if (itemId == R.id.shortcut_export_to_frontend) {
-                    exportShortcutToFrontend(shortcut);
-                } else if (itemId == R.id.shortcut_properties) {
-                    showShortcutProperties(shortcut);
+                        });
+                    }
+                    case R.id.shortcut_add_to_home_screen -> {
+                        if (shortcut.getExtra("uuid").isEmpty())
+                            shortcut.genUUID();
+                        addShortcutToScreen(shortcut);
+                    }
+                    case R.id.shortcut_export_to_frontend -> exportShortcutToFrontend(shortcut);
+                    case R.id.shortcut_properties -> showShortcutProperties(shortcut);
                 }
                 return true;
             });
@@ -351,7 +351,6 @@ public class ShortcutsFragment extends Fragment {
         public interface OnContainerSelectedListener {
             void onContainerSelected(Container container);
         }
-
 
         private void showContainerSelectionDialog(ArrayList<Container> containers, OnContainerSelectedListener listener) {
             // Create an AlertDialog to show the list of containers
@@ -518,7 +517,6 @@ public class ShortcutsFragment extends Fragment {
 
                 // Show a toast message to the user
                 Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-
             } catch (IOException e) {
                 Log.e("ShortcutsFragment", "Failed to export shortcut", e);
                 Toast.makeText(getContext(), "Failed to export shortcut", Toast.LENGTH_LONG).show();
@@ -561,11 +559,8 @@ public class ShortcutsFragment extends Fragment {
                 Toast.makeText(getContext(), "Properties reset successfully.", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             });
-
             dialog.show();
         }
-
-
     }
 
     private ShortcutInfo buildScreenShortCut(String shortLabel, String longLabel, int containerId, String shortcutPath, Icon icon, String uuid) {

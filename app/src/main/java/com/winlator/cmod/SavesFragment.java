@@ -61,17 +61,11 @@ public class SavesFragment extends Fragment {
 
     private static final int REQUEST_CODE_IMPORT_ARCHIVE = 1001;
 
-    private boolean isDarkMode;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         containerManager = new ContainerManager(getContext());
-
-        // Initialize isDarkMode based on shared preferences or theme
-        isDarkMode = PreferenceManager.getDefaultSharedPreferences(getContext())
-                .getBoolean("dark_mode", false);
     }
 
     @Override
@@ -167,12 +161,7 @@ public class SavesFragment extends Fragment {
                 })
                 .create();
 
-        // Apply background based on isDarkMode
-        if (isDarkMode) {
-            dialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background_dark);
-        } else {
-            dialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background);
-        }
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background_dark);
 
         dialog.show();
     }

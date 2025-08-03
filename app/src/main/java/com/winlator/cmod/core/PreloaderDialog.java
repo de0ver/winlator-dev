@@ -2,8 +2,11 @@ package com.winlator.cmod.core;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.winlator.cmod.R;
@@ -36,6 +39,18 @@ public class PreloaderDialog {
         close();
         if (dialog == null) create();
         ((TextView)dialog.findViewById(R.id.TextView)).setText(textResId);
+        ImageView customIcon = dialog.findViewById(R.id.CustomIcon);
+        customIcon.setImageResource(R.drawable.icon_wine);
+        customIcon.setColorFilter(Color.BLACK);
+        dialog.show();
+    }
+
+    public synchronized void show(String text, Bitmap icon) {
+        if (isShowing()) return;
+        close();
+        if (dialog == null) create();
+        ((TextView)dialog.findViewById(R.id.TextView)).setText(text);
+        ((ImageView)dialog.findViewById(R.id.CustomIcon)).setImageBitmap(icon);
         dialog.show();
     }
 
@@ -49,7 +64,7 @@ public class PreloaderDialog {
                 dialog.dismiss();
             }
         }
-        catch (Exception e) {}
+        catch (Exception ignored) {}
     }
 
     public void closeOnUiThread() {

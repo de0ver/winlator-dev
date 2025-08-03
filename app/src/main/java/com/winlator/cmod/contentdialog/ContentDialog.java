@@ -29,8 +29,6 @@ public class ContentDialog extends Dialog {
     private Runnable onCancelCallback;
     private final View contentView;
 
-    private boolean isDarkMode;
-
     public ContentDialog(@NonNull Context context) {
         this(context, 0);
     }
@@ -43,13 +41,13 @@ public class ContentDialog extends Dialog {
 
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
+        //isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
 
 //        contentView.setBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark: R.drawable.content_dialog_background);
 
-        if (isDarkMode) {
+        //if (isDarkMode) {
             this.getContext().setTheme(R.style.ContentDialog_Dark);
-        }
+        //}
 
 
         if (layoutResId > 0) {

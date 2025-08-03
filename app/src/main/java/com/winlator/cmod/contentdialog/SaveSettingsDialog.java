@@ -38,8 +38,6 @@ public class SaveSettingsDialog extends ContentDialog {
     private EditText etTitle;
     private Save saveToEdit;  // Store the save object being edited
 
-    private boolean isDarkMode;
-
 
     public SaveSettingsDialog(Activity activity, SaveManager saveManager, ContainerManager containerManager) {
         super(activity, R.layout.save_settings_dialog);
@@ -56,7 +54,7 @@ public class SaveSettingsDialog extends ContentDialog {
         setOnShowListener(dialog -> {
             Spinner sContainer = findViewById(R.id.SContainer);
 
-            sContainer.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
+            sContainer.setPopupBackgroundResource(R.drawable.content_dialog_background_dark);
 
             loadContainerSpinner(sContainer);
 
@@ -87,16 +85,13 @@ public class SaveSettingsDialog extends ContentDialog {
     private void createContentView() {
         final Context context = getContext();
 
-        isDarkMode = PreferenceManager.getDefaultSharedPreferences(getContext())
-                .getBoolean("dark_mode", false);
-
         LinearLayout llContent = findViewById(R.id.LLContent);
         llContent.getLayoutParams().width = AppUtils.getPreferredDialogWidth(context);
 
         etTitle = findViewById(R.id.ETTitle);
 
         // Set the background resource based on isDarkMode
-        etTitle.setBackgroundResource(isDarkMode ? R.drawable.edit_text_dark : R.drawable.edit_text);
+        etTitle.setBackgroundResource(R.drawable.edit_text_dark);
 
         tvSavePath = findViewById(R.id.TVPath);
         tvSavePath.setVisibility(View.GONE);
@@ -146,7 +141,7 @@ public class SaveSettingsDialog extends ContentDialog {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sContainer.setAdapter(adapter);
 
-        sContainer.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
+        sContainer.setPopupBackgroundResource(R.drawable.content_dialog_background_dark);
 
         sContainer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

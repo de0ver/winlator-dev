@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private SaveEditDialog currentSaveEditDialog;
 
-    private boolean isDarkMode;
-
 //    private void cleanupErroneousContainer() {
 //        // Define the specific path to the erroneous directory
 //        File erroneousDir = new File(Environment.getExternalStorageDirectory(), "Android/data/com.winlator/files/Backups");
@@ -130,18 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         }
 
-        // Load the user's preferred theme
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
-
-        // Apply the theme based on the preference
-        if (isDarkMode) {
-            setTheme(R.style.AppTheme_Dark);
-        } else {
-            setTheme(R.style.AppTheme);
-        }
-
-
+        setTheme(R.style.AppTheme_Dark);
         setContentView(R.layout.main_activity);
 
         drawerLayout = findViewById(R.id.DrawerLayout);
@@ -156,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // Determine text color based on dark mode
-        int textColor = isDarkMode ? Color.WHITE : Color.BLACK;
+        int textColor = Color.WHITE;
         setNavigationViewItemTextColor(navigationView, textColor);
 
 
@@ -241,11 +228,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         saveEditDialog = new SaveEditDialog(this, saveManager, containerManager, saveToEdit);
 
         // Check for dark mode and set the background accordingly
-        if (isDarkMode) {
+        //if (isDarkMode) {
             saveEditDialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background_dark);
-        } else {
-            saveEditDialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background);
-        }
+        //} else {
+        //    saveEditDialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background);
+        //}
 
         saveEditDialog.show();
     }
@@ -321,11 +308,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 saveSettingsDialog = new SaveSettingsDialog(this, saveManager, containerManager);
 
                 // Check for dark mode and set the background accordingly
-                if (isDarkMode) {
+                //if (isDarkMode) {
                     saveSettingsDialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background_dark);
-                } else {
-                    saveSettingsDialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background);
-                }
+                //} else {
+                //    saveSettingsDialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background);
+                //}
 
                 saveSettingsDialog.show();
             }
@@ -413,11 +400,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ContentDialog dialog = new ContentDialog(this, R.layout.about_dialog);
         dialog.findViewById(R.id.LLBottomBar).setVisibility(View.GONE);
 
-        if (isDarkMode) {
+        //if (isDarkMode) {
             dialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background_dark);
-        } else {
-            dialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background);
-        }
+        //} else {
+        //   dialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background);
+        //}
 
         try {
             final PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);

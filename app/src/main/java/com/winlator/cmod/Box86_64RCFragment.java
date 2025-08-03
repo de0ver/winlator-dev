@@ -67,17 +67,11 @@ public class Box86_64RCFragment extends Fragment {
     private Spinner sRCFile;
     private Callback<RCFile> importRCFileCallback;
 
-    private boolean isDarkMode;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
         manager = new RCManager(getContext());
-
-        // Initialize isDarkMode based on shared preferences or theme
-        isDarkMode = PreferenceManager.getDefaultSharedPreferences(getContext())
-                .getBoolean("dark_mode", false);
     }
 
     @Override
@@ -112,7 +106,7 @@ public class Box86_64RCFragment extends Fragment {
         EditText etFilter = layout.findViewById(R.id.ETFilter);
 
         // Set the background resource based on isDarkMode
-        etFilter.setBackgroundResource(isDarkMode ? R.drawable.edit_text_dark : R.drawable.edit_text);
+        etFilter.setBackgroundResource(R.drawable.edit_text_dark);
 
         etFilter.addTextChangedListener(textWatcher);
 
@@ -135,7 +129,7 @@ public class Box86_64RCFragment extends Fragment {
         spinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, values));
 
         // Set popup background based on theme
-        spinner.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
+        spinner.setPopupBackgroundResource(R.drawable.content_dialog_background_dark);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -465,8 +459,7 @@ public class Box86_64RCFragment extends Fragment {
             etGroupName.setText(group.getGroupName());
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            boolean isDarkMode = prefs.getBoolean("dark_mode", false);
-            applyDarkThemeToEditText(etGroupName, isDarkMode);
+            applyDarkThemeToEditText(etGroupName);
 
             final View btNewItem = layout.findViewById(R.id.BTNewItem);
             btNewItem.setOnClickListener(v -> ContentDialog.prompt(getContext(), R.string.process_name, null, (name) -> {
@@ -721,15 +714,10 @@ public class Box86_64RCFragment extends Fragment {
                 public void buildView(Context context) {
                     LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.box86_64_rc_var, null);
                     etKey = layout.findViewById(R.id.ETKey);
-
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                    boolean isDarkMode = prefs.getBoolean("dark_mode", false);
-                    applyDarkThemeToEditText(etKey, isDarkMode);
-
+                    applyDarkThemeToEditText(etKey);
 
                     etValue = layout.findViewById(R.id.ETValue);
-
-                    applyDarkThemeToEditText(etValue, isDarkMode);
+                    applyDarkThemeToEditText(etValue);
 
                     btRemove = layout.findViewById(R.id.BTRemoveVar);
                     btVarMenu = layout.findViewById(R.id.BTVarMenu);
@@ -744,15 +732,9 @@ public class Box86_64RCFragment extends Fragment {
         }
     }
 
-    private static void applyDarkThemeToEditText(EditText editText, boolean isDarkMode) {
-        if (isDarkMode) {
-            editText.setTextColor(Color.WHITE); // Set text color to white for dark theme
-            editText.setHintTextColor(Color.GRAY); // Set hint color to gray
-            editText.setBackgroundResource(R.drawable.edit_text_dark); // Custom dark background drawable
-        } else {
-            editText.setTextColor(Color.BLACK); // Default text color
-            editText.setHintTextColor(Color.GRAY); // Default hint color
-            editText.setBackgroundResource(R.drawable.edit_text); // Custom light background drawable
-        }
+    private static void applyDarkThemeToEditText(EditText editText) {
+        editText.setTextColor(Color.WHITE); // Set text color to white for dark theme
+        editText.setHintTextColor(Color.GRAY); // Set hint color to gray
+        editText.setBackgroundResource(R.drawable.edit_text_dark); // Custom dark background drawable
     }
 }

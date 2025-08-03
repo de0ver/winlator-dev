@@ -97,7 +97,6 @@ public class SettingsFragment extends Fragment {
     private EditText etCustomApiKey;
 
     private CheckBox cbDarkMode;
-    boolean isDarkMode;
 
     private static final int REQUEST_CODE_FRONTEND_EXPORT_PATH = 1002;
     private static final int REQUEST_CODE_INSTALL_SOUNDFONT = 1001;
@@ -131,12 +130,12 @@ public class SettingsFragment extends Fragment {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Check for Dark Mode preference
-        isDarkMode = preferences.getBoolean("dark_mode", true);
         // Apply dynamic styles
-        applyDynamicStyles(view, isDarkMode);
+        applyDynamicStyles(view);
 
+        //updateTheme();
         // Initialize the Dark Mode checkbox
-        cbDarkMode = view.findViewById(R.id.CBDarkMode);
+        /*cbDarkMode = view.findViewById(R.id.CBDarkMode);
         cbDarkMode.setChecked(preferences.getBoolean("dark_mode", false));
 
         cbDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -146,8 +145,8 @@ public class SettingsFragment extends Fragment {
             editor.apply();
 
             // Update the UI or activity theme if necessary
-            updateTheme(isChecked);
-        });
+
+        });*/
 
         // Initialize Big Picture Mode Checkbox
         cbEnableBigPictureMode = view.findViewById(R.id.CBEnableBigPictureMode);
@@ -263,7 +262,7 @@ public class SettingsFragment extends Fragment {
 
         final Spinner sMIDISoundFont = view.findViewById(R.id.SMIDISoundFont);
 
-        sMIDISoundFont.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
+        sMIDISoundFont.setPopupBackgroundResource(R.drawable.content_dialog_background_dark);
 
         final View btInstallSF = view.findViewById(R.id.BTInstallSF);
         final View btRemoveSF = view.findViewById(R.id.BTRemoveSF);
@@ -447,81 +446,66 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
-    private void updateTheme(boolean isDarkMode) {
-        if (isDarkMode) {
-            getActivity().setTheme(R.style.AppTheme_Dark);
-        } else {
-            getActivity().setTheme(R.style.AppTheme);
-        }
-
-        // Recreate the activity to apply the new theme
+    private void updateTheme() {
+        getActivity().setTheme(R.style.AppTheme_Dark);
         getActivity().recreate();
     }
 
 
-    private void applyDynamicStyles(View view, boolean isDarkMode) {
+    private void applyDynamicStyles(View view) {
 
         Spinner sBox64Preset = view.findViewById(R.id.SBox64Preset);
-        sBox64Preset.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
+        sBox64Preset.setPopupBackgroundResource(R.drawable.content_dialog_background_dark);
 
     }
 
     private void applyDynamicStylesRecursively(View view) {
         TextView box86box64Label = view.findViewById(R.id.TVBox86Box64);
-        applyFieldSetLabelStyle(box86box64Label, isDarkMode);
+        applyFieldSetLabelStyle(box86box64Label);
 
         TextView soundLabel = view.findViewById(R.id.TVSound);
-        applyFieldSetLabelStyle(soundLabel, isDarkMode);
+        applyFieldSetLabelStyle(soundLabel);
 
-        TextView themeLabel = view.findViewById(R.id.TVTheme);
-        applyFieldSetLabelStyle(themeLabel, isDarkMode);
+        //TextView themeLabel = view.findViewById(R.id.TVTheme);
+        //applyFieldSetLabelStyle(themeLabel);
 
         TextView shortcutSettingsLabel = view.findViewById(R.id.TVShortcutSettings);
-        applyFieldSetLabelStyle(shortcutSettingsLabel, isDarkMode);
+        applyFieldSetLabelStyle(shortcutSettingsLabel);
 
         TextView bigPictureModeLabel = view.findViewById(R.id.TVBigPictureMode);
-        applyFieldSetLabelStyle(bigPictureModeLabel, isDarkMode);
+        applyFieldSetLabelStyle(bigPictureModeLabel);
 
         TextView tvCustomApiKey = view.findViewById(R.id.TVCustomApiKey);
-        applyFieldSetLabelStyle(tvCustomApiKey, isDarkMode);
+        applyFieldSetLabelStyle(tvCustomApiKey);
 
 //        TextView shortcutSettingsLabel = view.findViewById(R.id.TVShortcutSettings);
-//        applyFieldSetLabelStyle(shortcutSettingsLabel, isDarkMode);
+//        applyFieldSetLabelStyle(shortcutSettingsLabel);
 
         // Inputs tab labels
         TextView xServerLabel = view.findViewById(R.id.TVXServer);
-        applyFieldSetLabelStyle(xServerLabel, isDarkMode);
+        applyFieldSetLabelStyle(xServerLabel);
 
         TextView gyroSettingsLabel = view.findViewById(R.id.TVGyroSettings);
-        applyFieldSetLabelStyle(gyroSettingsLabel, isDarkMode);
+        applyFieldSetLabelStyle(gyroSettingsLabel);
 
         TextView gameControllerLabel = view.findViewById(R.id.TVGameControllerLabel);
-        applyFieldSetLabelStyle(gameControllerLabel, isDarkMode);
+        applyFieldSetLabelStyle(gameControllerLabel);
 
         // Advanced tab labels
         TextView logsLabel = view.findViewById(R.id.TVLogs);
-        applyFieldSetLabelStyle(logsLabel, isDarkMode);
+        applyFieldSetLabelStyle(logsLabel);
 
         TextView experimentalLabel = view.findViewById(R.id.TVExperimental);
-        applyFieldSetLabelStyle(experimentalLabel, isDarkMode);
+        applyFieldSetLabelStyle(experimentalLabel);
 
         TextView ImageFsLabel = view.findViewById(R.id.TVImageFs);
-        applyFieldSetLabelStyle(ImageFsLabel, isDarkMode);
+        applyFieldSetLabelStyle(ImageFsLabel);
 
     }
 
-    private void applyFieldSetLabelStyle(TextView textView, boolean isDarkMode) {
-//        Context context = textView.getContext();
-
-        if (isDarkMode) {
-            // Apply dark mode-specific attributes
-            textView.setTextColor(Color.parseColor("#cccccc")); // Set text color to #cccccc
-            textView.setBackgroundResource(R.color.window_background_color_dark); // Set dark background color
-        } else {
-            // Apply light mode-specific attributes (original FieldSetLabel)
-            textView.setTextColor(Color.parseColor("#bdbdbd")); // Set text color to #bdbdbd
-            textView.setBackgroundResource(R.color.window_background_color); // Set light background color
-        }
+    private void applyFieldSetLabelStyle(TextView textView) {
+        textView.setTextColor(Color.parseColor("#cccccc")); // Set text color to #cccccc
+        textView.setBackgroundResource(R.color.window_background_color_dark); // Set dark background color
     }
 
     private void initCustomApiKeySettings(View view) {

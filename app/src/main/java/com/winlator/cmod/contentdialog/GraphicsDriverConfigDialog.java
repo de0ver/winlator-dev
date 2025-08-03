@@ -73,12 +73,11 @@ public class GraphicsDriverConfigDialog extends ContentDialog {
 
         private View initDropDownView(int position, View convertView, ViewGroup parent) {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-            boolean isDarkMode = sp.getBoolean("dark_mode", false);
             if (convertView == null) {
                 convertView = getLayoutInflater().inflate(R.layout.checkbox_spinner, parent, false);
             }
             CheckBox cb = convertView.findViewById(R.id.checkbox);
-            cb.setTextAppearance(isDarkMode ? R.style.CheckBox_Dark : R.style.CheckBox);
+            cb.setTextAppearance(R.style.CheckBox_Dark);
             cb.setText(extensions.get(position));
             cb.setOnCheckedChangeListener(null);
             cb.setChecked(extensionsState.getOrDefault(extensions.get(position), true));

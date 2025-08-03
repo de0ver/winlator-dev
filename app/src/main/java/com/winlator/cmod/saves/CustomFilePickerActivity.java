@@ -29,17 +29,7 @@ public class CustomFilePickerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Check dark mode setting from shared preferences or system
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
-
-        // Apply the theme based on dark mode setting
-        if (isDarkMode) {
-            setTheme(R.style.AppTheme_Dark);  // Use your dark theme
-        } else {
-            setTheme(R.style.AppTheme);  // Use your light theme
-        }
-
+        setTheme(R.style.AppTheme_Dark);  // Use your dark theme
         // Set content view after setting the theme
         setContentView(R.layout.activity_file_picker);
 
@@ -50,18 +40,10 @@ public class CustomFilePickerActivity extends AppCompatActivity {
         upButton = findViewById(R.id.upButton);
         TextView pickerTitle = findViewById(R.id.TVPickerTitle);
 
-        // Set background color and text color for dark mode
-        if (isDarkMode) {
-            recyclerView.setBackgroundColor(ContextCompat.getColor(this, R.color.content_dialog_background_dark));
-            pickerTitle.setTextColor(ContextCompat.getColor(this, R.color.white));
-            confirmButton.setBackgroundResource(R.drawable.edit_text_dark);
-            upButton.setBackgroundResource(R.drawable.edit_text_dark);
-        } else {
-//            recyclerView.setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
-//            pickerTitle.setTextColor(ContextCompat.getColor(this, R.color.black));
-//            confirmButton.setBackgroundResource(R.drawable.button_light);
-//            upButton.setBackgroundResource(R.drawable.button_light);
-        }
+        recyclerView.setBackgroundColor(ContextCompat.getColor(this, R.color.content_dialog_background_dark));
+        pickerTitle.setTextColor(ContextCompat.getColor(this, R.color.white));
+        confirmButton.setBackgroundResource(R.drawable.edit_text_dark);
+        upButton.setBackgroundResource(R.drawable.edit_text_dark);
 
         // Get the initial directory from the intent
         String initialDirectoryPath = getIntent().getStringExtra("initialDirectory");

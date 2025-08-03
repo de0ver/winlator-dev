@@ -110,7 +110,7 @@
             </FrameLayout>
 
             <!-- Theme Settings -->
-            <FrameLayout
+            <!--<FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout style="@style/FieldSet">
@@ -124,7 +124,7 @@
                     android:id="@+id/TVTheme"
                     style="@style/FieldSetLabel"
                     android:text="Theme" />
-            </FrameLayout>
+            </FrameLayout>-->
 
             <!-- Shortcuts -->
             <FrameLayout

@@ -57,8 +57,6 @@ public class InputControlsFragment extends Fragment {
     private Callback<ControlsProfile> importProfileCallback;
     private final int selectedProfileId;
 
-    private boolean isDarkMode;
-
     public InputControlsFragment(int selectedProfileId) {
         this.selectedProfileId = selectedProfileId;
     }
@@ -68,9 +66,6 @@ public class InputControlsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
         manager = new InputControlsManager(getContext());
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
     }
 
     @Override
@@ -103,7 +98,7 @@ public class InputControlsFragment extends Fragment {
 
         final Spinner sProfile = view.findViewById(R.id.SProfile);
 
-        sProfile.setPopupBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark : R.drawable.content_dialog_background);
+        sProfile.setPopupBackgroundResource(R.drawable.content_dialog_background_dark);
 
         loadProfileSpinner(sProfile);
 

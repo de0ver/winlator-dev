@@ -151,7 +151,7 @@ public abstract class AppUtils {
         ((TextView)view.findViewById(R.id.TextView)).setText(text);
 
         Toast toast = new Toast(context);
-        toast.setGravity(Gravity.CENTER | Gravity.BOTTOM, 0, 50);
+        toast.setGravity(Gravity.CENTER | Gravity.BOTTOM, (text.length() / 2) * -5, 50);
         toast.setDuration(text.length() >= 40 ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
         toast.setView(view);
         toast.show();
