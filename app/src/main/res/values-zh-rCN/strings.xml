@@ -184,8 +184,6 @@
     <string name="as_button">作为按钮</string>
     <string name="as_axis">作为轴</string>
     <string name="both">两者</string>
-    <string name="trigger_mode">扳机键模式</string>
-    <string name="use_glibc">使用本地 Glibc 替代 Proot</string>
     <string name="experimental">实验性的</string>
     <string name="glibc_exp_edition">Glibc 实验性版本</string>
     <string name="enabled_async">启用 Async</string>

@@ -96,8 +96,6 @@ public class SettingsFragment extends Fragment {
     private CheckBox cbEnableCustomApiKey;
     private EditText etCustomApiKey;
 
-    private CheckBox cbDarkMode;
-
     private static final int REQUEST_CODE_FRONTEND_EXPORT_PATH = 1002;
     private static final int REQUEST_CODE_INSTALL_SOUNDFONT = 1001;
 
@@ -392,7 +390,6 @@ public class SettingsFragment extends Fragment {
             SharedPreferences.Editor editor = preferences.edit();
 
             // Save Dark Mode setting
-            editor.putBoolean("dark_mode", cbDarkMode.isChecked());
             editor.putString("box64_preset", Box86_64PresetManager.getSpinnerSelectedId(sBox64Preset));
             editor.putBoolean("use_dri3", cbUseDRI3.isChecked());
             editor.putBoolean("use_xr", cbUseXR.isChecked());

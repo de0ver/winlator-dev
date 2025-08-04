@@ -2,8 +2,6 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"  android:sharedUserId="com.termux">
-
-    <!-- Declare features that might be needed -->
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -116,6 +114,12 @@
             android:screenOrientation="sensor"
             android:exported="false" />
 
+        <activity
+            android:name="com.winlator.cmod.ShortcutPickerActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="sensor"
+            android:exported="false" />
+
         <receiver
             android:name=".ShortcutBroadcastReceiver"
             android:exported="true">
@@ -159,7 +163,5 @@
         <meta-data
             android:name="android.allow_multiple_resumed_activities"
             android:value="true" />
-        >
-
     </application>
 </manifest>

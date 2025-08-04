@@ -50,8 +50,6 @@ public class Win32AppWorkarounds {
         Log.d("Win32AppWorkarounds", "Workarounds initialized.");
     }
 
-
-
     public void applyStartupWorkarounds(String className) {
         Log.d("Win32AppWorkarounds", "applyStartupWorkarounds called with className: " + className);
 

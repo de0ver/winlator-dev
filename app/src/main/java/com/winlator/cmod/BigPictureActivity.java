@@ -369,7 +369,7 @@ public class BigPictureActivity extends AppCompatActivity {
         final String defaultVideoId = "yNwKYgM6SkM"; // Wii shop channel music extended
 
 
-        LinearLayout settingsLayout = findViewById(R.id.settingsLayout);
+        LinearLayout settingsLayout = findViewById(R.id.settingsLayoutS);
 
 
         // Override API key if custom key is set

@@ -849,6 +849,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:layout_marginTop="4dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp" /> <!-- fix where confirmbutton overlaps cpu layout-->
             </LinearLayout>
 
             <LinearLayout
@@ -965,7 +969,7 @@
         android:id="@+id/BTConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
+        android:layout_gravity="end|bottom"
         android:tint="#444444"
         android:src="@drawable/icon_confirm"
         android:layout_margin="16dp" />

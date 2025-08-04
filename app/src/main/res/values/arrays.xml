@@ -26,8 +26,8 @@
         <item>Mesa Turnip 25.1.0</item>
     </string-array>
     <string-array name="audio_driver_entries">
-        <item>ALSA</item>
         <item>PulseAudio</item>
+        <item>ALSA</item>
     </string-array>
     <string-array name="binding_type_entries">
         <item>Keyboard</item>

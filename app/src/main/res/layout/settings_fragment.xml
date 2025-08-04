@@ -69,27 +69,22 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <LinearLayout style="@style/FieldSet">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/midi_sound_font" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
                         <Spinner
                             android:id="@+id/SMIDISoundFont"
                             style="@style/ComboBox"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
-
                         <ImageButton
                             android:id="@+id/BTInstallSF"
                             style="@style/ListMenuButton"
@@ -375,7 +370,7 @@
                     <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/white">
+                        android:background="@color/white">
 
                         <LinearLayout
                             android:id="@+id/LLWineDebugChannels"
@@ -383,13 +378,13 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:padding="4dp"
-                            android:background="@android:color/white">
+                            android:background="@color/colorPrimary">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Channel 1"
-                                android:textColor="@android:color/white" />
+                                android:textColor="@color/white" />
 
                         </LinearLayout>
                     </HorizontalScrollView>

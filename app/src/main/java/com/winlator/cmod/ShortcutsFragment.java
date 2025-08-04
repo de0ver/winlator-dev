@@ -44,9 +44,11 @@ import com.winlator.cmod.container.Container;
 import com.winlator.cmod.container.ContainerManager;
 import com.winlator.cmod.container.Shortcut;
 import com.winlator.cmod.contentdialog.ContentDialog;
+import com.winlator.cmod.contentdialog.SaveSettingsDialog;
 import com.winlator.cmod.contentdialog.ShortcutSettingsDialog;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.FileUtils;
+import com.winlator.cmod.saves.Save;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -124,30 +126,8 @@ public class ShortcutsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.add_shortcuts:
-                AppUtils.showToast(getContext(), "W.I.P.");
-                /*if (selectedContainer == null || selectedContainer.getRootDir() == null) {
-                    AppUtils.showToast(getContext(), R.string.invalid_container);
-                    return;
-                }
 
-                File rootDir = selectedContainer.getRootDir();
-                String dynamicPath = new File(rootDir, ".wine/drive_c/").getAbsolutePath();
-
-                Intent intent = new Intent(activity, CustomFilePickerActivity.class);
-                intent.putExtra("initialDirectory", dynamicPath);
-                intent.putExtra("isEditing", saveToEdit != null); // Pass if we are in edit mode
-                intent.putExtra("editingPath", saveToEdit != null ? saveToEdit.path : dynamicPath); // Pass the current path if editing
-
-                activity.startActivityForResult(intent, REQUEST_CODE_CUSTOM_FILE_PICKER);*/
-                /*if (!ImageFs.find(getContext()).isValid()) return false;
-                FragmentManager fragmentManager = getParentFragmentManager();
-                fragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down, R.anim.slide_in_down, R.anim.slide_out_up)
-                        .addToBackStack(null)
-                        .replace(R.id.FLFragmentContainer, new ContainerDetailFragment())
-                        .commit();*/
                 return true;
-
             case R.id.sort_shortcuts:
                 curSortType = (curSortType + 1) % sortTypeText.length;
                 SharedPreferences.Editor prefEditor = prefs.edit();
@@ -251,10 +231,6 @@ public class ShortcutsFragment extends Fragment {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            /*int layoutId = (isGrid)
-                    ? R.layout.shortcut_grid_item
-                    : R.layout.shortcut_list_item;*/
-
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shortcut_list_item, parent, false);
             return new ViewHolder(view);
         }
@@ -294,7 +270,6 @@ public class ShortcutsFragment extends Fragment {
                     case R.id.shortcut_settings -> {
                         currentDialog = new ShortcutSettingsDialog(ShortcutsFragment.this, shortcut);
                         currentDialog.show();
-
                     }
                     case R.id.shortcut_launch_container -> {
                         Activity activity = getActivity();

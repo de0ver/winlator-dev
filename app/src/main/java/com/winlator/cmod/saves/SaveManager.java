@@ -175,9 +175,6 @@ public class SaveManager {
         return false;
     }
 
-
-
-
     public void removeSave(Save save) {
         if (save.file.exists() && !save.file.delete()) {
             throw new RuntimeException("Failed to delete save file: " + save.file.getAbsolutePath());

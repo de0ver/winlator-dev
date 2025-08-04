@@ -68,6 +68,7 @@
         <item name="android:spinnerMode">dropdown</item>
         <item name="android:background">@drawable/combo_box</item>
         <item name="android:popupBackground">@drawable/content_dialog_background</item>
+        <item name="android:tint">@color/white</item>
     </style>
 
     <!-- Dark ComboBox Styles -->
@@ -112,6 +113,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@drawable/content_dialog_background</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
 
