@@ -147,8 +147,8 @@ public class SettingsFragment extends Fragment {
         });*/
 
         // Initialize Big Picture Mode Checkbox
-        cbEnableBigPictureMode = view.findViewById(R.id.CBEnableBigPictureMode);
-        cbEnableBigPictureMode.setChecked(preferences.getBoolean("enable_big_picture_mode", false));
+        //cbEnableBigPictureMode = view.findViewById(R.id.CBEnableBigPictureMode);
+        //cbEnableBigPictureMode.setChecked(preferences.getBoolean("enable_big_picture_mode", false));
 
         initCustomApiKeySettings(view);
 
@@ -425,10 +425,6 @@ public class SettingsFragment extends Fragment {
 
             editor.putBoolean("legacy_mode_enabled", enableLegacyInputMode); // Save the 7.1.2 legacy mode state
 
-            // Save Big Picture Mode setting
-            editor.putBoolean("enable_big_picture_mode", ((CheckBox) view.findViewById(R.id.CBEnableBigPictureMode)).isChecked());
-            saveCustomApiKeySettings(editor);
-
             if (editor.commit()) {
                 NavigationView navigationView = getActivity().findViewById(R.id.NavigationView);
                 navigationView.setCheckedItem(R.id.main_menu_containers);
@@ -437,6 +433,8 @@ public class SettingsFragment extends Fragment {
                         .replace(R.id.FLFragmentContainer, new ContainersFragment())
                         .commit();
             }
+
+            AppUtils.showToast(context, "Settings saved!");
         });
 
 
@@ -469,11 +467,11 @@ public class SettingsFragment extends Fragment {
         TextView shortcutSettingsLabel = view.findViewById(R.id.TVShortcutSettings);
         applyFieldSetLabelStyle(shortcutSettingsLabel);
 
-        TextView bigPictureModeLabel = view.findViewById(R.id.TVBigPictureMode);
+        /*TextView bigPictureModeLabel = view.findViewById(R.id.TVBigPictureMode);
         applyFieldSetLabelStyle(bigPictureModeLabel);
 
         TextView tvCustomApiKey = view.findViewById(R.id.TVCustomApiKey);
-        applyFieldSetLabelStyle(tvCustomApiKey);
+        applyFieldSetLabelStyle(tvCustomApiKey);*/
 
 //        TextView shortcutSettingsLabel = view.findViewById(R.id.TVShortcutSettings);
 //        applyFieldSetLabelStyle(shortcutSettingsLabel);
@@ -506,29 +504,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void initCustomApiKeySettings(View view) {
-        cbEnableCustomApiKey = view.findViewById(R.id.CBEnableCustomApiKey);
-        etCustomApiKey = view.findViewById(R.id.ETCustomApiKey);
 
-        // Load saved preferences
-        boolean isCustomApiKeyEnabled = preferences.getBoolean("enable_custom_api_key", false);
-        String customApiKey = preferences.getString("custom_api_key", "");
-
-        cbEnableCustomApiKey.setChecked(isCustomApiKeyEnabled);
-        etCustomApiKey.setText(customApiKey);
-
-        // Show/hide the EditText based on checkbox state
-        etCustomApiKey.setVisibility(isCustomApiKeyEnabled ? View.VISIBLE : View.GONE);
-
-        cbEnableCustomApiKey.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            etCustomApiKey.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-        });
-
-        // Help button listener to open API documentation
-        view.findViewById(R.id.BTHelpApiKey).setOnClickListener(v -> {
-            String url = "https://www.steamgriddb.com/profile/preferences/api";
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
-        });
     }
 
     private void saveCustomApiKeySettings(SharedPreferences.Editor editor) {

@@ -69,7 +69,9 @@ public class ShortcutsFragment extends Fragment {
     public int curSortType = 0;
     private final String[] sortTypeText = {"Name", "Container Id", "Path", "Playtime", "Play Count", "Last Play Date"};
     private boolean isGrid = false;
+    private ShortcutsAdapter adapter;
     private SharedPreferences prefs;
+    private DividerItemDecoration divider;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,16 +90,13 @@ public class ShortcutsFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.shortcuts);
     }
 
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FrameLayout frameLayout = (FrameLayout) inflater.inflate(R.layout.shortcuts_fragment, container, false);
-        recyclerView = frameLayout.findViewById(R.id.RecyclerView);
-        emptyTextView = frameLayout.findViewById(R.id.TVEmptyText);
+        View rootView = inflater.inflate(R.layout.shortcuts_fragment, container, false);
+        recyclerView = rootView.findViewById(R.id.RecyclerView);
+        emptyTextView = rootView.findViewById(R.id.TVEmptyText);
         setRecyclerLayoutManager();
-        //recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-        return frameLayout;
+        return rootView;
     }
 
     @Override
@@ -140,6 +139,8 @@ public class ShortcutsFragment extends Fragment {
             case R.id.change_layout:
                 isGrid = !isGrid;
                 setRecyclerLayoutManager();
+                recyclerView.setAdapter(adapter);
+                adapter.setGrid(isGrid);
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
@@ -188,24 +189,108 @@ public class ShortcutsFragment extends Fragment {
         }
 
         shortcuts.removeIf(shortcut -> shortcut == null || shortcut.file.getName().isEmpty());
-        recyclerView.setAdapter(new ShortcutsAdapter(shortcuts));
-        if (shortcuts.isEmpty()) emptyTextView.setVisibility(View.VISIBLE);
-        else
-            emptyTextView.setVisibility(View.GONE); // Ensure the empty text view is hidden if there are shortcuts
+        if (adapter == null) {
+            adapter = new ShortcutsAdapter(shortcuts, isGrid);
+            recyclerView.setAdapter(adapter);
+        } else {
+            adapter.setData(shortcuts);
+        }
+        emptyTextView.setVisibility(shortcuts.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     private void setRecyclerLayoutManager() {
         if (isGrid) {
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 5));
+            if (divider != null) recyclerView.removeItemDecoration(divider);
         } else {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            if (divider == null) {
+                divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+            }
+            recyclerView.addItemDecoration(divider);
         }
     }
 
-    private class ShortcutsAdapter extends RecyclerView.Adapter<ShortcutsAdapter.ViewHolder> {
+    private class ShortcutsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private final List<Shortcut> data;
+        private boolean isGrid;
 
-        private class ViewHolder extends RecyclerView.ViewHolder {
+        public ShortcutsAdapter(List<Shortcut> data, boolean isGrid) {
+            this.data = new ArrayList<>(data);
+            this.isGrid = isGrid;
+        }
+
+        public void setData(List<Shortcut> newData) {
+            data.clear();
+            data.addAll(newData);
+            notifyDataSetChanged();
+        }
+
+        public void setGrid(boolean isGrid) {
+            this.isGrid = isGrid;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return isGrid ? 1 : 0;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            if (viewType == 1) { // GRID
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.shortcut_grid_item, parent, false);
+                return new GridViewHolder(view);
+            } else { // LIST
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.shortcut_list_item, parent, false);
+                return new ListViewHolder(view);
+            }
+        }
+
+        @Override
+        public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+            if (holder instanceof ListViewHolder vh) {
+                vh.menuButton.setOnClickListener(null);
+                vh.innerArea.setOnClickListener(null);
+            } else if (holder instanceof GridViewHolder vh) {
+                vh.itemView.setOnClickListener(null);
+                vh.itemView.setOnLongClickListener(null);
+            }
+            super.onViewRecycled(holder);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            final Shortcut item = data.get(position);
+
+            if (holder instanceof ListViewHolder vh) {
+                if (item.icon != null) vh.imageView.setImageBitmap(item.icon);
+                vh.title.setText(item.name);
+                vh.path.setText(item.path);
+                vh.subtitle.setText(item.container.getName());
+                vh.menuButton.setOnClickListener(v -> showListItemMenu(v, item));
+                vh.innerArea.setOnClickListener(v -> runFromShortcut(item));
+
+            } else if (holder instanceof GridViewHolder vh) {
+                if (item.icon != null) vh.imageView.setImageBitmap(item.icon);
+                vh.title.setText(item.name);
+                vh.itemView.setOnClickListener(v -> runFromShortcut(item));
+                vh.itemView.setOnLongClickListener(v -> {
+                    showListItemMenu(v, item);
+                    return true;
+                });
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return data.size();
+        }
+
+        private class ListViewHolder extends RecyclerView.ViewHolder {
             private final ImageButton menuButton;
             private final ImageView imageView;
             private final TextView title;
@@ -213,7 +298,7 @@ public class ShortcutsFragment extends Fragment {
             private final TextView subtitle;
             private final View innerArea;
 
-            private ViewHolder(View view) {
+            private ListViewHolder(View view) {
                 super(view);
                 this.imageView = view.findViewById(R.id.ImageView);
                 this.title = view.findViewById(R.id.TVTitle);
@@ -224,38 +309,15 @@ public class ShortcutsFragment extends Fragment {
             }
         }
 
-        public ShortcutsAdapter(List<Shortcut> data) {
-            this.data = data;
-        }
+        private class GridViewHolder extends RecyclerView.ViewHolder {
+            private final ImageView imageView;
+            private final TextView title;
 
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shortcut_list_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onViewRecycled(@NonNull ViewHolder holder) {
-            holder.menuButton.setOnClickListener(null);
-            holder.innerArea.setOnClickListener(null);
-            super.onViewRecycled(holder);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            final Shortcut item = data.get(position);
-            if (item.icon != null) holder.imageView.setImageBitmap(item.icon);
-            holder.title.setText(item.name);
-            holder.path.setText(item.path);
-            holder.subtitle.setText(item.container.getName());
-            holder.menuButton.setOnClickListener((v) -> showListItemMenu(v, item));
-            holder.innerArea.setOnClickListener((v) -> runFromShortcut(item));
-        }
-
-        @Override
-        public final int getItemCount() {
-            return data.size();
+            private GridViewHolder(View view) {
+                super(view);
+                this.imageView = view.findViewById(R.id.ImageView);
+                this.title = view.findViewById(R.id.TVTitle);
+            }
         }
 
         private void showListItemMenu(View anchorView, final Shortcut shortcut) {

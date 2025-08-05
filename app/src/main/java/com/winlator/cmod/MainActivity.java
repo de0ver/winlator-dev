@@ -113,20 +113,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
+            Log.e("WinlatorCMOD", "Uncaught exception", e);
+        });
 //        cleanupErroneousContainer();
-
-        // Get shared preferences
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        // Check if Big Picture Mode is enabled
-        boolean isBigPictureModeEnabled = sharedPreferences.getBoolean("enable_big_picture_mode", false);
-
-        if (isBigPictureModeEnabled) {
-            // If enabled, launch the BigPictureActivity and finish MainActivity
-            Intent intent = new Intent(MainActivity.this, BigPictureActivity.class);
-            startActivity(intent);
-        }
 
         setTheme(R.style.AppTheme_Dark);
         setContentView(R.layout.main_activity);

@@ -158,13 +158,13 @@
 
             <!-- Big Picture Mode -->
 
-            <FrameLayout
+           <!-- <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <LinearLayout style="@style/FieldSet">
 
-                    <!-- SteamGridDB API Key Section -->
+                    &lt;!&ndash; SteamGridDB API Key Section &ndash;&gt;
                     <CheckBox
                         android:id="@+id/CBEnableBigPictureMode"
                         android:layout_width="wrap_content"
@@ -217,7 +217,7 @@
                     android:id="@+id/TVBigPictureMode"
                     style="@style/FieldSetLabel"
                     android:text="Big Picture Mode" />
-            </FrameLayout>
+            </FrameLayout>-->
 
             <FrameLayout
                 android:layout_width="match_parent"

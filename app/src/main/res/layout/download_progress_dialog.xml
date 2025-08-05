@@ -28,7 +28,7 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp">
+                android:layout_marginEnd="16dp">
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/CircularProgressIndicator"
@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     app:trackThickness="10dp"
                     app:trackColor="#bdbdbd"
-                    app:indicatorColor="@color/colorAccent"
+                    app:indicatorColor="@color/material_blue_grey_900"
                     app:indicatorSize="64dp"
                     android:layout_gravity="center" />
 
@@ -44,7 +44,8 @@
                     android:id="@+id/TVProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14dp"
+                    app:tint="@color/colorPrimary"
+                    android:textSize="14sp"
                     android:layout_gravity="center" />
             </FrameLayout>
 

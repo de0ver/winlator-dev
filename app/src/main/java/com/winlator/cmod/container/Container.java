@@ -1,9 +1,7 @@
 package com.winlator.cmod.container;
 
 import android.os.Environment;
-import android.util.Log;
 
-import com.winlator.cmod.XrActivity;
 import com.winlator.cmod.box86_64.Box86_64Preset;
 import com.winlator.cmod.core.DefaultVersion;
 import com.winlator.cmod.core.EnvVars;
