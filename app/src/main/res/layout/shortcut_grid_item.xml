@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -25,4 +26,18 @@
         android:layout_marginTop="4dp"
         android:textSize="12sp"
         android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/TVSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:scrollHorizontally="false"
+        android:singleLine="false"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginTop="4dp"
+        android:textSize="10sp"
+        android:textColor="#9A2F2F"
+        />
 </LinearLayout>

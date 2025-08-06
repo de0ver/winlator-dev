@@ -161,6 +161,7 @@ public class ShortcutSettingsDialog extends ContentDialog {
 
 
         final Spinner sGraphicsDriver = findViewById(R.id.SGraphicsDriver);
+        sGraphicsDriver.setEnabled(false);
         
         final Spinner sDXWrapper = findViewById(R.id.SDXWrapper);
 
@@ -189,8 +190,8 @@ public class ShortcutSettingsDialog extends ContentDialog {
         AppUtils.setSpinnerSelectionFromIdentifier(sAudioDriver, shortcut.getExtra("audioDriver", shortcut.container.getAudioDriver()));
         final Spinner sEmulator = findViewById(R.id.SEmulator);
         AppUtils.setSpinnerSelectionFromIdentifier(sEmulator, shortcut.getExtra("emulator", shortcut.container.getEmulator()));
-        final Spinner sEmulator64 = findViewById(R.id.SEmulator64);
-        sEmulator64.setEnabled(false);
+        //final Spinner sEmulator64 = findViewById(R.id.SEmulator64);
+        //sEmulator64.setEnabled(false);
         final Spinner sMIDISoundFont = findViewById(R.id.SMIDISoundFont);
         MidiManager.loadSFSpinner(sMIDISoundFont);
         AppUtils.setSpinnerSelectionFromValue(sMIDISoundFont, shortcut.getExtra("midiSoundFont", shortcut.container.getMIDISoundFont()));
@@ -201,13 +202,13 @@ public class ShortcutSettingsDialog extends ContentDialog {
         if (wineInfo.isArm64EC()) {
             fexcoreFL.setVisibility(View.VISIBLE);
             sEmulator.setEnabled(true);
-            sEmulator64.setSelection(0);
+            //sEmulator64.setSelection(0);
         }
         else {
             fexcoreFL.setVisibility(View.GONE);
             sEmulator.setEnabled(false);
             sEmulator.setSelection(1);
-            sEmulator64.setSelection(1);
+            //sEmulator64.setSelection(1);
         }
 
         loadBox64VersionSpinner(context, contentsManager, sBox64Version, wineInfo.isArm64EC());

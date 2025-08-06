@@ -334,7 +334,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
 
         // Handler and Runnable to manage timeout for hiding controls
-
         boolean isTimeoutEnabled = preferences.getBoolean("touchscreen_timeout_enabled", true);
 
         hideControlsRunnable = () -> {
@@ -343,7 +342,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 Log.d("XServerDisplayActivity", "Touchscreen controls hidden after timeout.");
             }
         };
-
 
         contentsManager = new ContentsManager(this);
         contentsManager.syncContents();
@@ -438,11 +436,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
             incrementPlayCount();
 
-            if (Objects.equals(shortcutName, null))
-                AppUtils.showToast(this, "Launching " + '"' + container.getName() + '"');
-            else
-                AppUtils.showToast(this, "Launching " + '"' + shortcutName + '"');
-
             // Initialize Win32AppWorkarounds
             win32AppWorkarounds = new Win32AppWorkarounds(this);
 
@@ -490,6 +483,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             if (enableLogs) {
                 LogView.setFilename(getExecutable());
                 ProcessHelper.addDebugCallback(debugDialog = new DebugDialog(this));
+                //ProcessHelper.addDebugCallback(debugDialog = new DebugDialog(this));
             }
 
             // Retrieve secondary executable and delay
@@ -566,10 +560,11 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             }
         }
 
-        if (shortcut == null)
-            preloaderDialog.show(R.string.starting_up);
-        else
+        if (shortcut == null && container.name != null) // lol
+            preloaderDialog.show(container.name, null);
+        else if (shortcut != null && container.name == null){
             preloaderDialog.show(shortcut.name, shortcut.icon);
+        }
 
 
         inputControlsManager = new InputControlsManager(this);

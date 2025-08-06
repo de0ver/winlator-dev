@@ -50,7 +50,12 @@ public class PreloaderDialog {
         close();
         if (dialog == null) create();
         ((TextView)dialog.findViewById(R.id.TextView)).setText(text);
-        ((ImageView)dialog.findViewById(R.id.CustomIcon)).setImageBitmap(icon);
+        ImageView customIcon = dialog.findViewById(R.id.CustomIcon);
+        if (icon == null) {
+            customIcon.setImageResource(R.drawable.icon_wine);
+            customIcon.setColorFilter(Color.BLACK);
+        } else
+            customIcon.setImageBitmap(icon);
         dialog.show();
     }
 

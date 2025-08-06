@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,6 +51,8 @@ import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.FileUtils;
 import com.winlator.cmod.saves.Save;
 
+import org.w3c.dom.Text;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -72,6 +75,7 @@ public class ShortcutsFragment extends Fragment {
     private ShortcutsAdapter adapter;
     private SharedPreferences prefs;
     private DividerItemDecoration divider;
+    private final String[] prefsText = {"cur_sort_type", "last_view_type", "playtime_stats"};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,10 +87,7 @@ public class ShortcutsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         manager = new ContainerManager(getContext());
-        prefs = requireContext().getSharedPreferences("ShortcutsPref", Context.MODE_PRIVATE);
-        curSortType = prefs.getInt("cur_sort_type", 0);
         loadShortcutsList(curSortType);
-
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.shortcuts);
     }
 
@@ -95,6 +96,11 @@ public class ShortcutsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.shortcuts_fragment, container, false);
         recyclerView = rootView.findViewById(R.id.RecyclerView);
         emptyTextView = rootView.findViewById(R.id.TVEmptyText);
+
+        prefs = requireContext().getSharedPreferences("ShortcutsPref", Context.MODE_PRIVATE);
+        curSortType = prefs.getInt(prefsText[0], 0);
+        isGrid = prefs.getBoolean(prefsText[1], false); //bc setRecycler check isGrid
+
         setRecyclerLayoutManager();
         return rootView;
     }
@@ -130,7 +136,7 @@ public class ShortcutsFragment extends Fragment {
             case R.id.sort_shortcuts:
                 curSortType = (curSortType + 1) % sortTypeText.length;
                 SharedPreferences.Editor prefEditor = prefs.edit();
-                prefEditor.putInt("cur_sort_type", curSortType);
+                prefEditor.putInt(prefsText[0], curSortType); // lol
                 prefEditor.apply();
                 loadShortcutsList(curSortType);
                 AppUtils.showToast(getContext(), "Sort by: " + sortTypeText[curSortType]);
@@ -138,6 +144,9 @@ public class ShortcutsFragment extends Fragment {
                 return true;
             case R.id.change_layout:
                 isGrid = !isGrid;
+                SharedPreferences.Editor prefEditor2 = prefs.edit(); // xd
+                prefEditor2.putBoolean(prefsText[1], isGrid);
+                prefEditor2.apply();
                 setRecyclerLayoutManager();
                 recyclerView.setAdapter(adapter);
                 adapter.setGrid(isGrid);
@@ -193,6 +202,7 @@ public class ShortcutsFragment extends Fragment {
             adapter = new ShortcutsAdapter(shortcuts, isGrid);
             recyclerView.setAdapter(adapter);
         } else {
+            adapter.setGrid(isGrid);
             adapter.setData(shortcuts);
         }
         emptyTextView.setVisibility(shortcuts.isEmpty() ? View.VISIBLE : View.GONE);
@@ -277,6 +287,7 @@ public class ShortcutsFragment extends Fragment {
             } else if (holder instanceof GridViewHolder vh) {
                 if (item.icon != null) vh.imageView.setImageBitmap(item.icon);
                 vh.title.setText(item.name);
+                vh.container_name.setText(item.container.name);
                 vh.itemView.setOnClickListener(v -> runFromShortcut(item));
                 vh.itemView.setOnLongClickListener(v -> {
                     showListItemMenu(v, item);
@@ -312,11 +323,13 @@ public class ShortcutsFragment extends Fragment {
         private class GridViewHolder extends RecyclerView.ViewHolder {
             private final ImageView imageView;
             private final TextView title;
+            private final TextView container_name;
 
             private GridViewHolder(View view) {
                 super(view);
                 this.imageView = view.findViewById(R.id.ImageView);
                 this.title = view.findViewById(R.id.TVTitle);
+                this.container_name = view.findViewById(R.id.TVSubtitle);
             }
         }
 
@@ -324,7 +337,7 @@ public class ShortcutsFragment extends Fragment {
             final Context context = getContext();
             PopupMenu listItemMenu = new PopupMenu(context, anchorView);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) listItemMenu.setForceShowIcon(true);
-
+            listItemMenu.setGravity(Gravity.END);
             listItemMenu.inflate(R.menu.shortcut_popup_menu);
             listItemMenu.setOnMenuItemClickListener((menuItem) -> {
                 int itemId = menuItem.getItemId();

@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Looper;
@@ -151,7 +152,34 @@ public abstract class AppUtils {
         ((TextView)view.findViewById(R.id.TextView)).setText(text);
 
         Toast toast = new Toast(context);
-        toast.setGravity(Gravity.CENTER | Gravity.BOTTOM, (text.length() / 2) * -5, 50);
+        toast.setGravity(Gravity.CENTER | Gravity.BOTTOM, -50, 50);
+        toast.setDuration(text.length() >= 40 ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+        toast.setView(view);
+        toast.show();
+        globalToastReference = new WeakReference<>(toast);
+        return toast;
+    }
+
+    public static Toast showToastError(final Context context, final String text) { //todo: блять, крч, там надо в топе добавить проверку, но так как мне похуй +похуй я сделаю вторую функцию
+        if (!isUiThread()) {
+            if (context instanceof Activity) {
+                ((Activity)context).runOnUiThread(() -> showToast(context, text));
+            }
+            return null;
+        }
+
+        if (globalToastReference != null) {
+            Toast toast = globalToastReference.get();
+            if (toast != null) toast.cancel();
+            globalToastReference = null;
+        }
+
+        View view = LayoutInflater.from(context).inflate(R.layout.custom_toast, null);
+        TextView text_view = view.findViewById(R.id.TextView);
+        text_view.setText(text);
+
+        Toast toast = new Toast(context);
+        toast.setGravity(Gravity.CENTER | Gravity.BOTTOM, -50, 50);
         toast.setDuration(text.length() >= 40 ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
         toast.setView(view);
         toast.show();

@@ -30,14 +30,18 @@ public class EnvVarsView extends FrameLayout {
     public static final String[][] knownEnvVars = {
         {"ZINK_DESCRIPTORS", "SELECT", "auto", "lazy", "cached", "notemplates"},
         {"ZINK_DEBUG", "SELECT_MULTIPLE", "nir", "spirv", "tgsi", "validation", "sync", "compact", "noreorder"},
+        {"ZINK_CONTEXT_THREADED", "CHECKBOX", "false", "true"},
         {"MESA_SHADER_CACHE_DISABLE", "CHECKBOX", "false", "true"},
         {"mesa_glthread", "CHECKBOX", "false", "true"},
         {"WINEESYNC", "CHECKBOX", "0", "1"},
         {"TU_DEBUG", "SELECT_MULTIPLE", "startup", "nir", "nobin", "sysmem", "gmem", "forcebin", "layout", "noubwc", "nomultipos", "nolrz", "nolrzfc", "perf", "perfc", "flushall", "syncdraw", "push_consts_per_stage", "rast_order", "unaligned_store", "log_skip_gmem_ops", "dynamic", "bos", "3d_load", "fdm", "noconform", "rd"},
-        {"DXVK_HUD", "SELECT_MULTIPLE", "devinfo", "fps", "frametimes", "submissions", "drawcalls", "pipelines", "descriptors", "memory", "gpuload", "version", "api", "cs", "compiler", "samplers", "scale=0.7", "scale=0.5"},
+        {"DXVK_HUD", "SELECT_MULTIPLE", "devinfo", "fps", "frametimes", "submissions", "drawcalls", "pipelines", "descriptors", "memory", "gpuload", "version", "api", "cs", "compiler", "samplers", "scale=1.5", "scale=0.7", "scale=0.5", "scale=0.3", "opacity=0.8", "opacity=0.5", "opacity=0.3"},
         {"MESA_EXTENSION_MAX_YEAR", "NUMBER"},
         {"PULSE_LATENCY_MSEC", "NUMBER"},
-        {"MANGOHUD", "CHECKBOX", "0", "1"}
+        {"MANGOHUD", "CHECKBOX", "0", "1"},
+        {"GALLIUM_HUD", "SELECT_MULTIPLE", "help", "glxgears", "fps", "cpu", "GPU-load", "VRAM-usage"},
+        {"VK_INSTANCE_LAYERS", "SELECT", "VK_LAYER_MESA_overlay"},
+        {"VK_LAYER_MESA_OVERLAY_CONFIG", "SELECT_MULTIPLE", "help", "vkcube", "fps", "gpu_timing"}
     };
     private final LinearLayout container;
     private final TextView emptyTextView;
@@ -127,15 +131,8 @@ public class EnvVarsView extends FrameLayout {
     private void applyDarkTheme(View view) {
             if (view instanceof TextView) {
                 ((TextView) view).setTextColor(Color.WHITE);
-            } else if (view instanceof EditText) {
-                view.setBackgroundResource(R.drawable.edit_text_dark); // Assuming you have a dark background resource
-                ((EditText) view).setTextColor(Color.WHITE);
-                ((EditText) view).setHintTextColor(Color.GRAY);
             } else if (view instanceof Spinner) {
                 ((Spinner) view).setPopupBackgroundResource(R.drawable.content_dialog_background_dark);
-            } else if (view instanceof ToggleButton) {
-                // Apply custom styles if needed for ToggleButton
-                // For example, you could change the background or text colors
             }
     }
 

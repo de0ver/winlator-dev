@@ -94,7 +94,7 @@ public class LogView extends View {
                 String cur_line = lines.get(i).toLowerCase();
                 if (cur_line.contains(":err:"))
                     paint.setColor(0xfff7a59c);
-                else if (cur_line.contains("fault") || cur_line.contains("illegal"))
+                else if (cur_line.contains(" fault") || cur_line.contains(" illegal"))
                     paint.setColor(0xffff0000);
                 else
                     paint.setColor((i % 2) != 0 ? 0xffe1f5fe : 0xffffffff);

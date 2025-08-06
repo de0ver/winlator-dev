@@ -1,6 +1,7 @@
 package com.winlator.cmod.container;
 
 import android.os.Environment;
+import android.util.Log;
 
 import com.winlator.cmod.box86_64.Box86_64Preset;
 import com.winlator.cmod.core.DefaultVersion;
@@ -24,7 +25,7 @@ public class Container {
         THUMBSTICK_UP, THUMBSTICK_DOWN, THUMBSTICK_LEFT, THUMBSTICK_RIGHT
     }
     public static final String DEFAULT_ENV_VARS = "ZINK_DESCRIPTORS=lazy ZINK_DEBUG=compact MESA_SHADER_CACHE_DISABLE=false MESA_SHADER_CACHE_MAX_SIZE=512MB mesa_glthread=true WINEESYNC=1 TU_DEBUG=noconform,sysmem DXVK_HUD=devinfo,fps,frametimes,gpuload,version,api MANGOHUD=0 MANGOHUD_CONFIG=engine_version,gpu_stats=0";
-    public static final String DEFAULT_SCREEN_SIZE = "1280x720";
+    public static final String DEFAULT_SCREEN_SIZE = "1024x768";
     public static final String DEFAULT_GRAPHICS_DRIVER = "wrapper";
     public static final String DEFAULT_AUDIO_DRIVER = "pulseaudio";
     public static final String DEFAULT_EMULATOR = "FEXCore";
@@ -433,7 +434,9 @@ public class Container {
             if (!WineInfo.isMainWineVersion(wineVersion)) data.put("wineVersion", wineVersion);
             FileUtils.writeString(getConfigFile(), data.toString());
         }
-        catch (JSONException e) {}
+        catch (JSONException e) {
+            Log.e("WinlatorCMOD", "Cant save container data - Container.java:437");
+        }
     }
 
 

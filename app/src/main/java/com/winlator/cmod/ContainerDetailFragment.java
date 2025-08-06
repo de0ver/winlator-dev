@@ -155,8 +155,8 @@ public class ContainerDetailFragment extends Fragment {
         Spinner sAudioDriver = view.findViewById(R.id.SAudioDriver);
         sAudioDriver.setPopupBackgroundResource( R.drawable.content_dialog_background_dark);
 
-        Spinner sEmulator64 = view.findViewById(R.id.SEmulator64);
-        sEmulator64.setPopupBackgroundResource( R.drawable.content_dialog_background_dark);
+        //Spinner sEmulator64 = view.findViewById(R.id.SEmulator64);
+        //sEmulator64.setPopupBackgroundResource( R.drawable.content_dialog_background_dark);
 
         Spinner sEmulator = view.findViewById(R.id.SEmulator);
         sEmulator.setPopupBackgroundResource( R.drawable.content_dialog_background_dark);
@@ -1066,20 +1066,20 @@ public class ContainerDetailFragment extends Fragment {
                 CheckBox cbWoW64Mode = view.findViewById(R.id.CBWoW64Mode);
                 FrameLayout fexcoreFL = view.findViewById(R.id.fexcoreFrame);
                 Spinner sEmulator = view.findViewById(R.id.SEmulator);
-                Spinner sEmulator64 = view.findViewById(R.id.SEmulator64);
-                sEmulator64.setEnabled(false);
+                //Spinner sEmulator64 = view.findViewById(R.id.SEmulator64);
+                //sEmulator64.setEnabled(false);
                 String wineVersion = sWineVersion.getSelectedItem().toString();
                 WineInfo wineInfo = WineInfo.fromIdentifier(context, contentsManager, wineVersion);
                 if (wineInfo.isArm64EC()) {
                     fexcoreFL.setVisibility(View.VISIBLE);
                     sEmulator.setEnabled(true);
-                    sEmulator64.setSelection(0);
+                    //sEmulator64.setSelection(0);
                     if (!isEditMode()) sEmulator.setSelection(0);
                 } else {
                     fexcoreFL.setVisibility(View.GONE);
                     sEmulator.setEnabled(false);
                     sEmulator.setSelection(1);
-                    sEmulator64.setSelection(1);
+                    //sEmulator64.setSelection(1);
                 }
                 loadBox64VersionSpinner(context, container, contentsManager, sBox64Version, wineInfo.isArm64EC());
                 cbWoW64Mode.setEnabled(true); // Always allow user to toggle WoW64 mode
@@ -1089,19 +1089,19 @@ public class ContainerDetailFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
                 FrameLayout fexcoreFL = view.findViewById(R.id.fexcoreFrame);
                 Spinner sEmulator = view.findViewById(R.id.SEmulator);
-                Spinner sEmulator64 = view.findViewById(R.id.SEmulator64);
-                sEmulator64.setEnabled(false);
+                //Spinner sEmulator64 = view.findViewById(R.id.SEmulator64);
+                //sEmulator64.setEnabled(false);
                 String wineVersion = sWineVersion.getSelectedItem().toString();
                 WineInfo wineInfo = WineInfo.fromIdentifier(context, contentsManager, wineVersion);
                 if (wineInfo.isArm64EC()) {
                     fexcoreFL.setVisibility(View.VISIBLE);
                     sEmulator.setEnabled(true);
-                    sEmulator64.setSelection(0);
+                    //sEmulator64.setSelection(0);
                 } else {
                     fexcoreFL.setVisibility(View.GONE);
                     sEmulator.setEnabled(false);
                     sEmulator.setSelection(1);
-                    sEmulator64.setSelection(1);
+                    //sEmulator64.setSelection(1);
                 }
                 loadBox64VersionSpinner(context, container, contentsManager, sBox64Version, wineInfo.isArm64EC());
             }
