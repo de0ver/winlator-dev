@@ -38,18 +38,7 @@ public class ContentDialog extends Dialog {
     public ContentDialog(@NonNull Context context, int layoutResId) {
         super(context, R.style.ContentDialog);
         contentView = LayoutInflater.from(context).inflate(R.layout.content_dialog, null);
-
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        //isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
-
-//        contentView.setBackgroundResource(isDarkMode ? R.drawable.content_dialog_background_dark: R.drawable.content_dialog_background);
-
-        //if (isDarkMode) {
-            this.getContext().setTheme(R.style.ContentDialog_Dark);
-        //}
-
-
+        this.getContext().setTheme(R.style.ContentDialog_Dark);
         if (layoutResId > 0) {
             FrameLayout frameLayout = contentView.findViewById(R.id.FrameLayout);
             frameLayout.setVisibility(View.VISIBLE);

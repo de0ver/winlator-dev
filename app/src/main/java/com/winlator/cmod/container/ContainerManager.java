@@ -1,14 +1,12 @@
 package com.winlator.cmod.container;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 import com.winlator.cmod.R;
-import com.winlator.cmod.contents.ContentProfile;
 import com.winlator.cmod.contents.ContentsManager;
 import com.winlator.cmod.core.Callback;
 import com.winlator.cmod.core.FileUtils;
@@ -17,21 +15,12 @@ import com.winlator.cmod.core.TarCompressorUtils;
 import com.winlator.cmod.core.WineInfo;
 import com.winlator.cmod.xenvironment.ImageFs;
 
-import java.io.FilenameFilter;
-import java.util.Arrays;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.Executors;
 
 public class ContainerManager {

@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.util.Log;
 
 import androidx.core.graphics.ColorUtils;
 
@@ -73,6 +74,7 @@ public class ControlElement {
     private short x;
     private short y;
     private boolean selected = false;
+    private boolean pressed = false;
     private boolean toggleSwitch = false;
     private int currentPointerId = -1;
     private final Rect boundingBox = new Rect();
@@ -225,6 +227,14 @@ public class ControlElement {
         this.selected = selected;
     }
 
+    public boolean isPressed() {
+        return pressed;
+    }
+
+    public void setPressed(boolean pressed) {
+        this.pressed = pressed;
+    }
+
     public String getText() {
         return text;
     }
@@ -253,21 +263,20 @@ public class ControlElement {
 
         switch (type) {
             case BUTTON:
-                switch (shape) {
-                    case RECT:
-                    case ROUND_RECT:
+                halfHeight = switch (shape) {
+                    case RECT, ROUND_RECT -> {
                         halfWidth = snappingSize * 4;
-                        halfHeight = snappingSize * 2;
-                        break;
-                    case SQUARE:
-                        halfWidth = (int)(snappingSize * 2.5f);
-                        halfHeight = (int)(snappingSize * 2.5f);
-                        break;
-                    case CIRCLE:
+                        yield snappingSize * 2;
+                    }
+                    case SQUARE -> {
+                        halfWidth = (int) (snappingSize * 2.5f);
+                        yield (int) (snappingSize * 2.5f);
+                    }
+                    case CIRCLE -> {
                         halfWidth = snappingSize * 3;
-                        halfHeight = snappingSize * 3;
-                        break;
-                }
+                        yield snappingSize * 3;
+                    }
+                };
                 break;
             case D_PAD: {
                 halfWidth = snappingSize * 7;
@@ -300,8 +309,6 @@ public class ControlElement {
         return boundingBox;
     }
 
-
-
     private String getDisplayText() {
         if (text != null && !text.isEmpty()) {
             return text;
@@ -326,22 +333,12 @@ public class ControlElement {
     }
 
     private static String getRangeTextForIndex(Range range, int index) {
-        String text = "";
-        switch (range) {
-            case FROM_A_TO_Z:
-                text = String.valueOf((char)(65 + index));
-                break;
-            case FROM_0_TO_9:
-                text = String.valueOf((index + 1) % 10);
-                break;
-            case FROM_F1_TO_F12:
-                text = "F"+(index + 1);
-                break;
-            case FROM_NP0_TO_NP9:
-                text = "NP"+((index + 1) % 10);
-                break;
-        }
-        return text;
+        return switch (range) {
+            case FROM_A_TO_Z -> String.valueOf((char) (65 + index));
+            case FROM_0_TO_9 -> String.valueOf((index + 1) % 10);
+            case FROM_F1_TO_F12 -> "F" + (index + 1);
+            case FROM_NP0_TO_NP9 -> "NP" + ((index + 1) % 10);
+        };
     }
 
     public void draw(Canvas canvas) {
@@ -349,7 +346,13 @@ public class ControlElement {
         Paint paint = inputControlsView.getPaint();
         int primaryColor = inputControlsView.getPrimaryColor();
 
-        paint.setColor(selected ? inputControlsView.getSecondaryColor() : primaryColor);
+        if (selected)
+            paint.setColor(inputControlsView.getSecondaryColor());
+        else if (pressed)
+            paint.setColor(inputControlsView.getThirdColor());
+        else
+            paint.setColor(inputControlsView.getPrimaryColor());
+        //paint.setColor(selected ? inputControlsView.getSecondaryColor() : primaryColor);
         paint.setStyle(Paint.Style.STROKE);
         float strokeWidth = snappingSize * 0.25f;
         paint.setStrokeWidth(strokeWidth);
@@ -603,7 +606,8 @@ public class ControlElement {
             currentPointerId = pointerId;
             if (type == Type.BUTTON) {
                 if (isKeepButtonPressedAfterMinTime()) touchTime = System.currentTimeMillis();
-                if (!toggleSwitch || !selected) inputControlsView.handleInputEvent(getBindingAt(0), true);
+                if (!toggleSwitch || !selected)  { inputControlsView.handleInputEvent(getBindingAt(0), true); }
+                inputControlsView.invalidate();
                 return true;
             }
             else if (type == Type.RANGE_BUTTON) {
@@ -743,14 +747,17 @@ public class ControlElement {
                     selected = (System.currentTimeMillis() - (long)touchTime) > BUTTON_MIN_TIME_TO_KEEP_PRESSED;
                     if (!selected) inputControlsView.handleInputEvent(binding, false);
                     touchTime = null;
-                    inputControlsView.invalidate();
+                //    inputControlsView.invalidate();
                 }
                 else if (!toggleSwitch || selected) inputControlsView.handleInputEvent(binding, false);
 
                 if (toggleSwitch) {
                     selected = !selected;
-                    inputControlsView.invalidate();
+                //    inputControlsView.invalidate();
                 }
+
+                //if (pressed)
+                //    inputControlsView.invalidate();
             }
             else if (type == Type.RANGE_BUTTON || type == Type.D_PAD || type == Type.STICK || type == Type.TRACKPAD) {
                 for (byte i = 0; i < states.length; i++) {
@@ -761,12 +768,15 @@ public class ControlElement {
                 if (type == Type.RANGE_BUTTON) {
                     scroller.handleTouchUp();
                 }
-                else if (type == Type.STICK) {
-                    inputControlsView.invalidate();
-                }
+                //else if (type == Type.STICK) {
+                //    inputControlsView.invalidate();
+                //}
 
                 if (currentPosition != null) currentPosition = null;
+
+                //inputControlsView.invalidate();
             }
+            inputControlsView.invalidate(); //idk but can it destroy performance on click???
             currentPointerId = -1;
             return true;
         }

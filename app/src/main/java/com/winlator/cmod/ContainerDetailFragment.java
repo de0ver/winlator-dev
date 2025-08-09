@@ -33,7 +33,6 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.winlator.cmod.R;
 import com.winlator.cmod.box86_64.Box86_64Preset;
 import com.winlator.cmod.box86_64.Box86_64PresetManager;
 import com.winlator.cmod.box86_64.rc.RCManager;
@@ -52,14 +51,12 @@ import com.winlator.cmod.core.Callback;
 import com.winlator.cmod.core.DefaultVersion;
 import com.winlator.cmod.core.EnvVars;
 import com.winlator.cmod.core.FileUtils;
-import com.winlator.cmod.core.GPUInformation;
 import com.winlator.cmod.core.KeyValueSet;
 import com.winlator.cmod.core.PreloaderDialog;
 import com.winlator.cmod.core.StringUtils;
 import com.winlator.cmod.core.WineInfo;
 import com.winlator.cmod.core.WineRegistryEditor;
 import com.winlator.cmod.core.WineThemeManager;
-import com.winlator.cmod.core.WineUtils;
 import com.winlator.cmod.fexcore.FEXCoreManager;
 import com.winlator.cmod.midi.MidiManager;
 import com.winlator.cmod.widget.CPUListView;
@@ -79,7 +76,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class ContainerDetailFragment extends Fragment {
 
@@ -134,8 +130,6 @@ public class ContainerDetailFragment extends Fragment {
 
 
     private void applyDynamicStyles(View view) {
-
-
         // Update Spinners
         Spinner sScreenSize = view.findViewById(R.id.SScreenSize);
         sScreenSize.setPopupBackgroundResource(R.drawable.content_dialog_background_dark);

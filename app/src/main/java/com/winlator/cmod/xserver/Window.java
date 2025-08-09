@@ -1,6 +1,5 @@
 package com.winlator.cmod.xserver;
 
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.winlator.cmod.xserver.events.Event;

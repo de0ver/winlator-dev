@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 import androidx.preference.PreferenceManager;
 
 import com.winlator.cmod.R;
+import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.inputcontrols.Binding;
 import com.winlator.cmod.inputcontrols.ControlElement;
 import com.winlator.cmod.inputcontrols.ControlsProfile;
@@ -68,14 +69,10 @@ public class InputControlsView extends View {
     private Timer mouseMoveTimer;
     private final PointF mouseMoveOffset = new PointF();
     private boolean showTouchscreenControls = true;
-
     private Handler timeoutHandler; // Reference to the activity's timeout handler
     private Runnable hideControlsRunnable; // Runnable to hide the controls
-
     private SharedPreferences preferences;
-
     private ControlElement stickElement;
-
     private boolean focusOnStick = false; // A flag to determine if we are focusing on the stick
 
     public boolean isFocusedOnStick() {
@@ -86,8 +83,6 @@ public class InputControlsView extends View {
         this.focusOnStick = focus;
         invalidate(); // Redraw the view with the new focus setting
     }
-
-
 
     @SuppressLint("ResourceType")
     public InputControlsView(Context context) {
@@ -135,7 +130,6 @@ public class InputControlsView extends View {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
     }
-
 
     public void setEditMode(boolean editMode) {
         this.editMode = editMode;
@@ -192,7 +186,6 @@ public class InputControlsView extends View {
         super.onDraw(canvas);
     }
 
-
     public void resetStickPosition() {
         if (stickElement != null) {
             Rect boundingBox = stickElement.getBoundingBox();
@@ -204,8 +197,6 @@ public class InputControlsView extends View {
         }
     }
 
-
-
     public void initializeStickElement(float x, float y, float scale) {
         stickElement = new ControlElement(this);
         stickElement.setType(ControlElement.Type.STICK); // Set type to STICK
@@ -215,7 +206,6 @@ public class InputControlsView extends View {
         invalidate(); // Force the view to redraw with the stick
     }
 
-
     public void updateStickPosition(float x, float y) {
         if (stickElement != null) {
             stickElement.getCurrentPosition().x = x;  // Update the thumbstick's position
@@ -223,7 +213,6 @@ public class InputControlsView extends View {
             invalidate(); // Redraw the view
         }
     }
-
 
     public ControlElement getStickElement() {
         return stickElement;
@@ -334,12 +323,16 @@ public class InputControlsView extends View {
         this.showTouchscreenControls = showTouchscreenControls;
     }
 
-    public int getPrimaryColor() {
+    public int getPrimaryColor() { //def buttons color
         return Color.argb((int)(overlayOpacity * 255), 255, 255, 255);
     }
 
-    public int getSecondaryColor() {
+    public int getSecondaryColor() { //button if toggled
         return Color.argb((int)(overlayOpacity * 255), 2, 119, 189);
+    }
+
+    public int getThirdColor() { //button if pressed
+        return Color.argb((int)(overlayOpacity * 255), 64, 110, 63);
     }
 
     private synchronized ControlElement intersectElement(float x, float y) {
@@ -417,26 +410,6 @@ public class InputControlsView extends View {
         }
     }
 
-
-//    private void processJoystickInput(ExternalController controller) {
-//        ExternalControllerBinding controllerBinding;
-//        final int[] axes = {MotionEvent.AXIS_X, MotionEvent.AXIS_Y, MotionEvent.AXIS_Z, MotionEvent.AXIS_RZ, MotionEvent.AXIS_HAT_X, MotionEvent.AXIS_HAT_Y};
-//        final float[] values = {controller.state.thumbLX, controller.state.thumbLY, controller.state.thumbRX, controller.state.thumbRY, controller.state.getDPadX(), controller.state.getDPadY()};
-//
-//        for (byte i = 0; i < axes.length; i++) {
-//            if (Math.abs(values[i]) > ControlElement.STICK_DEAD_ZONE) {
-//                controllerBinding = controller.getControllerBinding(ExternalControllerBinding.getKeyCodeForAxis(axes[i], Mathf.sign(values[i])));
-//                if (controllerBinding != null) handleInputEvent(controllerBinding.getBinding(), true, values[i]);
-//            }
-//            else {
-//                controllerBinding = controller.getControllerBinding(ExternalControllerBinding.getKeyCodeForAxis(axes[i], (byte) 1));
-//                if (controllerBinding != null) handleInputEvent(controllerBinding.getBinding(), false, values[i]);
-//                controllerBinding = controller.getControllerBinding(ExternalControllerBinding.getKeyCodeForAxis(axes[i], (byte)-1));
-//                if (controllerBinding != null) handleInputEvent(controllerBinding.getBinding(), false, values[i]);
-//            }
-//        }
-//    }
-
     private void processJoystickInput(ExternalController controller) {
         final int[] axes = {
                 MotionEvent.AXIS_X, MotionEvent.AXIS_Y,
@@ -471,41 +444,17 @@ public class InputControlsView extends View {
         }
     }
 
-
-
-//    @Override
-//    public boolean onGenericMotionEvent(MotionEvent event) {
-//        if (!editMode && profile != null) {
-//            ExternalController controller = profile.getController(event.getDeviceId());
-//            if (controller != null && controller.updateStateFromMotionEvent(event)) {
-//                ExternalControllerBinding controllerBinding;
-//                controllerBinding = controller.getControllerBinding(KeyEvent.KEYCODE_BUTTON_L2);
-//                if (controllerBinding != null) handleInputEvent(controllerBinding.getBinding(), controller.state.isPressed(ExternalController.IDX_BUTTON_L2));
-//
-//                controllerBinding = controller.getControllerBinding(KeyEvent.KEYCODE_BUTTON_R2);
-//                if (controllerBinding != null) handleInputEvent(controllerBinding.getBinding(), controller.state.isPressed(ExternalController.IDX_BUTTON_R2));
-//
-//                processJoystickInput(controller);
-//                return true;
-//            }
-//        }
-//        return super.onGenericMotionEvent(event);
-//    }
-
     @Override
     public boolean dispatchGenericMotionEvent(MotionEvent event) {
         Log.d("InputControlsView", "dispatchGenericMotionEvent called. Source: " + event.getSource());
         return super.dispatchGenericMotionEvent(event);
     }
 
-
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
-
         Log.d("InputControlsView", "Motion event received. Source: " + event.getSource());
         Log.d("InputControlsView", "Device ID: " + event.getDeviceId());
         Log.d("InputControlsView", "Profile is " + (profile != null ? "set" : "null"));
-
 
         if (!editMode && profile != null) {
             // Retrieve the associated controller for this event
@@ -548,7 +497,6 @@ public class InputControlsView extends View {
     public boolean onTouchEvent(MotionEvent event) {
 
         boolean hapticsEnabled = preferences.getBoolean("touchscreen_haptics_enabled", true);
-
         // Reset the timeout when touch events occur within InputControlsView
         resetTouchscreenTimeout();
 
@@ -602,19 +550,13 @@ public class InputControlsView extends View {
                     for (ControlElement element : profile.getElements()) {
                         if (element.handleTouchDown(pointerId, x, y)) {
                             handled = true;
-
+                            element.setPressed(true);
                             // Trigger haptic feedback for input controls
                             if (hapticsEnabled) {
                                 Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
                                 if (vibrator != null && vibrator.hasVibrator()) {
-                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                        vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
-                                    } else {
-                                        vibrator.vibrate(50); // Legacy method for older Android versions
-                                    }
-
+                                    vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
                                 }
-
                             }
                         }
                         if (element.getBindingAt(0) == Binding.MOUSE_LEFT_BUTTON) {
@@ -640,17 +582,14 @@ public class InputControlsView extends View {
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
                 case MotionEvent.ACTION_CANCEL:
-                    for (ControlElement element : profile.getElements()) if (element.handleTouchUp(pointerId)) handled = true;
+                    for (ControlElement element : profile.getElements())
+                        if (element.handleTouchUp(pointerId)) { handled = true; element.setPressed(false);} //for button highlight
                     if (!handled) touchpadView.onTouchEvent(event);
                     break;
             }
         }
         return true;
     }
-
-
-
-
 
     private void resetTouchscreenTimeout() {
         Log.d("InputControlsView", "Touch detected, resetting timeout.");

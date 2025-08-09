@@ -4,10 +4,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.net.InetAddresses;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Process;
 import android.util.Log;
 
@@ -20,10 +16,8 @@ import com.winlator.cmod.container.Shortcut;
 import com.winlator.cmod.contents.ContentProfile;
 import com.winlator.cmod.contents.ContentsManager;
 import com.winlator.cmod.core.Callback;
-import com.winlator.cmod.core.DefaultVersion;
 import com.winlator.cmod.core.EnvVars;
 import com.winlator.cmod.core.FileUtils;
-import com.winlator.cmod.core.GPUInformation;
 import com.winlator.cmod.core.ProcessHelper;
 import com.winlator.cmod.core.TarCompressorUtils;
 import com.winlator.cmod.core.WineInfo;
@@ -35,7 +29,6 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.List;
 
 public class BionicProgramLauncherComponent extends GuestProgramLauncherComponent {
     private String guestExecutable;

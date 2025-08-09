@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.winlator.cmod.R;
 import com.winlator.cmod.box86_64.rc.RCField;
 import com.winlator.cmod.box86_64.rc.RCGroup;
 import com.winlator.cmod.box86_64.rc.RCItem;

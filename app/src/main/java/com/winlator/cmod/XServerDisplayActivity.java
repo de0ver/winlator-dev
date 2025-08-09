@@ -135,7 +135,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -227,7 +226,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             configChangedCallback = null;
         }
     }
-
 
     private final SensorEventListener gyroListener = new SensorEventListener() {
         @Override
@@ -560,9 +558,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             }
         }
 
-        if (shortcut == null && container.name != null) // lol
+        if (shortcut == null)
             preloaderDialog.show(container.name, null);
-        else if (shortcut != null && container.name == null){
+        else {
             preloaderDialog.show(shortcut.name, shortcut.icon);
         }
 

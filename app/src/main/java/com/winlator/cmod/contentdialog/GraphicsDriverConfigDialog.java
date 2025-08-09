@@ -16,14 +16,12 @@ import androidx.preference.PreferenceManager;
 
 import com.winlator.cmod.R;
 import com.winlator.cmod.contents.AdrenotoolsManager;
-import com.winlator.cmod.contents.ContentProfile;
 import com.winlator.cmod.contents.ContentsManager;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.DefaultVersion;
 import com.winlator.cmod.core.GPUInformation;
 import com.winlator.cmod.core.StringUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -234,7 +232,6 @@ public class GraphicsDriverConfigDialog extends ContentDialog {
         // Add installed versions from AdrenotoolsManager
         AdrenotoolsManager adrenotoolsManager = new AdrenotoolsManager(context);
         wrapperVersions.addAll(adrenotoolsManager.enumarateInstalledDrivers());
-
 
         availableExtensions = new ArrayList<>(Arrays.asList(GPUInformation.enumerateExtensions()));
 

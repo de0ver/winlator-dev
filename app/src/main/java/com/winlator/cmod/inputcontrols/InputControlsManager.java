@@ -208,24 +208,27 @@ public class InputControlsManager {
             int fieldsRead = 0;
 
             reader.beginObject();
+            label:
             while (reader.hasNext()) {
                 String name = reader.nextName();
 
-                if (name.equals("id")) {
-                    profileId = reader.nextInt();
-                    fieldsRead++;
-                }
-                else if (name.equals("name")) {
-                    profileName = reader.nextString();
-                    fieldsRead++;
-                }
-                else if (name.equals("cursorSpeed")) {
-                    cursorSpeed = (float) reader.nextDouble();
-                    fieldsRead++;
-                }
-                else {
-                    if (fieldsRead == 3) break;
-                    reader.skipValue();
+                switch (name) {
+                    case "id" -> {
+                        profileId = reader.nextInt();
+                        fieldsRead++;
+                    }
+                    case "name" -> {
+                        profileName = reader.nextString();
+                        fieldsRead++;
+                    }
+                    case "cursorSpeed" -> {
+                        cursorSpeed = (float) reader.nextDouble();
+                        fieldsRead++;
+                    }
+                    default -> {
+                        if (fieldsRead == 3) break label;
+                        reader.skipValue();
+                    }
                 }
             }
 

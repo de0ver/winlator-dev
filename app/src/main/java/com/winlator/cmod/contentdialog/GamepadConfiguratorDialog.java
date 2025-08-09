@@ -226,9 +226,6 @@ public class GamepadConfiguratorDialog {
         ((XServerDisplayActivity) context).getWinHandler().refreshControllerMappings();
     }
 
-
-
-
     public void refreshSpinners() {
         for (Map.Entry<Byte, Spinner> entry : mappingSpinners.entrySet()) {
             byte buttonIdx = entry.getKey();

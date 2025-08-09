@@ -2,8 +2,6 @@ package com.winlator.cmod.xenvironment;
 
 import android.content.Context;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.winlator.cmod.MainActivity;
 import com.winlator.cmod.R;
 import com.winlator.cmod.SettingsFragment;
@@ -12,16 +10,10 @@ import com.winlator.cmod.container.ContainerManager;
 import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.DownloadProgressDialog;
 import com.winlator.cmod.core.FileUtils;
-import com.winlator.cmod.core.PreloaderDialog;
 import com.winlator.cmod.core.TarCompressorUtils;
 import com.winlator.cmod.core.WineInfo;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 

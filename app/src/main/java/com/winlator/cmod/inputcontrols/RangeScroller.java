@@ -53,18 +53,13 @@ public class RangeScroller {
         int index = (int)Math.floor((offset / getElementSize()) % range.max);
         if (index < 0) index = range.max + index;
 
-        switch (range) {
-            case FROM_A_TO_Z:
-                return Binding.valueOf("KEY_"+((char)(65 + index)));
-            case FROM_0_TO_9:
-                return Binding.valueOf("KEY_"+((index + 1) % 10));
-            case FROM_F1_TO_F12:
-                return Binding.valueOf("KEY_F"+(index + 1));
-            case FROM_NP0_TO_NP9:
-                return Binding.valueOf("KEY_KP_"+((index + 1) % 10));
-            default:
-                return Binding.NONE;
-        }
+        return switch (range) {
+            case FROM_A_TO_Z -> Binding.valueOf("KEY_" + ((char) (65 + index)));
+            case FROM_0_TO_9 -> Binding.valueOf("KEY_" + ((index + 1) % 10));
+            case FROM_F1_TO_F12 -> Binding.valueOf("KEY_F" + (index + 1));
+            case FROM_NP0_TO_NP9 -> Binding.valueOf("KEY_KP_" + ((index + 1) % 10));
+            default -> Binding.NONE;
+        };
     }
 
     private boolean isTap() {

@@ -159,11 +159,6 @@ public class TouchpadView extends View {
             return (float)Math.hypot(x - startX, y - startY);
         }
     }
-
-//    public void setTouchscreenMode(boolean isTouchscreenMode) {
-//        this.isTouchscreenMode = isTouchscreenMode;
-//    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean isTouchscreenMode = preferences.getBoolean("touchscreen_toggle", false);
@@ -257,8 +252,6 @@ public class TouchpadView extends View {
         xServer.injectPointerButtonRelease(Pointer.Button.BUTTON_LEFT);
         xServer.injectPointerButtonRelease(Pointer.Button.BUTTON_RIGHT);
     }
-
-
 
     private boolean handleTouchpadEvent(MotionEvent event) {
         int actionIndex = event.getActionIndex();

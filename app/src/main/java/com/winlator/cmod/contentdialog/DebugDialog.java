@@ -1,7 +1,6 @@
 package com.winlator.cmod.contentdialog;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;

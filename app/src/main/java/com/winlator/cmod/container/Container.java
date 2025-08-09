@@ -76,8 +76,6 @@ public class Container {
 
     private ContainerManager containerManager;
 
-
-
     public Container(int id) {
         this.id = id;
         this.name = "Container-"+id;
@@ -438,7 +436,6 @@ public class Container {
             Log.e("WinlatorCMOD", "Cant save container data - Container.java:437");
         }
     }
-
 
     public void loadData(JSONObject data) throws JSONException {
         wineVersion = WineInfo.MAIN_WINE_VERSION.identifier();

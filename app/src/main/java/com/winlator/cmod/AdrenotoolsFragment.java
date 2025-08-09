@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.winlator.cmod.R;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

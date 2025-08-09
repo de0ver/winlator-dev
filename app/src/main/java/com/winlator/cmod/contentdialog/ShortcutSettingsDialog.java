@@ -52,7 +52,6 @@ import com.winlator.cmod.widget.EnvVarsView;
 import com.winlator.cmod.winhandler.WinHandler;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,8 +59,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import kotlin.random.Random;
 
 public class ShortcutSettingsDialog extends ContentDialog {
     private final ShortcutsFragment fragment;
@@ -158,7 +155,6 @@ public class ShortcutSettingsDialog extends ContentDialog {
 //        containerDetailFragment.loadScreenSizeSpinner(getContentView(), shortcut.getExtra("screenSize", shortcut.container.getScreenSize()));
 
         loadScreenSizeSpinner(getContentView(), shortcut.getExtra("screenSize", shortcut.container.getScreenSize()));
-
 
         final Spinner sGraphicsDriver = findViewById(R.id.SGraphicsDriver);
         sGraphicsDriver.setEnabled(false);

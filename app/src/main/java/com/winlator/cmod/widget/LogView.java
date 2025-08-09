@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 
 import com.winlator.cmod.R;
 import com.winlator.cmod.contentdialog.DebugDialog;
-import com.winlator.cmod.core.AppUtils;
 import com.winlator.cmod.core.UnitUtils;
 import com.winlator.cmod.math.Mathf;
 
