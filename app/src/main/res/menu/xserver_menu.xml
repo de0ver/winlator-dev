@@ -30,7 +30,8 @@
             <item
                 android:icon="@drawable/icon_exit"
                 android:id="@+id/main_menu_exit"
-                android:title="@string/exit" />
+                android:title="@string/exit"
+                />
         </group>
         <!--
         <item

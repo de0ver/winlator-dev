@@ -21,7 +21,7 @@
                 style="@style/ComboBox"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:spinnerMode="dialog"/>
+                android:spinnerMode="dialog" />
 
             <ImageView
                 android:id="@+id/BTSettings"

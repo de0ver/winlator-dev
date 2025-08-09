@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -1859,7 +1860,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background_dark);
         sProfile.setPopupBackgroundResource(R.drawable.content_dialog_background_dark);
-
+        sProfile.setBackgroundColor(Color.GRAY);
         // Set text color for all TextViews in the dialog to white or black based on dark mode
         int textColor = ContextCompat.getColor(this, R.color.white);
         ViewGroup dialogViewGroup = (ViewGroup) dialog.getWindow().getDecorView().findViewById(android.R.id.content);

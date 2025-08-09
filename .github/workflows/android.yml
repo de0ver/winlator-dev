@@ -17,10 +17,14 @@ jobs:
       run: |
        cd ./app/src/main/assets
 
-       wget -O proton-9.0-arm64ec.txz https://github.com/TGP-17/wine/releases/download/proton/proton-9.0-arm64ec.txz
-       wget -O proton-9.0-x86_64.txz https://github.com/TGP-17/wine/releases/download/proton/proton-9.0-x86_64.txz
-       wget -O imagefs.txz https://github.com/Pipetto-crypto/winlator/raw/refs/heads/dev/app/src/main/assets/imagefs.txz
-    
+       wget -O proton-9.0-arm64ec.txz https://gitlab.com/winlator3/winlator-extra/-/raw/main/proton/proton-9.0-arm64ec.txz
+       wget -O proton-9.0-x86_64.txz https://gitlab.com/winlator3/winlator-extra/-/raw/main/proton/proton-9.0-x86_64.txz
+       wget -O imagefs.txz.00 https://gitlab.com/winlator3/winlator-extra/-/raw/main/imagefs/imagefs.txz.00
+       wget -O imagefs.txz.01 https://gitlab.com/winlator3/winlator-extra/-/raw/main/imagefs/imagefs.txz.01
+       wget -O imagefs.txz.02 https://gitlab.com/winlator3/winlator-extra/-/raw/main/imagefs/imagefs.txz.02
+       wget -O imagefs.txz.03 https://gitlab.com/winlator3/winlator-extra/-/raw/main/imagefs/imagefs.txz.03
+       cat imagefs.txz.* > imagefs.txz
+
     - name: set up JDK 11
       uses: actions/setup-java@v4
       with:

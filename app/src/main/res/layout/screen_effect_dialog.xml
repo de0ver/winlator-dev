@@ -5,22 +5,22 @@
         <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
             <FrameLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
                 <LinearLayout style="@style/FieldSet">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/brightness" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/brightness" android:textColor="@color/white" />
                     <com.winlator.cmod.widget.SeekBar
                         android:id="@+id/SBBrightness" android:layout_width="fill_parent" android:layout_height="60dp" app:maxValue="50" app:minValue="-50" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/contrast" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/contrast" android:textColor="@color/white" />
                     <com.winlator.cmod.widget.SeekBar
                         android:id="@+id/SBContrast" android:layout_width="fill_parent" android:layout_height="60dp" app:maxValue="100" app:minValue="-100" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/gamma" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/gamma" android:textColor="@color/white"/>
                     <com.winlator.cmod.widget.SeekBar
                         android:id="@+id/SBGamma" android:layout_width="fill_parent" android:layout_height="60dp" app:maxValue="3.0" app:minValue="0.5" app:step="0.01" />
                 </LinearLayout>
                 <TextView android:background="#ffffffff" android:text="@string/color_adjustment" style="@style/FieldSetLabel" android:id="@+id/LBLColorAdjustment" />
             </FrameLayout>
         </LinearLayout>
-        <View style="@style/VerticalLine" />
+        <!--<View style="@style/VerticalLine" />-->
         <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/profile" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/profile" android:textColor="@color/white"/>
             <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
                 <Spinner android:id="@id/SProfile" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" style="@style/ComboBox" />
                 <LinearLayout style="@style/Toolbox">
@@ -30,10 +30,10 @@
                         app:tint="@color/black" />
                 </LinearLayout>
             </LinearLayout>
-            <CheckBox android:id="@+id/CBEnableFXAA" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:text="@string/enable_fxaa" />
-            <CheckBox android:id="@+id/CBEnableCRTShader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/enable_crt_shader" />
-            <CheckBox android:id="@+id/CBEnableToonShader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/enable_toon_shader" />
-            <CheckBox android:id="@+id/CBEnableNTSCEffect" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/enable_ntsc_effect" />
+            <CheckBox android:id="@+id/CBEnableFXAA" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white" android:layout_marginTop="8.0dip" android:text="@string/enable_fxaa" />
+            <CheckBox android:id="@+id/CBEnableCRTShader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white" android:text="@string/enable_crt_shader" />
+            <CheckBox android:id="@+id/CBEnableToonShader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white" android:text="@string/enable_toon_shader" />
+            <CheckBox android:id="@+id/CBEnableNTSCEffect" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white" android:text="@string/enable_ntsc_effect" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

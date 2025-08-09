@@ -69,11 +69,12 @@
         <item name="android:background">@drawable/combo_box</item>
         <item name="android:popupBackground">@drawable/content_dialog_background</item>
         <item name="android:tint">@color/white</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <!-- Dark ComboBox Styles -->
     <style name="ComboBox.Dark" parent="ComboBox">
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/combo_box_dark</item>
         <item name="android:popupBackground">@drawable/content_dialog_background_dark</item>
     </style>

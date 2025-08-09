@@ -65,7 +65,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/no_items_to_display"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:textColor="@color/white"/>
             </FrameLayout>
         </LinearLayout>
 
@@ -90,7 +91,7 @@
                         android:id="@+id/TVCPUTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/white"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -112,13 +113,14 @@
                         android:id="@+id/TVMemoryTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/white"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/TVMemoryInfo"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="#ff888888"/>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

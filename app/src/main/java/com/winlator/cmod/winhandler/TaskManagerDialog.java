@@ -3,6 +3,7 @@ package com.winlator.cmod.winhandler;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -189,6 +190,7 @@ public class TaskManagerDialog extends ContentDialog implements OnGetProcessInfo
         for (int i = 0; i < clockSpeeds.length; i++) {
             TextView textView = new TextView(activity);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            textView.setTextColor(Color.GRAY);
             short clockSpeed = CPUStatus.getMaxClockSpeed(i);
             textView.setText(clockSpeeds[i] + "/" + clockSpeed + " MHz");
             llCPUInfo.addView(textView);
