@@ -24,6 +24,9 @@ jobs:
        wget -O imagefs.txz.02 https://gitlab.com/winlator3/winlator-extra/-/raw/main/imagefs/imagefs.txz.02
        wget -O imagefs.txz.03 https://gitlab.com/winlator3/winlator-extra/-/raw/main/imagefs/imagefs.txz.03
        cat imagefs.txz.* > imagefs.txz
+       rm -f imagefs.txz.*
+        
+       ls
 
     - name: set up JDK 11
       uses: actions/setup-java@v4
