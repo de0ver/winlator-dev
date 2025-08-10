@@ -1971,7 +1971,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 args += " " + envVars.get("EXTRA_EXEC_ARGS");
                 envVars.remove("EXTRA_EXEC_ARGS"); // Remove the key after use
             } else {
-                args += "\"explorer.exe\"";
+                args += "\"wfm.exe\"";
             }
         }
         // Construct the final command
@@ -1988,7 +1988,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         } else if (isGenerateWineprefix()) {
             filename = "wineboot.exe";
         } else
-            filename = "explorer.exe";
+            filename = "wfm.exe";
         return filename;
     }
 

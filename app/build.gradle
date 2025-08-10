@@ -18,17 +18,17 @@ plugins {
 tasks.register("prepareKotlinBuildScriptModel"){}
 
 android {
-    namespace 'com.winlator.cmod'
+    namespace 'com.winlator.cmo'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.winlator.cmod"
+        applicationId "com.winlator.cmo"
         minSdkVersion 26
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
 
         versionCode 20
-        versionName "7.1.4x-cmod"
+        versionName "7.1.5x-cmod"
 
         externalNativeBuild {
             cmake {
@@ -55,8 +55,11 @@ android {
             minifyEnabled false
         }
         release {
+            debuggable false
             minifyEnabled false
             signingConfig signingConfigs.debug
+            //shrinkResources true
+            //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
