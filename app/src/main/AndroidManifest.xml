@@ -36,7 +36,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
-        android:label="Winlator CMOD"
+        android:label="Winlator CMOD2"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme"
@@ -50,9 +50,8 @@
 
         <!-- Main activity -->
         <activity
-            android:name="com.winlator.cmod.MainActivity"
+            android:name="com.winlator.cmo.MainActivity"
             android:theme="@style/AppTheme.Dark"
-            android:screenOrientation="sensor"
             android:exported="true"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|density|navigation">
             <intent-filter>
@@ -62,12 +61,12 @@
         </activity>
 
         <activity
-            android:name="com.winlator.cmod.TerminalActivity"
+            android:name="com.winlator.cmo.TerminalActivity"
             android:theme="@style/Theme.AppCompat"
             android:exported="false" />
 
         <activity
-            android:name="com.winlator.cmod.XServerDisplayActivity"
+            android:name="com.winlator.cmo.XServerDisplayActivity"
             android:theme="@style/AppThemeFullscreen"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true"
@@ -76,7 +75,7 @@
             android:exported="true" />
 
         <activity
-            android:name="com.winlator.cmod.XrActivity"
+            android:name="com.winlator.cmo.XrActivity"
             android:theme="@style/AppThemeFullscreen"
             android:launchMode="singleTask"
             android:resizeableActivity="false"
@@ -92,13 +91,13 @@
         </activity>
 
         <activity
-            android:name="com.winlator.cmod.ControlsEditorActivity"
+            android:name="com.winlator.cmo.ControlsEditorActivity"
             android:theme="@style/AppThemeFullscreen"
             android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <activity
-            android:name="com.winlator.cmod.ExternalControllerBindingsActivity"
+            android:name="com.winlator.cmo.ExternalControllerBindingsActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="sensor"
             android:exported="false" />
@@ -110,7 +109,7 @@
             android:exported="false" />
 
         <activity
-            android:name="com.winlator.cmod.ShortcutPickerActivity"
+            android:name="com.winlator.cmo.ShortcutPickerActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="sensor"
             android:exported="false" />
@@ -119,14 +118,14 @@
             android:name=".ShortcutBroadcastReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.winlator.cmod.SHORTCUT_ADDED" />
+                <action android:name="com.winlator.cmo.SHORTCUT_ADDED" />
             </intent-filter>
         </receiver>
 
         <!-- FileProvider for sharing files -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.winlator.cmod.tileprovider"
+            android:authorities="com.winlator.cmo.tileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -137,7 +136,7 @@
         <!-- Provider for Winlator’s DocumentProvider or similar usage -->
         <provider
             android:name=".core.WinlatorFilesProvider"
-            android:authorities="com.winlator.cmod.core.WinlatorFilesProvider"
+            android:authorities="com.winlator.cmo.core.WinlatorFilesProvider"
             android:exported="true"
             android:grantUriPermissions="true"
             android:permission="android.permission.MANAGE_DOCUMENTS">
