@@ -92,7 +92,7 @@
 
         <activity
             android:name="com.winlator.cmo.ControlsEditorActivity"
-            android:theme="@style/AppThemeFullscreen"
+            android:theme="@style/AppThemeFullscreen.Dark"
             android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
