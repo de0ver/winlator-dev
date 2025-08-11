@@ -384,8 +384,7 @@
                     android:id="@+id/LLWinComponentsDirectX" />
 
                 <TextView
-                    style="@style/FieldSetLabel"
-                    android:background="#ffffff"
+                    style="@style/FieldSetLabel.Dark"
                     android:text="@string/directx" />
             </FrameLayout>
 
@@ -478,8 +477,7 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@style/FieldSetLabel"
-                    android:background="#ffffff"
+                    style="@style/FieldSetLabel.Dark"
                     android:text="@string/box86_box64" />
             </FrameLayout>
             
@@ -532,8 +530,7 @@
                 </LinearLayout>
                     
                 <TextView
-                    style="@style/FieldSetLabel"
-                    android:background="#ffffff"
+                    style="@style/FieldSetLabel.Dark"
                     android:text="@string/fexcore_config" />
                     
             </FrameLayout>
@@ -600,8 +597,7 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@style/FieldSetLabel"
-                    android:background="#ffffff"
+                    style="@style/FieldSetLabel.Dark"
                     android:text="@string/input_controls" />
             </FrameLayout>
 
@@ -677,8 +673,7 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@style/FieldSetLabel"
-                    android:background="#ffffff"
+                    style="@style/FieldSetLabel.Dark"
                     android:text="@string/game_controller" />
             </FrameLayout>
 
@@ -726,8 +721,7 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@style/FieldSetLabel"
-                    android:background="#ffffff"
+                    style="@style/FieldSetLabel.Dark"
                     android:text="@string/system" />
             </FrameLayout>
 
@@ -812,8 +806,7 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@style/FieldSetLabel"
-                    android:background="#ffffff"
+                    style="@style/FieldSetLabel.Dark"
                     android:text="@string/vkbasalt" />
             </FrameLayout>
 

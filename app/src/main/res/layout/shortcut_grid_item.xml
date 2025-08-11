@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/ImageView"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:contentDescription="@string/shortcuticon" />
 
     <TextView
@@ -37,7 +37,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:layout_marginTop="4dp"
-        android:textSize="10sp"
-        android:textColor="#9A2F2F"
+        android:textSize="11sp"
+        android:textColor="@color/error_color_material_dark"
         />
 </LinearLayout>

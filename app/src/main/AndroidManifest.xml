@@ -39,7 +39,7 @@
         android:label="Winlator CMOD2"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme.Dark"
         android:appCategory="game"
         android:isGame="true"
         android:allowBackup="false"
@@ -67,7 +67,7 @@
 
         <activity
             android:name="com.winlator.cmo.XServerDisplayActivity"
-            android:theme="@style/AppThemeFullscreen"
+            android:theme="@style/AppThemeFullscreen.Dark"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true"
             android:screenOrientation="sensorLandscape"
@@ -76,7 +76,7 @@
 
         <activity
             android:name="com.winlator.cmo.XrActivity"
-            android:theme="@style/AppThemeFullscreen"
+            android:theme="@style/AppThemeFullscreen.Dark"
             android:launchMode="singleTask"
             android:resizeableActivity="false"
             android:screenOrientation="landscape"
@@ -98,19 +98,19 @@
 
         <activity
             android:name="com.winlator.cmo.ExternalControllerBindingsActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.Dark"
             android:screenOrientation="sensor"
             android:exported="false" />
 
         <activity
             android:name=".saves.CustomFilePickerActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.Dark"
             android:screenOrientation="sensor"
             android:exported="false" />
 
         <activity
             android:name="com.winlator.cmo.ShortcutPickerActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.Dark"
             android:screenOrientation="sensor"
             android:exported="false" />
 

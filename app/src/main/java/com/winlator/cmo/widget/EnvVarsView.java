@@ -41,7 +41,9 @@ public class EnvVarsView extends FrameLayout {
         {"MANGOHUD", "CHECKBOX", "0", "1"},
         {"GALLIUM_HUD", "SELECT_MULTIPLE", "help", "glxgears", "fps", "cpu", "GPU-load", "VRAM-usage"},
         {"VK_INSTANCE_LAYERS", "SELECT", "VK_LAYER_MESA_overlay"},
-        {"VK_LAYER_MESA_OVERLAY_CONFIG", "SELECT_MULTIPLE", "help", "vkcube", "fps", "gpu_timing"}
+        {"VK_LAYER_MESA_OVERLAY_CONFIG", "SELECT_MULTIPLE", "help", "vkcube", "fps", "gpu_timing"},
+            {"MESA_GL_VERSION_OVERRIDE", "NUMBER"},
+            {"MESA_VK_WSI_PRESENT_MODE", "SELECT", "fifo", "mailbox", "relaxed", "immediate"}
     };
     private final LinearLayout container;
     private final TextView emptyTextView;

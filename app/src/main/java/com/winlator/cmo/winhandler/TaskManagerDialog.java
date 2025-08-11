@@ -80,7 +80,6 @@ public class TaskManagerDialog extends ContentDialog implements OnGetProcessInfo
     private void showListItemMenu(final View anchorView, final ProcessInfo processInfo) {
         PopupMenu listItemMenu = new PopupMenu(activity, anchorView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) listItemMenu.setForceShowIcon(true);
-
         listItemMenu.inflate(R.menu.process_popup_menu);
         listItemMenu.setOnMenuItemClickListener((menuItem) -> {
             int itemId = menuItem.getItemId();

@@ -55,7 +55,6 @@
                         <ImageButton
                             style="@style/ListMenuButton"
                             android:id="@+id/BTRemoveBox64Preset"
-                            android:layout_marginRight="0dp"
                             android:src="@drawable/icon_remove" />
                     </LinearLayout>
                 </LinearLayout>
@@ -93,7 +92,6 @@
                         <ImageButton
                             android:id="@+id/BTRemoveSF"
                             style="@style/ListMenuButton"
-                            android:layout_marginRight="0dp"
                             android:src="@drawable/icon_remove" />
                     </LinearLayout>
                 </LinearLayout>

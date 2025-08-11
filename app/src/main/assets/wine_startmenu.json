@@ -19,11 +19,27 @@
         },
         {
             "name" : "Cnc-draw CFG",
-            "path" : "C:/windows/syswow64/cnc-draw config.exe"
+            "path" : "C:/windows/syswow64/cnc-draw_config.exe"
         },
         {
             "name" : "nGlide CFG",
             "path" : "C:/windows/syswow64/nglide_config.exe"
+        },
+        {
+            "name" : "Wine Explorer",
+            "path" : "C:/windows/explorer.exe"
+        },
+        {
+            "name" : "GPUInfo",
+            "path" : "C:/windows/GPUInfo.exe"
+        },
+        {
+            "name" : "TestD3D",
+            "path" : "C:/windows/TestD3D.exe"
+        },
+        {
+            "name" : "7Zip",
+            "path" : "C:/windows/7zFM.exe"
         }
     ]
     },

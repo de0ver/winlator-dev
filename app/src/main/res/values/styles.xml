@@ -2,19 +2,19 @@
 <resources>
     <!-- Light Theme -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccentDark</item>
+        <item name="colorPrimary">@color/colorPrimaryDarkMode</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkModeDark</item>
         <item name="android:windowBackground">@color/window_background_color</item>
         <item name="android:colorBackground">@color/window_background_color</item>
-        <item name="android:textViewStyle">@style/TextView</item>
-        <item name="android:checkboxStyle">@style/CheckBox</item>
-        <item name="android:listPopupWindowStyle">@style/ListPopupWindow</item>
-        <item name="listPopupWindowStyle">@style/ListPopupWindow</item>
-        <item name="android:popupWindowStyle">@style/PopupWindow</item>
+        <item name="android:textViewStyle">@style/TextView.Dark</item>
+        <item name="android:checkboxStyle">@style/CheckBox.Dark</item>
+        <item name="android:listPopupWindowStyle">@style/ListPopupWindow.Dark</item>
+        <item name="listPopupWindowStyle">@style/ListPopupWindow.Dark</item>
+        <item name="android:popupWindowStyle">@style/PopupWindow.Dark</item>
         <item name="popupWindowStyle">@style/PopupWindow</item>
-        <item name="android:popupMenuStyle">@style/PopupMenu</item>
-        <item name="popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Dark</item>
+        <item name="popupMenuStyle">@style/PopupMenu.Dark</item>
     </style>
 
     <!-- Dark Theme -->
@@ -88,7 +88,6 @@
         <item name="android:dropDownHorizontalOffset">-4dp</item>
     </style>
 
-
     <style name="ListPopupWindow.Dark" parent="ListPopupWindow">
         <item name="android:popupBackground">@drawable/content_dialog_background_dark</item>
     </style>
@@ -103,11 +102,17 @@
     </style>
 
     <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
-        <item name="android:popupBackground">@drawable/content_dialog_background</item>
+        <item name="android:popupBackground">@drawable/content_dialog_background_dark</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:itemBackground">@color/white</item>
+        <item name="android:color">@color/white</item>
     </style>
 
     <style name="PopupMenu.Dark" parent="PopupMenu">
         <item name="android:popupBackground">@drawable/content_dialog_background_dark</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:itemBackground">@color/white</item>
+        <item name="android:color">@color/white</item>
     </style>
 
     <style name="ContentDialog" parent="@android:style/Theme.Dialog">
@@ -135,6 +140,7 @@
         <item name="android:maxLines">1</item>
         <item name="android:inputType">text</item>
         <item name="android:background">@drawable/edit_text</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="EditText.Dark" parent="EditText">

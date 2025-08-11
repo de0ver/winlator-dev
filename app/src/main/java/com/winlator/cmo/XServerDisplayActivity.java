@@ -1417,7 +1417,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.content_dialog_background_dark);
         sProfile.setPopupBackgroundResource(R.drawable.content_dialog_background_dark);
-        sProfile.setBackgroundColor(Color.GRAY);
         // Set text color for all TextViews in the dialog to white or black based on dark mode
         int textColor = ContextCompat.getColor(this, R.color.white);
         ViewGroup dialogViewGroup = (ViewGroup) dialog.getWindow().getDecorView().findViewById(android.R.id.content);
@@ -1780,7 +1779,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             if (dxwrapper.contains("dxvk") && compareVersion(StringUtils.parseNumber(dxwrapper), "2.4") < 0)
                 TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "dxwrapper/d8vk-" + DefaultVersion.D8VK + ".tzst", windowsDir, onExtractFileListener);
             else
-                TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "dxwrapper/dxvk-2.4.1" + ".tzst", windowsDir, onExtractFileListener);
+                TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "dxwrapper/" + dxwrapper + ".tzst", windowsDir, onExtractFileListener);
+            //extracting same dxwrapper 2 times, xd, maybe upd it and extract vkd3d + dxvk + d8vk
+
+            Log.d("XServerDisplayActivity", "Extracting dxwrapper: " + dxwrapper);
         }
 
         if (dxwrapper.contains("wined3d")) {

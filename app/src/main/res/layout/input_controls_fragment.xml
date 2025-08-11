@@ -7,7 +7,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="16dp">
 
         <TextView
@@ -142,7 +142,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:text="@string/external_controllers"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:layout_marginTop="8dp" />
 
         <View style="@style/HorizontalLine" />

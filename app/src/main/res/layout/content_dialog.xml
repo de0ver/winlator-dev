@@ -45,6 +45,7 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:layout_marginBottom="8dp"
+        android:textColor="@color/white"
         android:visibility="gone" />
 
     <EditText
@@ -52,12 +53,13 @@
         android:id="@+id/EditText"
         android:layout_width="280dp"
         android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"
         android:visibility="gone" />
 
     <ListView
         android:id="@+id/ListView"
         android:layout_width="340dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:visibility="gone" />
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/process_affinity" android:title="@string/processor_affinity" android:icon="@drawable/icon_popup_menu_cpu" android:iconTint="@color/black" />
-    <item android:id="@+id/bring_to_front" android:title="@string/bring_to_front" android:icon="@drawable/icon_popup_menu_bring_to_front" android:iconTint="@color/black" />
-    <item android:id="@+id/process_end" android:title="@string/end_process" android:icon="@drawable/icon_popup_menu_remove" android:iconTint="@color/black" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/process_affinity" android:title="@string/processor_affinity" android:icon="@drawable/icon_popup_menu_cpu" app:tint="@color/white"/>
+    <item android:id="@+id/bring_to_front" android:title="@string/bring_to_front" android:icon="@drawable/icon_popup_menu_bring_to_front" app:tint="@color/white"/>
+    <item android:id="@+id/process_end" android:title="@string/end_process" android:icon="@drawable/icon_popup_menu_remove" app:tint="@color/white"/>
 </menu>
