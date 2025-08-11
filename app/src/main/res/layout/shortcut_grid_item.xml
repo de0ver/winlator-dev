@@ -5,10 +5,11 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:padding="8dp"
-    android:background="@android:color/transparent">
+    android:background="@drawable/edit_text_pressed_dark">
 
     <ImageView
         android:id="@+id/ImageView"
+        android:layout_margin="8dp"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:contentDescription="@string/shortcuticon" />
@@ -36,8 +37,8 @@
         android:singleLine="false"
         android:maxLines="1"
         android:ellipsize="end"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:textSize="11sp"
-        android:textColor="@color/error_color_material_dark"
+        android:textColor="@android:color/darker_gray"
         />
 </LinearLayout>

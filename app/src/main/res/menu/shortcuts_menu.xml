@@ -18,6 +18,20 @@
         android:title="Change Layout"
         android:icon="@drawable/icon_reset"
         android:color="#FFFFFF"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/layout_grid_small"
+                android:title="Grid Layout (Small)" />
+            <item
+                android:id="@+id/layout_grid_big"
+                android:title="Grid Layout (Big)" />
+            <item
+                android:id="@+id/layout_list_small"
+                android:title="List Layout (Small)" />
+            <item
+                android:id="@+id/layout_list_big"
+                android:title="List Layout (Big)" />
+        </menu>
+    </item>
 </menu>

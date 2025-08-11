@@ -46,7 +46,8 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:ellipsize="end"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:layout_marginBottom="4dp"/>
 
                 <TextView
                     android:id="@+id/TVPath"

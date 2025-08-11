@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.content.res.Configuration;
 import android.graphics.drawable.Icon;
+import android.icu.lang.UCharacter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -69,22 +71,15 @@ public class ShortcutsFragment extends Fragment {
     private SharedPreferences prefs;
     private DividerItemDecoration divider;
     private final String[] sortTypeText = {"Name", "Container Id", "Path", "Playtime", "Play Count", "Last Play Date"};
-    private final String[] prefsText = {"cur_sort_type", "last_view_type", "playtime_stats"};
-    private boolean isGrid = false;
+    private final String[] prefsText = {"cur_sort_type", "last_view_type", "playtime_stats", "cur_grid_type", "cur_list_type"};
     public int curSortType = 0;
+    public int curGridType = 0;
+    public int curListType = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        manager = new ContainerManager(getContext());
-        loadShortcutsList(curSortType);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.shortcuts);
     }
 
     @Override
@@ -96,11 +91,20 @@ public class ShortcutsFragment extends Fragment {
         prefs = requireContext().getSharedPreferences("ShortcutsPref", Context.MODE_PRIVATE);
 
         curSortType = prefs.getInt(prefsText[0], 0);
-        isGrid = prefs.getBoolean(prefsText[1], false); //bc setRecycler check isGrid
+        curGridType = prefs.getInt(prefsText[3], 0);
+        curListType = prefs.getInt(prefsText[4], 0);
 
-        setRecyclerLayoutManager();
+        setRecyclerLayoutManager(curGridType, curListType);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        manager = new ContainerManager(getContext());
+        loadShortcutsList(curSortType);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.shortcuts);
     }
 
     @Override
@@ -113,97 +117,147 @@ public class ShortcutsFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setRecyclerLayoutManager(curGridType, curListType);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setRecyclerLayoutManager(curGridType, curListType);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) { //WARNING TRASH CODE...
+        SharedPreferences.Editor prefEditor = prefs.edit();
         switch (menuItem.getItemId()) {
             case R.id.add_shortcuts:
 
                 return true;
             case R.id.sort_shortcuts:
                 curSortType = (curSortType + 1) % sortTypeText.length;
-                SharedPreferences.Editor prefEditor = prefs.edit();
                 prefEditor.putInt(prefsText[0], curSortType); // lol
                 prefEditor.apply();
                 loadShortcutsList(curSortType);
                 AppUtils.showToast(getContext(), "Sort by: " + sortTypeText[curSortType]);
                 menuItem.setTitle(sortTypeText[curSortType]);
                 return true;
-            case R.id.change_layout:
-                isGrid = !isGrid;
-                SharedPreferences.Editor prefEditor2 = prefs.edit(); // xd
-                prefEditor2.putBoolean(prefsText[1], isGrid);
-                prefEditor2.apply();
-                setRecyclerLayoutManager();
-                recyclerView.setAdapter(adapter);
-                adapter.setGrid(isGrid);
-                return true;
+            case R.id.layout_grid_small:
+                curGridType = 1;
+                curListType = 0;
+                break;
+            case R.id.layout_grid_big:
+                curGridType = 2;
+                curListType = 0;
+                break;
+            case R.id.layout_list_small:
+                curGridType = 0;
+                curListType = 1;
+                break;
+            case R.id.layout_list_big:
+                curGridType = 0;
+                curListType = 2;
+                break;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
-    }
 
+        prefEditor.putInt(prefsText[3], curGridType);
+        prefEditor.apply();
+        prefEditor.putInt(prefsText[4], curListType);
+        prefEditor.apply();
+        setRecyclerLayoutManager(curGridType, curListType);
+        recyclerView.setAdapter(adapter);
+        adapter.setGrid(curGridType > 0);
+
+        AppUtils.showToast(getContext(), "Layout Changed");
+
+        return true;
+    }
 
     public void loadShortcutsList(int typeSort) {
         ArrayList<Shortcut> shortcuts = manager.loadShortcuts();
         SharedPreferences playtime_prefs = getContext().getSharedPreferences("playtime_stats", Context.MODE_PRIVATE);
 
         switch (typeSort) {
-            case 0:
+            case 0 ->
                 shortcuts.sort(Comparator.comparing(s -> s.name));
-                break;
-            case 1:
+            case 1 ->
                 shortcuts.sort(Comparator.comparing(s -> s.container.id));
-                break;
-            case 2:
+            case 2 ->
                 shortcuts.sort(Comparator.comparing(s -> s.path));
-                break;
-            case 3:
+            case 3 ->
                 shortcuts.sort((s1, s2) -> Long.compare(
                         playtime_prefs.getLong(s2.path + "_playtime", 0),
-                        //prefs.getLong(s2.name + "_playtime", 0),
                         playtime_prefs.getLong(s1.path + "_playtime", 0)
-                        //prefs.getLong(s1.name + "_playtime", 0)
                 ));
-                break;
-            case 4:
+            case 4 ->
                 shortcuts.sort((s1, s2) -> Integer.compare(
                         playtime_prefs.getInt(s2.path + "_play_count", 0),
-                        //prefs.getInt(s2.name + "_play_count", 0),
                         playtime_prefs.getInt(s1.path + "_play_count", 0)
-                        //prefs.getInt(s1.name + "_play_count", 0)
                 ));
-                break;
-            case 5:
+            case 5 ->
                 shortcuts.sort((s1, s2) -> Long.compare(
                         playtime_prefs.getLong(s2.path + "_play_date", 0),
-                        //prefs.getLong(s2.name + "_play_date", 0),
                         playtime_prefs.getLong(s1.path + "_play_date", 0)
-                        //prefs.getLong(s1.name + "_play_date", 0)
                 ));
-                break;
         }
 
         shortcuts.removeIf(shortcut -> shortcut == null || shortcut.file.getName().isEmpty());
         if (adapter == null) {
-            adapter = new ShortcutsAdapter(shortcuts, isGrid);
+            adapter = new ShortcutsAdapter(shortcuts, curGridType > 0);
             recyclerView.setAdapter(adapter);
         } else {
-            adapter.setGrid(isGrid);
+            adapter.setGrid(curGridType > 0);
             adapter.setData(shortcuts);
         }
         emptyTextView.setVisibility(shortcuts.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
-    private void setRecyclerLayoutManager() {
-        if (isGrid) {
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 5));
-            if (divider != null) recyclerView.removeItemDecoration(divider);
-        } else {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            if (divider == null) {
-                divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-            }
-            recyclerView.addItemDecoration(divider);
+    private void setRecyclerLayoutManager(int gridType, int listType) {
+        int orientation = this.getResources().getConfiguration().orientation;
+        switch (gridType) {
+            case 1 ->  {
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == Configuration.ORIENTATION_PORTRAIT ? 5 : 7));
+                if (divider != null) recyclerView.removeItemDecoration(divider);
+            } //5 = portrait, 7 landscape
+            case 2 -> {
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == Configuration.ORIENTATION_PORTRAIT ? 3 : 5));
+                if (divider != null) recyclerView.removeItemDecoration(divider);
+            } //3 = portrait, 5 landscape
         }
+
+        switch (listType) {
+            case 1, 2 -> {
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                if (divider == null) {
+                    divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+                }
+                if (recyclerView.getItemDecorationCount() == 0)
+                    recyclerView.addItemDecoration(divider);
+            }
+        }
+    }
+
+    private void changeListSizes(int curListType, ShortcutsAdapter.ListViewHolder vh) {
+        ImageView shortcutIcon = vh.imageView;
+        TextView shortcutName = vh.title;
+        TextView shortcutPath = vh.path;
+        TextView shortcutContainer = vh.subtitle;
+        ViewGroup.LayoutParams params = shortcutIcon.getLayoutParams();
+        if (curListType == 1) {
+            params.width = 128;
+            params.height = 128;
+            shortcutName.setTextSize(14);
+            shortcutPath.setTextSize(12);
+            shortcutContainer.setTextSize(12);
+        } else {
+            params.width = 192;
+            params.height = 192;
+            shortcutName.setTextSize(22);
+            shortcutPath.setTextSize(14);
+            shortcutContainer.setTextSize(14);
+        }
+        shortcutIcon.setLayoutParams(params);
     }
 
     @Override
@@ -281,7 +335,7 @@ public class ShortcutsFragment extends Fragment {
                 vh.subtitle.setText(item.container.getName());
                 vh.menuButton.setOnClickListener(v -> showListItemMenu(v, item));
                 vh.innerArea.setOnClickListener(v -> runFromShortcut(item));
-
+                changeListSizes(curListType, vh);
             } else if (holder instanceof GridViewHolder vh) {
                 if (item.icon != null) vh.imageView.setImageBitmap(item.icon);
                 vh.title.setText(item.name);
