@@ -601,12 +601,13 @@ public class ControlElement {
     }
 
     public boolean handleTouchDown(int pointerId, float x, float y) {
+        inputControlsView.invalidate(); //need for highlight buttons while pressing
         if (currentPointerId == -1 && containsPoint(x, y)) {
             currentPointerId = pointerId;
             if (type == Type.BUTTON) {
                 if (isKeepButtonPressedAfterMinTime()) touchTime = System.currentTimeMillis();
                 if (!toggleSwitch || !selected)  { inputControlsView.handleInputEvent(getBindingAt(0), true); }
-                inputControlsView.invalidate();
+
                 return true;
             }
             else if (type == Type.RANGE_BUTTON) {
@@ -637,6 +638,8 @@ public class ControlElement {
                 deltaX = deltaPoint[0];
                 deltaY = deltaPoint[1];
                 currentPosition.set(x, y);
+
+                //inputControlsView.invalidate();
             }
             else {
                 float localX = x - boundingBox.left;
@@ -653,6 +656,8 @@ public class ControlElement {
 
                 deltaX = Mathf.clamp(offsetX / radius, -1, 1);
                 deltaY = Mathf.clamp(offsetY / radius, -1, 1);
+
+                //inputControlsView.invalidate();
             }
 
             if (type == Type.STICK) {
@@ -676,7 +681,7 @@ public class ControlElement {
                     }
                 }
 
-                inputControlsView.invalidate();
+                //inputControlsView.invalidate();
             }
             else if (type == Type.TRACKPAD) {
                 final boolean[] states = {deltaY <= -TRACKPAD_MIN_SPEED, deltaX >= TRACKPAD_MIN_SPEED, deltaY >= TRACKPAD_MIN_SPEED, deltaX <= -TRACKPAD_MIN_SPEED};
@@ -729,6 +734,7 @@ public class ControlElement {
                 }
             }
 
+            inputControlsView.invalidate(); //need for highlight buttons while pressing
             return true;
         }
         else if (pointerId == currentPointerId && type == Type.RANGE_BUTTON) {
@@ -775,7 +781,7 @@ public class ControlElement {
 
                 //inputControlsView.invalidate();
             }
-            inputControlsView.invalidate(); //idk but can it destroy performance on click???
+            inputControlsView.invalidate(); //idk but can it destroy performance on click??? need for highlight buttons while pressing
             currentPointerId = -1;
             return true;
         }

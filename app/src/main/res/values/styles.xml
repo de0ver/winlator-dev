@@ -140,11 +140,11 @@
         <item name="android:maxLines">1</item>
         <item name="android:inputType">text</item>
         <item name="android:background">@drawable/edit_text</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="EditText.Dark" parent="EditText">
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:background">@drawable/edit_text_dark</item>
     </style>
 

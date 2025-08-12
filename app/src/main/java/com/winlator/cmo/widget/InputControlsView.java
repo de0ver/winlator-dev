@@ -331,7 +331,7 @@ public class InputControlsView extends View {
     }
 
     public int getThirdColor() { //button if pressed
-        return Color.argb((int)(overlayOpacity * 255), 64, 110, 63);
+        return Color.argb((int)(overlayOpacity * 255), 50, 90, 50);
     }
 
     private synchronized ControlElement intersectElement(float x, float y) {

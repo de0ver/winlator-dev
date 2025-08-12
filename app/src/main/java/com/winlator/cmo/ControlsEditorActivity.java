@@ -1,7 +1,9 @@
 package com.winlator.cmo;
 
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -247,18 +249,12 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
         final Spinner sBinding = view.findViewById(R.id.SBinding);
 
         Runnable update = () -> {
-            String[] bindingEntries = null;
-            switch (sBindingType.getSelectedItemPosition()) {
-                case 0:
-                    bindingEntries = Binding.keyboardBindingLabels();
-                    break;
-                case 1:
-                    bindingEntries = Binding.mouseBindingLabels();
-                    break;
-                case 2:
-                    bindingEntries = Binding.gamepadBindingLabels();
-                    break;
-            }
+            String[] bindingEntries = switch (sBindingType.getSelectedItemPosition()) {
+                case 0 -> Binding.keyboardBindingLabels();
+                case 1 -> Binding.mouseBindingLabels();
+                case 2 -> Binding.gamepadBindingLabels();
+                default -> null;
+            };
 
             sBinding.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, bindingEntries));
             AppUtils.setSpinnerSelectionFromValue(sBinding, element.getBindingAt(index).toString());
@@ -288,17 +284,12 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Binding binding = Binding.NONE;
-                switch (sBindingType.getSelectedItemPosition()) {
-                    case 0:
-                        binding = Binding.keyboardBindingValues()[position];
-                        break;
-                    case 1:
-                        binding = Binding.mouseBindingValues()[position];
-                        break;
-                    case 2:
-                        binding = Binding.gamepadBindingValues()[position];
-                        break;
-                }
+                binding = switch (sBindingType.getSelectedItemPosition()) {
+                    case 0 -> Binding.keyboardBindingValues()[position];
+                    case 1 -> Binding.mouseBindingValues()[position];
+                    case 2 -> Binding.gamepadBindingValues()[position];
+                    default -> binding;
+                };
 
                 if (binding != element.getBindingAt(index)) {
                     element.setBindingAt(index, binding);
@@ -342,6 +333,7 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
                 iconIds[i] = Byte.parseByte(FileUtils.getBasename(filenames[i]));
             }
         } catch (IOException e) {
+            Log.e("ControlsEditorActivity", e.toString());
         }
 
         Arrays.sort(iconIds);
@@ -359,6 +351,7 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
             imageView.setBackgroundResource(R.drawable.icon_background);
             imageView.setTag(id);
             imageView.setSelected(id == selectedId);
+            imageView.setBackgroundColor(Color.WHITE);
             imageView.setOnClickListener((v) -> {
                 for (int i = 0; i < parent.getChildCount(); i++)
                     parent.getChildAt(i).setSelected(false);
@@ -368,6 +361,7 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
             try (InputStream is = getAssets().open("inputcontrols/icons/" + id + ".png")) {
                 imageView.setImageBitmap(BitmapFactory.decodeStream(is));
             } catch (IOException e) {
+                Log.e("ControlsEditorActivity", e.toString());
             }
 
             parent.addView(imageView);

@@ -70,6 +70,7 @@ public class ShortcutsFragment extends Fragment {
     private ShortcutsAdapter adapter;
     private SharedPreferences prefs;
     private DividerItemDecoration divider;
+    private MenuItem sortItem;
     private final String[] sortTypeText = {"Name", "Container Id", "Path", "Playtime", "Play Count", "Last Play Date"};
     private final String[] prefsText = {"cur_sort_type", "last_view_type", "playtime_stats", "cur_grid_type", "cur_list_type"};
     public int curSortType = 0;
@@ -92,7 +93,7 @@ public class ShortcutsFragment extends Fragment {
 
         curSortType = prefs.getInt(prefsText[0], 0);
         curGridType = prefs.getInt(prefsText[3], 0);
-        curListType = prefs.getInt(prefsText[4], 0);
+        curListType = prefs.getInt(prefsText[4], 1); //fix default value
 
         setRecyclerLayoutManager(curGridType, curListType);
 
@@ -112,7 +113,7 @@ public class ShortcutsFragment extends Fragment {
         // Clear any existing menu items to prevent duplication
         menu.clear();
         menuInflater.inflate(R.menu.shortcuts_menu, menu);
-        MenuItem sortItem = menu.findItem(R.id.sort_shortcuts);
+        sortItem = menu.findItem(R.id.sort_shortcuts);
         sortItem.setTitle(sortTypeText[curSortType]);
     }
 
@@ -129,37 +130,41 @@ public class ShortcutsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) { //WARNING TRASH CODE...
         SharedPreferences.Editor prefEditor = prefs.edit();
-        switch (menuItem.getItemId()) {
-            case R.id.add_shortcuts:
-
+        switch (menuItem.getItemId()) { //xd
+            case R.id.add_shortcuts -> {
                 return true;
-            case R.id.sort_shortcuts:
-                curSortType = (curSortType + 1) % sortTypeText.length;
-                prefEditor.putInt(prefsText[0], curSortType); // lol
-                prefEditor.apply();
-                loadShortcutsList(curSortType);
-                AppUtils.showToast(getContext(), "Sort by: " + sortTypeText[curSortType]);
-                menuItem.setTitle(sortTypeText[curSortType]);
-                return true;
-            case R.id.layout_grid_small:
+            }
+            case R.id.sort_by_name -> curSortType = 0;
+            case R.id.sort_by_con_id -> curSortType = 1;
+            case R.id.sort_by_path -> curSortType = 2;
+            case R.id.sort_by_play_count -> curSortType = 3;
+            case R.id.sort_by_playtime -> curSortType = 4;
+            case R.id.sort_by_play_date -> curSortType = 5;
+            case R.id.layout_grid_small -> {
                 curGridType = 1;
                 curListType = 0;
-                break;
-            case R.id.layout_grid_big:
+            }
+            case R.id.layout_grid_big -> {
                 curGridType = 2;
                 curListType = 0;
-                break;
-            case R.id.layout_list_small:
+            }
+            case R.id.layout_list_small -> {
                 curGridType = 0;
                 curListType = 1;
-                break;
-            case R.id.layout_list_big:
+            }
+            case R.id.layout_list_big -> {
                 curGridType = 0;
                 curListType = 2;
-                break;
-            default:
+            }
+            default -> {
                 return super.onOptionsItemSelected(menuItem);
+            }
         }
+
+        prefEditor.putInt(prefsText[0], curSortType); // lol
+        prefEditor.apply();
+        loadShortcutsList(curSortType);
+        sortItem.setTitle(sortTypeText[curSortType]);
 
         prefEditor.putInt(prefsText[3], curGridType);
         prefEditor.apply();
