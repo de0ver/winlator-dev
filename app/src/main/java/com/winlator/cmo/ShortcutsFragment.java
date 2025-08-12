@@ -137,8 +137,8 @@ public class ShortcutsFragment extends Fragment {
             case R.id.sort_by_name -> curSortType = 0;
             case R.id.sort_by_con_id -> curSortType = 1;
             case R.id.sort_by_path -> curSortType = 2;
-            case R.id.sort_by_play_count -> curSortType = 3;
-            case R.id.sort_by_playtime -> curSortType = 4;
+            case R.id.sort_by_playtime -> curSortType = 3;
+            case R.id.sort_by_play_count -> curSortType = 4;
             case R.id.sort_by_play_date -> curSortType = 5;
             case R.id.layout_grid_small -> {
                 curGridType = 1;
