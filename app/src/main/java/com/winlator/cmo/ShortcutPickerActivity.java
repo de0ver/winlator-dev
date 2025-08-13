@@ -76,7 +76,6 @@ public class ShortcutPickerActivity extends AppCompatActivity {
         });
     }
 
-
     private void loadFiles(File directory) {
         File[] files = directory.listFiles();
         if (files != null) {

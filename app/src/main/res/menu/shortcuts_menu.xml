@@ -9,6 +9,10 @@
         app:showAsAction="always|withText">
         <menu>
             <item
+                android:id="@+id/search_shortcut"
+                android:icon="@drawable/icon_magnifier"
+                android:title="Search" />
+            <item
                 android:id="@+id/sort_by_name"
                 android:title="By Name" />
             <item
@@ -26,6 +30,12 @@
             <item
                 android:id="@+id/sort_by_play_date"
                 android:title="By Last Play Date" />
+            <item
+                android:id="@+id/sort_by_newest"
+                android:title="By Newest" />
+            <item
+                android:id="@+id/sort_by_oldest"
+                android:title="By Oldest" />
         </menu>
     </item>
     <item

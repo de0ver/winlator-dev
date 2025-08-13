@@ -1,5 +1,7 @@
     package com.winlator.cmo.container;
 
+    import static com.winlator.cmo.MainActivity.PACKAGE_NAME;
+
     import android.graphics.Bitmap;
     import android.graphics.BitmapFactory;
     import android.util.Log;
@@ -65,6 +67,13 @@ import java.nio.file.Files;
                                 if (iconFile.isFile()){
                                     icon = BitmapFactory.decodeFile(iconFile.getPath());
                                     break;
+                                } else {
+                                    File iconIfNotFound = new File("/data/user/0/" + PACKAGE_NAME + "/files/imagefs/home/xuser/.cache/wallpaper.bmp");
+                                    if (iconIfNotFound.isFile()) {
+                                        icon = BitmapFactory.decodeFile(iconIfNotFound.getPath());
+                                    } else {
+                                        icon = null;
+                                    }
                                 }
                             }
                         }

@@ -6,18 +6,22 @@ import static com.winlator.cmo.MainActivity.PACKAGE_NAME;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.drawable.Icon;
 import android.icu.lang.UCharacter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -73,6 +78,8 @@ public class ShortcutsFragment extends Fragment {
     private MenuItem sortItem;
     private final String[] sortTypeText = {"Name", "Container Id", "Path", "Playtime", "Play Count", "Last Play Date"};
     private final String[] prefsText = {"cur_sort_type", "last_view_type", "playtime_stats", "cur_grid_type", "cur_list_type"};
+    private String searchText;
+    private Container shortcutContainer;
     public int curSortType = 0;
     public int curGridType = 0;
     public int curListType = 0;
@@ -132,7 +139,35 @@ public class ShortcutsFragment extends Fragment {
         SharedPreferences.Editor prefEditor = prefs.edit();
         switch (menuItem.getItemId()) { //xd
             case R.id.add_shortcuts -> {
+                // Use the ContainerManager to get the list of containers
+                ContainerManager containerManager = new ContainerManager(getContext());
+                ArrayList<Container> containers = containerManager.getContainers();
+
+                // Show a container selection dialog
+                adapter.showContainerSelectionDialog(containers, selectedContainer -> {
+                        shortcutContainer = selectedContainer;
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("*/*");
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        startActivityForResult(intent, 7777);
+                });
                 return true;
+            }
+            case R.id.search_shortcut -> {
+                final EditText taskEditText = new EditText(getContext());
+                taskEditText.setText(searchText);
+                AlertDialog dialog = new AlertDialog.Builder(getContext())
+                        .setTitle("Search shortcuts by Name")
+                        .setMessage("Type Name of shortcut in field")
+                        .setView(taskEditText)
+                        .setPositiveButton("SEARCH", (dialog1, which) -> {
+                            searchText = String.valueOf(taskEditText.getText());
+                            loadShortcutsList(6);
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .create();
+                dialog.show();
+                taskEditText.setSelection(0);
             }
             case R.id.sort_by_name -> curSortType = 0;
             case R.id.sort_by_con_id -> curSortType = 1;
@@ -174,8 +209,6 @@ public class ShortcutsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         adapter.setGrid(curGridType > 0);
 
-        AppUtils.showToast(getContext(), "Layout Changed");
-
         return true;
     }
 
@@ -205,6 +238,24 @@ public class ShortcutsFragment extends Fragment {
                         playtime_prefs.getLong(s2.path + "_play_date", 0),
                         playtime_prefs.getLong(s1.path + "_play_date", 0)
                 ));
+            case 6 -> {
+                shortcuts.sort((s1, s2) -> {
+                    String name1 = s1.name.toLowerCase();
+                    String name2 = s2.name.toLowerCase();
+                    String search = searchText.toLowerCase();
+
+                    int idx1 = name1.indexOf(search);
+                    int idx2 = name2.indexOf(search);
+
+                    if (idx1 == -1 && idx2 != -1) return 1;
+                    if (idx1 != -1 && idx2 == -1) return -1;
+                    if (idx1 == -1 && idx2 == -1) return name1.compareTo(name2);
+
+                    if (idx1 != idx2) return Integer.compare(idx1, idx2);
+
+                    return name1.compareTo(name2);
+                });
+            }
         }
 
         shortcuts.removeIf(shortcut -> shortcut == null || shortcut.file.getName().isEmpty());
@@ -276,6 +327,85 @@ public class ShortcutsFragment extends Fragment {
                 currentDialog.onIconSelected(selectedImageUri);
             }
         }
+
+        if (requestCode == 7777 && resultCode == Activity.RESULT_OK && data != null) {
+            Uri selectedFile = data.getData();
+            String selectedFilePath = selectedFile.getPath().toLowerCase();
+            //AppUtils.showToast(getContext(), selectedFilePath);
+            if (selectedFilePath.endsWith(".exe") && selectedFilePath.contains("/document/")) {
+                if (shortcutContainer != null) {
+                    String driveLetter = null;
+
+                    if (selectedFilePath.contains("primary:"))
+                        driveLetter = "D:";
+
+                    if (selectedFilePath.contains("/data/user/0/" + PACKAGE_NAME + "/files/imagefs/"))
+                        driveLetter = "Z:";
+
+                    if (driveLetter == null) {
+                        AppUtils.showToast(getContext(), "Wrong path! Can't detect drive!");
+                        return;
+                    }
+
+                    String fileName = queryName(getContext().getContentResolver(), selectedFile);
+                    String fileNameOutExe = fileName.substring(0, fileName.length() - 4); // -.exe
+                    String pathWOutDocument = selectedFilePath;
+
+                    if (pathWOutDocument.startsWith("/document/primary:")) {
+                        pathWOutDocument = pathWOutDocument.replaceFirst("/document/primary:", "");
+                    } else if (pathWOutDocument.startsWith("/document/")) {
+                        pathWOutDocument = pathWOutDocument.replaceFirst("/document/", "");
+                    }
+
+                    if (driveLetter.equals("Z:"))
+                        pathWOutDocument = pathWOutDocument.replaceFirst("/data/user/0/" + PACKAGE_NAME + "/files/imagefs/", "");
+
+                    if (driveLetter.equals("D:"))
+                        pathWOutDocument = pathWOutDocument.replaceFirst("download/", "");
+
+                    String execPath = pathWOutDocument.replace("/", "\\\\\\\\");
+                    execPath = execPath.replace(" ", "\\\\ ");
+                    String shortcutDesktop =
+                                    "[Desktop Entry]\n" +
+                                    "Name=" + fileNameOutExe + "\n" +
+                                    "Exec=env WINEPREFIX=\"/data/user/0/" + PACKAGE_NAME + "/files/imagefs/home/xuser/.wine/dosdevices/z:/home/xuser/.wine\" wine " + driveLetter + "\\\\\\\\" + execPath /*+ fileName*/ + "\n" +
+                                    "Type=Application\n" +
+                                    "StartupNotify=true\n" +
+                                    "Path=/data/user/0/" + PACKAGE_NAME + "/files/imagefs/home/xuser/.wine/dosdevices/" + driveLetter.toLowerCase()  + "/" + pathWOutDocument.replaceFirst(fileName.toLowerCase(), "") + "\n" +
+                                    "Icon=MAKE_BIONIC_GREAT_AGAIN\n" +
+                                    "StartupWMClass=" + fileName;
+
+                    File desktopFile = new File(shortcutContainer.getDesktopDir(), fileNameOutExe + ".desktop");
+
+                    //AppUtils.showToast(getContext(), "Path: " + driveLetter + selectedFilePath.substring(0, pathWOutDocument.length() - fileName.length()) + "\n"
+                    //        + "Exec: " + driveLetter + execPath + fileName);
+
+                    try (FileWriter writer = new FileWriter(desktopFile)) {
+                        writer.write(shortcutDesktop);
+                    } catch (IOException e) {
+                        Log.e("ShortcutsFragment", e.toString());
+                        AppUtils.showToast(getContext(), "Error occured while adding shortcut!");
+                        return;
+                    }
+
+                    loadShortcutsList(curSortType);
+                    AppUtils.showToast(getContext(), "Shortcut created for Container: " + shortcutContainer.name);
+                }
+            } else {
+                AppUtils.showToast(getContext(), "Wrong file type! U need choose .exe file!");
+            }
+        }
+    }
+
+    private String queryName(ContentResolver resolver, Uri uri) { //https://stackoverflow.com/questions/5568874/how-to-extract-the-file-name-from-uri-returned-from-intent-action-get-content
+        String[] projection = new String[] { OpenableColumns.DISPLAY_NAME };
+        Cursor returnCursor =
+                resolver.query(uri, projection, null, null, null);
+        assert returnCursor != null;
+        returnCursor.moveToFirst();
+        String name = returnCursor.getString(0);
+        returnCursor.close();
+        return name;
     }
 
     private class ShortcutsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -458,7 +588,7 @@ public class ShortcutsFragment extends Fragment {
             void onContainerSelected(Container container);
         }
 
-        private void showContainerSelectionDialog(ArrayList<Container> containers, OnContainerSelectedListener listener) {
+        public void showContainerSelectionDialog(ArrayList<Container> containers, OnContainerSelectedListener listener) {
             // Create an AlertDialog to show the list of containers
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Select a container");

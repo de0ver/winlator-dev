@@ -115,7 +115,7 @@ public class ShortcutSettingsDialog extends ContentDialog {
                 iconPreview.setImageBitmap(bitmap);
             }
 
-            AppUtils.showToast(getContext(), "Icon updated!");
+            AppUtils.showToast(getContext(), "Icon updated! Refresh layout!");
 
         } catch (IOException e) {
             e.printStackTrace();
