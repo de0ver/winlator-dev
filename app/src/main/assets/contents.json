@@ -6,6 +6,7 @@
   { "type": "DXVK", "verName": "2.6.1-gplasync", "verCode": 1, "remoteUrl": "https://github.com/de0ver/Components-for-Wine/releases/download/12082025/dxvk-2.6.1-1-gplasync.wcp" },
   { "type": "DXVK", "verName": "2.6.1", "verCode": 1, "remoteUrl": "https://github.com/de0ver/Components-for-Wine/releases/download/12082025/dxvk-2.6.1.wcp" },
   { "type": "DXVK", "verName": "2.6.2", "verCode": 1, "remoteUrl": "https://github.com/de0ver/Components-for-Wine/releases/download/12082025/dxvk-2.6.2.wcp" },
+  { "type": "DXVK", "verName": "2.7.1", "verCode": 1, "remoteUrl": "https://github.com/de0ver/Components-for-Wine/releases/download/12082025/dxvk-2.7.1.wcp" },
   { "type": "Wine", "verName": "Proton-10-arm64ec", "verCode": 1, "remoteUrl": "https://github.com/de0ver/Components-for-Wine/releases/download/12082025/proton-10-arm64ec.wcp" },
   { "type": "Wine", "verName": "Wine-9.20-x86_64", "verCode": 1, "remoteUrl": "https://github.com/de0ver/Components-for-Wine/releases/download/12082025/wine-9.20.wcp" },
   { "type": "Box64", "verName": "Box64-0.2.8", "verCode": 1, "remoteUrl": "https://github.com/de0ver/Components-for-Wine/releases/download/12082025/Box64-0.2.8.wcp" },

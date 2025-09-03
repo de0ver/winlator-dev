@@ -45,7 +45,9 @@
             style="@style/EditText"
             android:id="@+id/EditText"
             android:layout_width="match_parent"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textColor="@color/white"
+            />
     </LinearLayout>
 
     <ImageButton

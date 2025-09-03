@@ -225,6 +225,7 @@ public class ContainerManager {
             String dllName = file.getName();
             if (dllName.equals("iexplore.exe") && wineInfo.isArm64EC() && srcName.equals("aarch64-windows"))
                 file = new File(wineInfo.path + "/lib/wine/" + "i386-windows/iexplore.exe");
+            if (dllName.equals("tabtip.exe") || dllName.equals("icu.dll")) continue;
             File dstFile = new File(containerDir, ".wine/drive_c/windows/" + dstName + "/" + dllName);
             if (dstFile.exists()) continue;
             if (onExtractFileListener != null ) {

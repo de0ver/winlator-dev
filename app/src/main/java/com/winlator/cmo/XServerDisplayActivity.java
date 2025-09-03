@@ -395,40 +395,12 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
             incrementPlayCount();
 
-            // Initialize Win32AppWorkarounds
-            //win32AppWorkarounds = new Win32AppWorkarounds(this);
-
             taskAffinityMask = (short) ProcessHelper.getAffinityMask(container.getCPUList(true));
             taskAffinityMaskWoW64 = (short) ProcessHelper.getAffinityMask(container.getCPUListWoW64(true));
 
             if (shortcut != null) {
                 taskAffinityMask = (short) ProcessHelper.getAffinityMask(shortcut.getExtra("cpuList", container.getCPUList(true)));
                 taskAffinityMaskWoW64 = (short) ProcessHelper.getAffinityMask(shortcut.getExtra("cpuListWoW64", container.getCPUListWoW64(true)));
-            }
-
-            //win32AppWorkarounds.setTaskAffinityMask(taskAffinityMask);
-            //win32AppWorkarounds.setTaskAffinityMaskWoW64(taskAffinityMaskWoW64);
-
-            // Determine the class name for the startup workarounds
-            String wmClass = shortcut != null ? shortcut.getExtra("wmClass", "") : "";
-            Log.d("XServerDisplayActivity", "Startup wmClass: " + wmClass);
-
-            if (!wmClass.isEmpty()) {
-                // Apply startup workarounds based on wmClass
-                //win32AppWorkarounds.applyStartupWorkarounds(wmClass);
-            } else {
-                // Fallback: Use the executable name for workarounds
-                String execPath = getIntent().getStringExtra("exec_path");
-                Log.d("XServerDisplayActivity", "Startup execPath: " + execPath);
-
-                if (execPath != null && !execPath.isEmpty()) {
-                    String execName = FileUtils.getName(execPath);
-                    Log.d("XServerDisplayActivity", "Startup execName: " + execName);
-
-                    //win32AppWorkarounds.applyStartupWorkarounds(execName);
-                } else {
-                    Log.w("XServerDisplayActivity", "No wmClass or execPath provided for startup workarounds.");
-                }
             }
 
             firstTimeBoot = container.getExtra("appVersion").isEmpty();
@@ -545,7 +517,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
             @Override
             public void onMapWindow(Window window) {
-
+                assignTaskAffinity(window);
             }
 
             @Override
@@ -2047,19 +2019,19 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         container.putExtra("desktopTheme", null);
     }
 
-//    private void assignTaskAffinity(Window window) {
-//        if (taskAffinityMask == 0) return;
-//        int processId = window.getProcessId();
-//        String className = window.getClassName();
-//        int processAffinity = window.isWoW64() ? taskAffinityMaskWoW64 : taskAffinityMask;
-//
-//        if (processId > 0) {
-//            winHandler.setProcessAffinity(processId, processAffinity);
-//        }
-//        else if (!className.isEmpty()) {
-//            winHandler.setProcessAffinity(window.getClassName(), processAffinity);
-//        }
-//    }
+    private void assignTaskAffinity(Window window) {
+        if (taskAffinityMask == 0) return;
+        int processId = window.getProcessId();
+        String className = window.getClassName();
+        int processAffinity = window.isWoW64() ? taskAffinityMaskWoW64 : taskAffinityMask;
+
+        if (processId > 0) {
+            winHandler.setProcessAffinity(processId, processAffinity);
+        }
+        else if (!className.isEmpty()) {
+            winHandler.setProcessAffinity(window.getClassName(), processAffinity);
+        }
+    }
 
     private void changeFrameRatingVisibility(Window window, Property property) {
         if (frameRating == null) return;
