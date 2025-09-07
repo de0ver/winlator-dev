@@ -101,7 +101,7 @@
     <string name="press_any_button_on_your_controller">Press any button on your controller</string>
     <string name="bindings">bindings</string>
     <string name="show_touchscreen_controls">Show Touchscreen Controls</string>
-    <string name="dxwrapper">DX Wrapper</string>
+    <string name="dxwrapper">Direct3D Wrappers</string>
     <string name="mouse_warp_override">Mouse Warp Override</string>
     <string name="direct3d">Direct3D</string>
     <string name="directsound">DirectSound</string>
@@ -610,7 +610,7 @@ E.g. <b>META</b> for <i>META key</i>, \n
     <string name="install_drivers_message">You will now be prompted to pick a driver. These must be the same ones used in other emulators like Yuzu, Dolphin, Citra, etc.</string>
     <string name="install_drivers_warning">Be warned that because of limitations of current PC emulators, Qualcomm Drivers may not work on chipsets below 8 Gen2 without getting patched.</string>
     <string name="enable_vulkan_api_dump">Enable dumping of Vulkan api calls to file.</string>
-    <string name="dll_emulator">32bit Emulator</string>
+    <string name="dll_emulator">x86-64 Emulator</string>
     <string name="open_with_android_browser">Open Android Browser in Wine</string>
     <string name="share_android_clipboard">Share Android Clipboard with Wine</string>
     <string name="ddraw_wrapper">DDraw/Glide Wrapper</string>

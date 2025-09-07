@@ -74,7 +74,6 @@ public class ShortcutsFragment extends Fragment {
     private ShortcutSettingsDialog currentDialog;
     private ShortcutsAdapter adapter;
     private SharedPreferences prefs;
-    private DividerItemDecoration divider;
     private MenuItem sortItem;
     private final String[] sortTypeText = {"Name", "Container Id", "Path", "Playtime", "Play Count", "Last Play Date"};
     private final String[] prefsText = {"cur_sort_type", "last_view_type", "playtime_stats", "cur_grid_type", "cur_list_type"};
@@ -274,22 +273,15 @@ public class ShortcutsFragment extends Fragment {
         switch (gridType) {
             case 1 ->  {
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == Configuration.ORIENTATION_PORTRAIT ? 5 : 7));
-                if (divider != null) recyclerView.removeItemDecoration(divider);
             } //5 = portrait, 7 landscape
             case 2 -> {
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == Configuration.ORIENTATION_PORTRAIT ? 3 : 5));
-                if (divider != null) recyclerView.removeItemDecoration(divider);
             } //3 = portrait, 5 landscape
         }
 
         switch (listType) {
             case 1, 2 -> {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                if (divider == null) {
-                    divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-                }
-                if (recyclerView.getItemDecorationCount() == 0)
-                    recyclerView.addItemDecoration(divider);
             }
         }
     }
@@ -524,7 +516,7 @@ public class ShortcutsFragment extends Fragment {
             final Context context = getContext();
             PopupMenu listItemMenu = new PopupMenu(context, anchorView);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) listItemMenu.setForceShowIcon(true);
-            listItemMenu.setGravity(Gravity.END);
+            listItemMenu.setGravity(Gravity.CENTER | Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             listItemMenu.inflate(R.menu.shortcut_popup_menu);
             listItemMenu.setOnMenuItemClickListener((menuItem) -> {
                 int itemId = menuItem.getItemId();

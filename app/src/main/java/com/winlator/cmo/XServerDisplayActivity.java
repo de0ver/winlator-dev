@@ -1287,7 +1287,6 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         inputControlsView.setVisibility(View.GONE);
         rootView.addView(inputControlsView);
 
-
         startTouchscreenTimeout();
 
         // Inside onCreate(), after initializing controls
@@ -1512,6 +1511,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private void showInputControls(ControlsProfile profile) {
         inputControlsView.setVisibility(View.VISIBLE);
         inputControlsView.requestFocus();
+        inputControlsView.setOverlayOpacity(preferences.getFloat("overlay_opacity", InputControlsView.DEFAULT_OVERLAY_OPACITY));
         inputControlsView.setProfile(profile);
 
         touchpadView.setSensitivity(profile.getCursorSpeed() * globalCursorSpeed);
@@ -1592,7 +1592,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         } else if (frameSync.equals("Never")) {
             envVars.put("WRAPPER_DISABLE_PRESENT_WAIT", "1");
         }
-        envVars.put("MESA_VK_WSI_PRESENT_MODE", "mailbox");
+
+        //envVars.put("MESA_VK_WSI_PRESENT_MODE", "mailbox");
+
         if (!vkbasaltConfig.isEmpty()) {
             envVars.put("ENABLE_VKBASALT", "1");
             envVars.put("VKBASALT_CONFIG", vkbasaltConfig);

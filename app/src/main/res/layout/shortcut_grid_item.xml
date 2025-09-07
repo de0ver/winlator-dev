@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:padding="8dp"
-    android:background="@drawable/edit_text_pressed_dark">
+    android:background="@drawable/shortcuts_list_item">
 
     <ImageView
         android:id="@+id/ImageView"
